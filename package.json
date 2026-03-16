@@ -1,0 +1,24 @@
+{
+  "name": "nomic",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @nomic/core && npm run build --workspace @nomic/cli && npm run build --workspace @nomic/vscode-extension",
+    "typecheck": "npm run typecheck --workspace @nomic/core && npm run typecheck --workspace @nomic/cli && npm run typecheck --workspace @nomic/vscode-extension",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run test && npm run typecheck && npm run build",
+    "clean": "npm run clean --workspace @nomic/vscode-extension && npm run clean --workspace @nomic/cli && npm run clean --workspace @nomic/core",
+    "cli": "npm run dev --workspace @nomic/cli --",
+    "extension:build": "npm run build --workspace @nomic/vscode-extension"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,73 @@
+import { describe, expect, it } from "vitest";
+import { HybridRetriever } from "./retriever";
+import type { RepositoryIndex } from "../types/contracts";
+
+describe("HybridRetriever", () => {
+  it("selects matching source files, imported dependencies, and related tests", async () => {
+    const retriever = new HybridRetriever();
+    const index: RepositoryIndex = {
+      repositoryRoot: "/repo",
+      fileCount: 4,
+      generatedAt: new Date().toISOString(),
+      files: [
+        {
+          path: "src/auth.ts",
+          language: "typescript",
+          size: 100,
+          imports: ["./crypto"],
+          isTest: false,
+          symbols: [
+            { name: "auth.ts", kind: "module", path: "src/auth.ts" },
+            { name: "AuthService", kind: "class", path: "src/auth.ts" },
+            { name: "loginUser", kind: "function", path: "src/auth.ts" }
+          ]
+        },
+        {
+          path: "src/crypto.ts",
+          language: "typescript",
+          size: 50,
+          imports: [],
+          isTest: false,
+          symbols: [
+            { name: "crypto.ts", kind: "module", path: "src/crypto.ts" },
+            { name: "hashPassword", kind: "function", path: "src/crypto.ts" }
+          ]
+        },
+        {
+          path: "tests/auth.test.ts",
+          language: "typescript",
+          size: 40,
+          imports: ["../src/auth"],
+          isTest: true,
+          symbols: [{ name: "auth.test.ts", kind: "test", path: "tests/auth.test.ts" }]
+        },
+        {
+          path: "src/payments.ts",
+          language: "typescript",
+          size: 80,
+          imports: [],
+          isTest: false,
+          symbols: [{ name: "payments.ts", kind: "module", path: "src/payments.ts" }]
+        }
+      ]
+    };
+
+    const result = await retriever.retrieve(
+      {
+        text: "refactor authentication login flow",
+        target: "codex",
+        repositoryRoot: "/repo"
+      },
+      index
+    );
+
+    expect(result.queryTerms).toEqual(expect.arrayContaining(["refactor", "authentication", "login", "flow"]));
+    expect(result.candidates.map((candidate) => candidate.path)).toEqual(
+      expect.arrayContaining(["src/auth.ts", "src/crypto.ts", "tests/auth.test.ts"])
+    );
+    expect(result.relatedTests).toContain("tests/auth.test.ts");
+    expect(result.candidates.find((candidate) => candidate.path === "src/crypto.ts")?.reason).toContain(
+      "Imported by src/auth.ts"
+    );
+  });
+});
