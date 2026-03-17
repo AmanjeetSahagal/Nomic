@@ -16,10 +16,22 @@ export class PromptCompiler {
       score: candidate.score,
       source: candidate.source
     }));
+    const rawFiles = dependencies.compression.items.filter((summary) => summary.compression === "raw");
+    const summarizedFiles = dependencies.compression.items.filter((summary) => summary.compression === "summary");
+    const sessionContext = dependencies.sessionContext.map((record) => {
+      const task = record.task.text;
+      const files = record.compiledPrompt.includedFiles.slice(0, 5).join(", ");
+      return `- ${task} [${files}]`;
+    });
 
     const prompt = [
       "# Task",
       task.text,
+      "",
+      "# Session Memory",
+      sessionContext.length > 0
+        ? sessionContext.join("\n")
+        : "No recent session context available.",
       "",
       "# Query Terms",
       dependencies.retrieval.queryTerms.length > 0
@@ -34,17 +46,36 @@ export class PromptCompiler {
         ? dependencies.retrieval.relatedTests.join("\n")
         : "No related tests selected yet.",
       "",
+      "# Token Budget",
+      `Max context tokens: ${dependencies.compression.tokenBudget.maxContextTokens}`,
+      `Usage: raw=${dependencies.compression.budgetUsage.raw}, summaries=${dependencies.compression.budgetUsage.summary}, dependencies=${dependencies.compression.budgetUsage.dependency}, tests=${dependencies.compression.budgetUsage.tests}, total=${dependencies.compression.budgetUsage.total}`,
+      "",
       "# Selection Reasons",
       selectionReasons.length > 0
         ? selectionReasons.map((item) => `- ${item.path} (${item.score}): ${item.reason}`).join("\n")
         : "No selection reasons available.",
       "",
+      "# Raw Context",
+      rawFiles.length > 0
+        ? rawFiles
+            .map(
+              (summary) =>
+                `## ${summary.path}\n${summary.summary}\n\`\`\`\n${summary.content ?? ""}\n\`\`\``
+            )
+            .join("\n\n")
+        : "No raw files included.",
+      "",
       "# Summaries",
-      dependencies.summaries.length > 0
-        ? dependencies.summaries
-            .map((summary) => `- ${summary.path}: ${summary.summary}`)
+      summarizedFiles.length > 0
+        ? summarizedFiles
+            .map((summary) => `- ${summary.path} (${summary.estimatedTokens} tokens): ${summary.summary}`)
             .join("\n")
-        : "No summaries generated yet."
+        : "No summaries generated yet.",
+      "",
+      "# Omitted Files",
+      dependencies.compression.omittedPaths.length > 0
+        ? dependencies.compression.omittedPaths.join("\n")
+        : "No files omitted by the current budget."
     ].join("\n");
 
     return {
@@ -53,8 +84,11 @@ export class PromptCompiler {
       tokenEstimate: this.tokenEstimator.estimate(prompt),
       includedFiles,
       relatedTests: dependencies.retrieval.relatedTests,
+      omittedPaths: dependencies.compression.omittedPaths,
+      tokenBudget: dependencies.compression.tokenBudget,
+      budgetUsage: dependencies.compression.budgetUsage,
       selectionReasons,
-      summaries: dependencies.summaries
+      summaries: dependencies.compression.items
     };
   }
 }

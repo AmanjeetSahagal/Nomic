@@ -14,6 +14,14 @@ export interface TokenBudget {
   testFraction: number;
 }
 
+export interface BudgetUsage {
+  raw: number;
+  summary: number;
+  dependency: number;
+  tests: number;
+  total: number;
+}
+
 export interface IndexedSymbol {
   name: string;
   kind: "function" | "class" | "interface" | "module" | "test" | "unknown";
@@ -45,8 +53,18 @@ export interface ContextCandidate {
 
 export interface FileSummary {
   path: string;
+  compression: "raw" | "summary";
   summary: string;
+  content?: string;
+  estimatedTokens: number;
   preservedInterfaces: string[];
+}
+
+export interface CompressionResult {
+  items: FileSummary[];
+  tokenBudget: TokenBudget;
+  budgetUsage: BudgetUsage;
+  omittedPaths: string[];
 }
 
 export interface RetrievalResult {
@@ -61,8 +79,17 @@ export interface CompiledPrompt {
   tokenEstimate: number;
   includedFiles: string[];
   relatedTests: string[];
+  omittedPaths: string[];
+  tokenBudget: TokenBudget;
+  budgetUsage: BudgetUsage;
   selectionReasons: Array<Pick<ContextCandidate, "path" | "reason" | "score" | "source">>;
   summaries: FileSummary[];
+}
+
+export interface SessionRecord {
+  task: UserTask;
+  compiledPrompt: CompiledPrompt;
+  createdAt: string;
 }
 
 export interface IndexRepositoryRequest {
@@ -72,7 +99,8 @@ export interface IndexRepositoryRequest {
 export interface CompileTaskDependencies {
   index: RepositoryIndex;
   retrieval: RetrievalResult;
-  summaries: FileSummary[];
+  compression: CompressionResult;
+  sessionContext: SessionRecord[];
 }
 
 export interface ParserProvider {
@@ -101,7 +129,7 @@ export interface StorageBackend {
 
 export interface SessionMemory {
   remember(task: UserTask, compiledPrompt: CompiledPrompt): Promise<void>;
-  recent(limit: number): Promise<CompiledPrompt[]>;
+  recent(limit: number, repositoryRoot?: string): Promise<SessionRecord[]>;
 }
 
 export interface AgentAdapter {
@@ -116,5 +144,14 @@ export interface EngineDependencies {
   storage: StorageBackend;
   memory: SessionMemory;
   adapters: Record<AgentTarget, AgentAdapter>;
+  tokenBudget?: TokenBudget;
   tokenEstimator?: TokenEstimator;
 }
+
+export const DEFAULT_TOKEN_BUDGET: TokenBudget = {
+  maxContextTokens: 8000,
+  rawCodeFraction: 0.5,
+  summaryFraction: 0.25,
+  dependencyFraction: 0.15,
+  testFraction: 0.1
+};

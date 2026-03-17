@@ -3,9 +3,9 @@
 import {
   ClaudeAdapter,
   CodexAdapter,
+  FileSessionMemory,
   FileStorageBackend,
   FilesystemParserProvider,
-  InMemorySessionMemory,
   createNomicEngine,
   type AgentTarget,
   type UserTask
@@ -19,7 +19,7 @@ async function main(): Promise<void> {
       claude: new ClaudeAdapter(),
       codex: new CodexAdapter()
     },
-    memory: new InMemorySessionMemory(),
+    memory: new FileSessionMemory(),
     parser: new FilesystemParserProvider(),
     storage: new FileStorageBackend()
   });
@@ -90,6 +90,7 @@ async function main(): Promise<void> {
       console.log(`Working directory: ${process.cwd()}`);
       console.log("Parser: filesystem parser");
       console.log("Storage: .nomic/index.json");
+      console.log("Session memory: .nomic/session-memory.json");
       return;
     }
     default: {

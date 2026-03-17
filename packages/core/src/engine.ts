@@ -2,7 +2,7 @@ import { ClaudeAdapter, CodexAdapter } from "./adapters/agent-adapters";
 import { PromptCompiler } from "./compiler/prompt-compiler";
 import { ContextCompressor } from "./compression/compressor";
 import { FilesystemParserProvider, RepositoryIndexer } from "./indexing/indexer";
-import { InMemorySessionMemory } from "./memory/session-memory";
+import { FileSessionMemory } from "./memory/session-memory";
 import { HybridRetriever } from "./retrieval/retriever";
 import { FileStorageBackend } from "./storage/index-store";
 import {
@@ -23,7 +23,7 @@ export class NomicEngine {
   constructor(private readonly dependencies: EngineDependencies) {
     this.indexer = new RepositoryIndexer(dependencies.parser ?? new FilesystemParserProvider());
     this.retriever = new HybridRetriever(dependencies.embeddings);
-    this.compressor = new ContextCompressor(dependencies.summarizer);
+    this.compressor = new ContextCompressor(dependencies.summarizer, dependencies.tokenBudget);
     this.compiler = new PromptCompiler(dependencies.tokenEstimator);
   }
 
@@ -39,12 +39,14 @@ export class NomicEngine {
       (await this.dependencies.storage.readIndex(repositoryRoot)) ??
       (await this.indexRepository({ repositoryRoot }));
 
+    const sessionContext = await this.dependencies.memory.recent(3, repositoryRoot);
     const retrieval = await this.retriever.retrieve(task, index);
-    const summaries = await this.compressor.compress(retrieval.candidates, index);
+    const compression = await this.compressor.compress(retrieval.candidates, index);
     const compiled = this.compiler.compile(task, {
       index,
       retrieval,
-      summaries
+      compression,
+      sessionContext
     });
 
     await this.dependencies.memory.remember(task, compiled);
@@ -75,7 +77,7 @@ export class NomicEngine {
 export function createNomicEngine(overrides: Partial<EngineDependencies> = {}): NomicEngine {
   return new NomicEngine({
     storage: overrides.storage ?? new FileStorageBackend(),
-    memory: overrides.memory ?? new InMemorySessionMemory(),
+    memory: overrides.memory ?? new FileSessionMemory(),
     adapters:
       overrides.adapters ??
       ({
