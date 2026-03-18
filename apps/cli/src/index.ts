@@ -34,6 +34,9 @@ async function main(): Promise<void> {
       console.log(`Indexed ${result.fileCount} files in ${repositoryRoot}`);
       console.log(`Test files: ${testFileCount}`);
       console.log(`Languages: ${languageBreakdown}`);
+      console.log(
+        `Index metrics: added=${result.metrics.addedFiles}, changed=${result.metrics.changedFiles}, reused=${result.metrics.reusedFiles}, removed=${result.metrics.removedFiles}`
+      );
       console.log("Saved index to .nomic/index.json");
       return;
     }

@@ -1,9 +1,15 @@
 export type AgentTarget = "codex" | "claude";
 
+export interface TaskOverrides {
+  pinnedPaths: string[];
+  excludedPaths: string[];
+}
+
 export interface UserTask {
   text: string;
   target: AgentTarget;
   repositoryRoot?: string;
+  overrides?: TaskOverrides;
 }
 
 export interface TokenBudget {
@@ -32,9 +38,17 @@ export interface FileRecord {
   path: string;
   language: string;
   size: number;
+  modifiedAtMs: number;
   imports: string[];
   isTest: boolean;
   symbols: IndexedSymbol[];
+}
+
+export interface IndexingMetrics {
+  addedFiles: number;
+  changedFiles: number;
+  removedFiles: number;
+  reusedFiles: number;
 }
 
 export interface RepositoryIndex {
@@ -42,6 +56,7 @@ export interface RepositoryIndex {
   fileCount: number;
   files: FileRecord[];
   generatedAt: string;
+  metrics: IndexingMetrics;
 }
 
 export interface ContextCandidate {
@@ -106,6 +121,7 @@ export interface SessionRecord {
 
 export interface IndexRepositoryRequest {
   repositoryRoot: string;
+  existingIndex?: RepositoryIndex | null;
 }
 
 export interface CompileTaskDependencies {

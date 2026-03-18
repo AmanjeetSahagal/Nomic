@@ -31,11 +31,18 @@ describe("ContextCompressor", () => {
       repositoryRoot,
       fileCount: 4,
       generatedAt: new Date().toISOString(),
+      metrics: {
+        addedFiles: 4,
+        changedFiles: 0,
+        removedFiles: 0,
+        reusedFiles: 0
+      },
       files: [
         {
           path: "src/auth.ts",
           language: "typescript",
           size: 40,
+          modifiedAtMs: 1,
           imports: ["./crypto"],
           isTest: false,
           symbols: [
@@ -47,6 +54,7 @@ describe("ContextCompressor", () => {
           path: "src/crypto.ts",
           language: "typescript",
           size: 30,
+          modifiedAtMs: 1,
           imports: [],
           isTest: false,
           symbols: [
@@ -58,6 +66,7 @@ describe("ContextCompressor", () => {
           path: "src/session.ts",
           language: "typescript",
           size: 20,
+          modifiedAtMs: 1,
           imports: [],
           isTest: false,
           symbols: [
@@ -69,6 +78,7 @@ describe("ContextCompressor", () => {
           path: "tests/auth.test.ts",
           language: "typescript",
           size: 20,
+          modifiedAtMs: 1,
           imports: [],
           isTest: true,
           symbols: [{ name: "auth.test.ts", kind: "test", path: "tests/auth.test.ts" }]

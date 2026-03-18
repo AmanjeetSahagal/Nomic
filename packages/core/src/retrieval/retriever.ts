@@ -4,6 +4,7 @@ import {
   type FileRecord,
   type RepositoryIndex,
   type RetrievalResult,
+  type TaskOverrides,
   type UserTask
 } from "../types/contracts";
 
@@ -39,6 +40,57 @@ export class LocalEmbeddingProvider implements EmbeddingProvider {
       .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path))
       .slice(0, 6);
   }
+}
+
+export function applyTaskOverrides(
+  retrieval: RetrievalResult,
+  index: RepositoryIndex,
+  overrides?: TaskOverrides
+): RetrievalResult {
+  if (!overrides) {
+    return retrieval;
+  }
+
+  const excludedPaths = new Set(overrides.excludedPaths);
+  const pinnedPaths = overrides.pinnedPaths.filter((path) => !excludedPaths.has(path));
+  const candidates = retrieval.candidates
+    .filter((candidate) => !excludedPaths.has(candidate.path))
+    .map((candidate) => ({ ...candidate }));
+  const candidateMap = new Map(candidates.map((candidate) => [candidate.path, candidate]));
+
+  for (const pinnedPath of pinnedPaths) {
+    if (candidateMap.has(pinnedPath)) {
+      const existing = candidateMap.get(pinnedPath);
+      if (existing) {
+        existing.reason = appendReason(existing.reason, "Pinned by user");
+        existing.score = Math.max(existing.score, 1000);
+        existing.source = "manual";
+      }
+      continue;
+    }
+
+    const file = index.files.find((entry) => entry.path === pinnedPath);
+    if (!file) {
+      continue;
+    }
+
+    const manualCandidate: ContextCandidate = {
+      path: pinnedPath,
+      reason: "Pinned by user",
+      score: 1000,
+      source: "manual"
+    };
+    candidates.push(manualCandidate);
+    candidateMap.set(pinnedPath, manualCandidate);
+  }
+
+  candidates.sort((left, right) => right.score - left.score || left.path.localeCompare(right.path));
+
+  return {
+    ...retrieval,
+    candidates,
+    relatedTests: candidates.filter((candidate) => isTestFilePath(candidate.path)).map((candidate) => candidate.path)
+  };
 }
 
 function retrieveStructuralCandidates(queryTerms: string[], index: RepositoryIndex): ContextCandidate[] {

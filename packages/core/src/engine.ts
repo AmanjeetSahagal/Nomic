@@ -3,7 +3,7 @@ import { PromptCompiler } from "./compiler/prompt-compiler";
 import { ContextCompressor } from "./compression/compressor";
 import { FilesystemParserProvider, RepositoryIndexer } from "./indexing/indexer";
 import { FileSessionMemory } from "./memory/session-memory";
-import { HybridRetriever } from "./retrieval/retriever";
+import { applyTaskOverrides, HybridRetriever } from "./retrieval/retriever";
 import { FileStorageBackend } from "./storage/index-store";
 import {
   type AgentTarget,
@@ -29,7 +29,13 @@ export class NomicEngine {
   }
 
   async indexRepository(request: IndexRepositoryRequest): Promise<RepositoryIndex> {
-    const index = await this.indexer.index(request);
+    const existingIndex =
+      request.existingIndex ??
+      (await this.dependencies.storage.readIndex(request.repositoryRoot));
+    const index = await this.indexer.index({
+      ...request,
+      existingIndex
+    });
     await this.dependencies.storage.writeIndex(index);
     return index;
   }
@@ -41,7 +47,7 @@ export class NomicEngine {
       (await this.indexRepository({ repositoryRoot }));
 
     const sessionContext = await this.dependencies.memory.recent(3, repositoryRoot);
-    const retrieval = await this.retriever.retrieve(task, index);
+    const retrieval = applyTaskOverrides(await this.retriever.retrieve(task, index), index, task.overrides);
     const compression = await this.compressor.compress(retrieval.candidates, index);
     const compiled = this.compiler.compile(task, {
       index,
@@ -60,7 +66,7 @@ export class NomicEngine {
       (await this.dependencies.storage.readIndex(repositoryRoot)) ??
       (await this.indexRepository({ repositoryRoot }));
 
-    const retrieval = await this.retriever.retrieve(task, index);
+    const retrieval = applyTaskOverrides(await this.retriever.retrieve(task, index), index, task.overrides);
     return retrieval.candidates.map((candidate) => ({
       path: candidate.path,
       reason: candidate.reason,

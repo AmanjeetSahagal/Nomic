@@ -22,13 +22,54 @@ export class FilesystemParserProvider implements ParserProvider {
   async indexRepository(request: IndexRepositoryRequest): Promise<RepositoryIndex> {
     const repositoryRoot = path.resolve(request.repositoryRoot);
     const filePaths = await walkRepository(repositoryRoot);
-    const files = await Promise.all(filePaths.map((filePath) => buildFileRecord(repositoryRoot, filePath)));
+    const previousFiles = new Map(
+      (request.existingIndex?.files ?? []).map((file) => [file.path, file] satisfies [string, FileRecord])
+    );
+    const nextRelativePaths = new Set(filePaths.map((filePath) => path.relative(repositoryRoot, filePath)));
+    const metrics = {
+      addedFiles: 0,
+      changedFiles: 0,
+      removedFiles: 0,
+      reusedFiles: 0
+    };
+
+    const files = await Promise.all(
+      filePaths.map(async (filePath) => {
+        const relativePath = path.relative(repositoryRoot, filePath);
+        const fileStats = await stat(filePath);
+        const previousFile = previousFiles.get(relativePath);
+
+        if (
+          previousFile &&
+          previousFile.size === fileStats.size &&
+          previousFile.modifiedAtMs === fileStats.mtimeMs
+        ) {
+          metrics.reusedFiles += 1;
+          return previousFile;
+        }
+
+        if (previousFile) {
+          metrics.changedFiles += 1;
+        } else {
+          metrics.addedFiles += 1;
+        }
+
+        return buildFileRecord(repositoryRoot, filePath, fileStats.mtimeMs, fileStats.size);
+      })
+    );
+
+    for (const previousPath of previousFiles.keys()) {
+      if (!nextRelativePaths.has(previousPath)) {
+        metrics.removedFiles += 1;
+      }
+    }
 
     return {
       repositoryRoot,
       fileCount: files.length,
       files: files.sort((left, right) => left.path.localeCompare(right.path)),
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
+      metrics
     };
   }
 }
@@ -115,15 +156,21 @@ function shouldIndexFile(fileName: string): boolean {
   return fileName === "Dockerfile" || fileName.endsWith(".env.example");
 }
 
-async function buildFileRecord(repositoryRoot: string, filePath: string): Promise<FileRecord> {
+async function buildFileRecord(
+  repositoryRoot: string,
+  filePath: string,
+  modifiedAtMs?: number,
+  size?: number
+): Promise<FileRecord> {
   const fileContents = await readFile(filePath, "utf8");
-  const fileStats = await stat(filePath);
+  const fileStats = modifiedAtMs === undefined || size === undefined ? await stat(filePath) : null;
   const relativePath = path.relative(repositoryRoot, filePath);
 
   return {
     path: relativePath,
     language: detectLanguage(relativePath),
-    size: fileStats.size,
+    size: size ?? fileStats?.size ?? 0,
+    modifiedAtMs: modifiedAtMs ?? fileStats?.mtimeMs ?? 0,
     imports: extractImports(fileContents),
     isTest: isTestFile(relativePath),
     symbols: extractSymbols(relativePath, fileContents)

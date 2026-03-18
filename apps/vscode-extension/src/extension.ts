@@ -75,6 +75,9 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
   private compiled?: CompiledPrompt;
   private payload?: AgentPayload;
   private workspaceRoot?: string;
+  private pinnedPaths = new Set<string>();
+  private excludedPaths = new Set<string>();
+  private loadedWorkspaceRoot?: string;
 
   constructor(private readonly context: vscode.ExtensionContext) {}
 
@@ -96,6 +99,20 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
           return;
         case "open-file":
           await this.openWorkspaceFile(message.path);
+          return;
+        case "toggle-pin":
+          this.togglePin(message.path);
+          await this.compileCurrentTask();
+          return;
+        case "toggle-exclude":
+          this.toggleExclude(message.path);
+          await this.compileCurrentTask();
+          return;
+        case "include-path":
+          this.excludedPaths.delete(message.path);
+          this.pinnedPaths.add(message.path);
+          await this.persistOverrideState();
+          await this.compileCurrentTask();
           return;
         case "switch-target":
           this.target = message.target;
@@ -141,6 +158,8 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
       return;
     }
 
+    await this.ensureOverrideStateLoaded(workspaceRoot);
+
     this.status = "Indexing workspace";
     this.render();
 
@@ -154,6 +173,11 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
   }
 
   async refresh(): Promise<void> {
+    const workspaceRoot = this.getWorkspaceRoot();
+    if (workspaceRoot) {
+      await this.ensureOverrideStateLoaded(workspaceRoot);
+    }
+
     if (this.taskText) {
       await this.compileCurrentTask();
       return;
@@ -206,6 +230,8 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
       return;
     }
 
+    await this.ensureOverrideStateLoaded(workspaceRoot);
+
     if (!this.taskText.trim()) {
       void vscode.window.showWarningMessage("Enter a task before compiling context.");
       return;
@@ -218,7 +244,11 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     const task: UserTask = {
       text: this.taskText,
       target: this.target,
-      repositoryRoot: workspaceRoot
+      repositoryRoot: workspaceRoot,
+      overrides: {
+        pinnedPaths: [...this.pinnedPaths],
+        excludedPaths: [...this.excludedPaths]
+      }
     };
 
     this.compiled = await this.engine.compileTask(task);
@@ -251,6 +281,52 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     });
   }
 
+  private togglePin(path: string): void {
+    if (this.pinnedPaths.has(path)) {
+      this.pinnedPaths.delete(path);
+      void this.persistOverrideState();
+      return;
+    }
+
+    this.pinnedPaths.add(path);
+    this.excludedPaths.delete(path);
+    void this.persistOverrideState();
+  }
+
+  private toggleExclude(path: string): void {
+    if (this.excludedPaths.has(path)) {
+      this.excludedPaths.delete(path);
+      void this.persistOverrideState();
+      return;
+    }
+
+    this.excludedPaths.add(path);
+    this.pinnedPaths.delete(path);
+    void this.persistOverrideState();
+  }
+
+  private async ensureOverrideStateLoaded(workspaceRoot: string): Promise<void> {
+    if (this.loadedWorkspaceRoot === workspaceRoot) {
+      return;
+    }
+
+    const saved = this.context.workspaceState.get<TaskOverrideState>(getOverrideStateKey(workspaceRoot));
+    this.pinnedPaths = new Set(saved?.pinnedPaths ?? []);
+    this.excludedPaths = new Set(saved?.excludedPaths ?? []);
+    this.loadedWorkspaceRoot = workspaceRoot;
+  }
+
+  private async persistOverrideState(): Promise<void> {
+    if (!this.workspaceRoot) {
+      return;
+    }
+
+    await this.context.workspaceState.update(getOverrideStateKey(this.workspaceRoot), {
+      pinnedPaths: [...this.pinnedPaths],
+      excludedPaths: [...this.excludedPaths]
+    } satisfies TaskOverrideState);
+  }
+
   private render(): void {
     if (!this.view) {
       return;
@@ -265,7 +341,9 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
       status: this.status,
       compiled: this.compiled,
       payload: this.payload,
-      workspaceRoot: this.workspaceRoot
+      workspaceRoot: this.workspaceRoot,
+      pinnedPaths: [...this.pinnedPaths],
+      excludedPaths: [...this.excludedPaths]
     });
   }
 }
@@ -284,6 +362,18 @@ type WebviewMessage =
       path: string;
     }
   | {
+      type: "toggle-pin";
+      path: string;
+    }
+  | {
+      type: "toggle-exclude";
+      path: string;
+    }
+  | {
+      type: "include-path";
+      path: string;
+    }
+  | {
       type: "switch-target";
       target: AgentTarget;
     }
@@ -297,6 +387,11 @@ type WebviewMessage =
       type: "open-compiled-prompt";
     };
 
+interface TaskOverrideState {
+  pinnedPaths: string[];
+  excludedPaths: string[];
+}
+
 function getWebviewHtml(
   webview: vscode.Webview,
   state: {
@@ -307,6 +402,8 @@ function getWebviewHtml(
     compiled?: CompiledPrompt;
     payload?: AgentPayload;
     workspaceRoot?: string;
+    pinnedPaths: string[];
+    excludedPaths: string[];
   }
 ): string {
   const nonce = getNonce();
@@ -509,6 +606,25 @@ function getWebviewHtml(
         margin-top: 8px;
         width: 100%;
       }
+      .item-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .pill {
+        padding: 5px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--panel) 88%, white 4%);
+        font-size: 11px;
+      }
       .mono {
         font-family: "SFMono-Regular", "Consolas", monospace;
         font-size: 12px;
@@ -601,13 +717,32 @@ function getWebviewHtml(
 
       <section class="card">
         <div class="kicker">Files</div>
+        <div class="pill-row">
+          ${
+            state.pinnedPaths.length
+              ? state.pinnedPaths.map((path) => `<span class="pill">Pinned: ${escapeHtml(path)}</span>`).join("")
+              : '<span class="pill">Pinned: none</span>'
+          }
+          ${
+            state.excludedPaths.length
+              ? state.excludedPaths.map((path) => `<span class="pill">Excluded: ${escapeHtml(path)}</span>`).join("")
+              : '<span class="pill">Excluded: none</span>'
+          }
+        </div>
         <h2>Included</h2>
         <div class="list">
           ${
             state.compiled?.includedFiles.length
               ? state.compiled.includedFiles
                   .map(
-                    (file) => `<div class="item"><div class="mono">${escapeHtml(file)}</div><button class="ghost open-file" data-path="${escapeAttribute(file)}">Open File</button></div>`
+                    (file) => `<div class="item">
+                      <div class="mono">${escapeHtml(file)}</div>
+                      <div class="item-actions">
+                        <button class="ghost open-file" data-path="${escapeAttribute(file)}">Open</button>
+                        <button class="ghost toggle-pin" data-path="${escapeAttribute(file)}">${state.pinnedPaths.includes(file) ? "Unpin" : "Pin"}</button>
+                      </div>
+                      <button class="ghost toggle-exclude" data-path="${escapeAttribute(file)}">${state.excludedPaths.includes(file) ? "Undo Exclude" : "Exclude"}</button>
+                    </div>`
                   )
                   .join("")
               : '<div class="empty">No files compiled yet.</div>'
@@ -618,7 +753,13 @@ function getWebviewHtml(
           ${
             state.compiled?.omittedPaths.length
               ? state.compiled.omittedPaths
-                  .map((file) => `<div class="item"><div class="mono">${escapeHtml(file)}</div></div>`)
+                  .map((file) => `<div class="item">
+                    <div class="mono">${escapeHtml(file)}</div>
+                    <div class="item-actions">
+                      <button class="ghost include-path" data-path="${escapeAttribute(file)}">Include</button>
+                      <button class="ghost toggle-pin" data-path="${escapeAttribute(file)}">${state.pinnedPaths.includes(file) ? "Unpin" : "Pin"}</button>
+                    </div>
+                  </div>`)
                   .join("")
               : '<div class="empty">No omitted files.</div>'
           }
@@ -703,6 +844,33 @@ function getWebviewHtml(
           });
         });
       });
+
+      document.querySelectorAll(".toggle-pin").forEach((button) => {
+        button.addEventListener("click", () => {
+          vscode.postMessage({
+            type: "toggle-pin",
+            path: button.dataset.path
+          });
+        });
+      });
+
+      document.querySelectorAll(".toggle-exclude").forEach((button) => {
+        button.addEventListener("click", () => {
+          vscode.postMessage({
+            type: "toggle-exclude",
+            path: button.dataset.path
+          });
+        });
+      });
+
+      document.querySelectorAll(".include-path").forEach((button) => {
+        button.addEventListener("click", () => {
+          vscode.postMessage({
+            type: "include-path",
+            path: button.dataset.path
+          });
+        });
+      });
     </script>
   </body>
 </html>`;
@@ -742,6 +910,10 @@ function formatPayloadText(payload: AgentPayload): string {
     `Omitted files: ${payload.metadata.omittedPaths.join(", ") || "None"}`,
     `Token estimate: ${payload.metadata.tokenEstimate}`
   ].join("\n");
+}
+
+function getOverrideStateKey(workspaceRoot: string): string {
+  return `nomic.overrideState:${workspaceRoot}`;
 }
 
 function getNonce(): string {

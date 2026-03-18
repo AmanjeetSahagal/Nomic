@@ -26,11 +26,18 @@ describe("FileStorageBackend", () => {
       repositoryRoot,
       fileCount: 1,
       generatedAt: new Date().toISOString(),
+      metrics: {
+        addedFiles: 1,
+        changedFiles: 0,
+        removedFiles: 0,
+        reusedFiles: 0
+      },
       files: [
         {
           path: "src/auth.ts",
           language: "typescript",
           size: 100,
+          modifiedAtMs: 1,
           imports: [],
           isTest: false,
           symbols: [{ name: "auth.ts", kind: "module", path: "src/auth.ts" }]

@@ -58,6 +58,47 @@ describe("FilesystemParserProvider", () => {
 
     const testFile = index.files.find((file) => file.path === "tests/auth.test.ts");
     expect(testFile?.isTest).toBe(true);
+    expect(index.metrics).toEqual({
+      addedFiles: 3,
+      changedFiles: 0,
+      removedFiles: 0,
+      reusedFiles: 0
+    });
+  });
+
+  it("reuses unchanged files and reports incremental metrics", async () => {
+    const repositoryRoot = await createTempRepository();
+
+    const authPath = path.join(repositoryRoot, "src", "auth.ts");
+    const cryptoPath = path.join(repositoryRoot, "src", "crypto.ts");
+    const testPath = path.join(repositoryRoot, "tests", "auth.test.ts");
+
+    await writeFile(authPath, "export function loginUser() { return true; }", "utf8");
+    await writeFile(cryptoPath, "export function hashPassword() { return 'x'; }", "utf8");
+    await writeFile(testPath, "describe('auth', () => {})", "utf8");
+
+    const parser = new FilesystemParserProvider();
+    const firstIndex = await parser.indexRepository({ repositoryRoot });
+    const originalCryptoRecord = firstIndex.files.find((file) => file.path === "src/crypto.ts");
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    await writeFile(authPath, "export function loginUser() { return false; }", "utf8");
+
+    const secondIndex = await parser.indexRepository({
+      repositoryRoot,
+      existingIndex: firstIndex
+    });
+
+    const nextCryptoRecord = secondIndex.files.find((file) => file.path === "src/crypto.ts");
+    const nextAuthRecord = secondIndex.files.find((file) => file.path === "src/auth.ts");
+
+    expect(secondIndex.metrics).toEqual({
+      addedFiles: 0,
+      changedFiles: 1,
+      removedFiles: 0,
+      reusedFiles: 2
+    });
+    expect(nextCryptoRecord).toEqual(originalCryptoRecord);
+    expect(nextAuthRecord?.symbols.map((symbol) => symbol.name)).toContain("loginUser");
   });
 });
 
