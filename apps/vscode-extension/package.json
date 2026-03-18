@@ -15,7 +15,10 @@
     "onView:nomic.preview",
     "onCommand:nomic.indexWorkspace",
     "onCommand:nomic.compileContext",
-    "onCommand:nomic.refreshPreview"
+    "onCommand:nomic.refreshPreview",
+    "onCommand:nomic.copyPayload",
+    "onCommand:nomic.openPayload",
+    "onCommand:nomic.openCompiledPrompt"
   ],
   "contributes": {
     "viewsContainers": {
@@ -23,7 +26,7 @@
         {
           "id": "nomic",
           "title": "Nomic",
-          "icon": "media/nomic.svg"
+          "icon": "media/vscode_grey_logo.png"
         }
       ]
     },
@@ -31,7 +34,8 @@
       "nomic": [
         {
           "id": "nomic.preview",
-          "name": "Prompt Preview"
+          "name": "Prompt Preview",
+          "type": "webview"
         }
       ]
     },
@@ -47,6 +51,18 @@
       {
         "command": "nomic.refreshPreview",
         "title": "Nomic: Refresh Preview"
+      },
+      {
+        "command": "nomic.copyPayload",
+        "title": "Nomic: Copy Payload"
+      },
+      {
+        "command": "nomic.openPayload",
+        "title": "Nomic: Open Payload"
+      },
+      {
+        "command": "nomic.openCompiledPrompt",
+        "title": "Nomic: Open Compiled Prompt"
       }
     ]
   },

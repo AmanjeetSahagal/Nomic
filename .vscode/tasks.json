@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build:nomic-extension",
+      "type": "npm",
+      "script": "build",
+      "path": "apps/vscode-extension",
+      "problemMatcher": "$tsc"
+    }
+  ]
+}

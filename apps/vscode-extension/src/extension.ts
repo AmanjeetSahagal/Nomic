@@ -41,6 +41,27 @@ export function activate(context: vscode.ExtensionContext): void {
       await provider.refresh();
     })
   );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("nomic.copyPayload", async () => {
+      await revealNomicView();
+      await provider.copyPayload();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("nomic.openPayload", async () => {
+      await revealNomicView();
+      await provider.openPayloadDocument();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("nomic.openCompiledPrompt", async () => {
+      await revealNomicView();
+      await provider.openCompiledPromptDocument();
+    })
+  );
 }
 
 export function deactivate(): void {}
@@ -82,6 +103,15 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
             this.payload = await this.engine.formatForTarget(this.compiled, this.target);
           }
           this.render();
+          return;
+        case "copy-payload":
+          await this.copyPayload();
+          return;
+        case "open-payload":
+          await this.openPayloadDocument();
+          return;
+        case "open-compiled-prompt":
+          await this.openCompiledPromptDocument();
           return;
         default:
           return;
@@ -130,6 +160,44 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     }
 
     this.render();
+  }
+
+  async copyPayload(): Promise<void> {
+    if (!this.payload) {
+      void vscode.window.showWarningMessage("Compile context before copying a payload.");
+      return;
+    }
+
+    await vscode.env.clipboard.writeText(formatPayloadText(this.payload));
+    this.status = `Copied ${this.payload.target} payload`;
+    this.render();
+    void vscode.window.showInformationMessage(`Copied ${this.payload.target} payload to clipboard.`);
+  }
+
+  async openPayloadDocument(): Promise<void> {
+    if (!this.payload) {
+      void vscode.window.showWarningMessage("Compile context before opening a payload.");
+      return;
+    }
+
+    const document = await vscode.workspace.openTextDocument({
+      content: formatPayloadText(this.payload),
+      language: "markdown"
+    });
+    await vscode.window.showTextDocument(document, { preview: false });
+  }
+
+  async openCompiledPromptDocument(): Promise<void> {
+    if (!this.compiled) {
+      void vscode.window.showWarningMessage("Compile context before opening the compiled prompt.");
+      return;
+    }
+
+    const document = await vscode.workspace.openTextDocument({
+      content: this.compiled.prompt,
+      language: "markdown"
+    });
+    await vscode.window.showTextDocument(document, { preview: false });
   }
 
   private async compileCurrentTask(): Promise<void> {
@@ -189,6 +257,9 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     }
 
     this.view.webview.html = getWebviewHtml(this.view.webview, {
+      iconUri: this.view.webview.asWebviewUri(
+        vscode.Uri.joinPath(this.context.extensionUri, "media", "vscode_grey_logo.png")
+      ).toString(),
       taskText: this.taskText,
       target: this.target,
       status: this.status,
@@ -215,11 +286,21 @@ type WebviewMessage =
   | {
       type: "switch-target";
       target: AgentTarget;
+    }
+  | {
+      type: "copy-payload";
+    }
+  | {
+      type: "open-payload";
+    }
+  | {
+      type: "open-compiled-prompt";
     };
 
 function getWebviewHtml(
   webview: vscode.Webview,
   state: {
+    iconUri: string;
     taskText: string;
     target: AgentTarget;
     status: string;
@@ -236,7 +317,7 @@ function getWebviewHtml(
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} data:; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nomic</title>
     <style>
@@ -257,6 +338,7 @@ function getWebviewHtml(
           radial-gradient(circle at top right, rgba(95, 175, 255, 0.14), transparent 34%),
           linear-gradient(180deg, var(--vscode-sideBar-background), color-mix(in srgb, var(--vscode-sideBar-background) 90%, #091319 10%));
         font-family: "Avenir Next", "Segoe UI", sans-serif;
+        overflow-x: hidden;
       }
       .shell {
         padding: 16px;
@@ -273,22 +355,58 @@ function getWebviewHtml(
         background:
           linear-gradient(135deg, rgba(95, 175, 255, 0.18), rgba(26, 81, 112, 0.06)),
           var(--panel-strong);
+        padding: 18px;
+      }
+      .brand {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        min-width: 0;
+      }
+      .brand-mark {
+        width: 56px;
+        height: 56px;
+        padding: 6px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow:
+          inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+          0 6px 18px rgba(0, 0, 0, 0.12);
+        object-fit: contain;
+        display: block;
+        flex: 0 0 auto;
+      }
+      .brand-copy {
+        min-width: 0;
+        display: grid;
+        gap: 6px;
       }
       .kicker {
-        font-size: 11px;
-        letter-spacing: 0.16em;
+        font-size: 10px;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
         color: var(--muted);
+        line-height: 1.5;
       }
       h1, h2 {
         margin: 6px 0 0;
         font-family: "Georgia", serif;
         font-weight: 600;
       }
-      h1 { font-size: 22px; }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        max-width: 8ch;
+      }
       h2 { font-size: 15px; }
+      .hero-meta {
+        margin-top: 16px;
+        display: grid;
+        gap: 10px;
+      }
       .status {
-        margin-top: 10px;
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -331,7 +449,7 @@ function getWebviewHtml(
       }
       .row {
         display: grid;
-        grid-template-columns: 1fr 110px;
+        grid-template-columns: minmax(0, 1fr) auto;
         gap: 10px;
       }
       button {
@@ -354,12 +472,15 @@ function getWebviewHtml(
       }
       .actions {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 10px;
+      }
+      .actions.secondary {
+        grid-template-columns: 1fr;
       }
       .metrics {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
       .metric {
@@ -403,15 +524,46 @@ function getWebviewHtml(
         color: var(--muted);
         font-size: 12px;
       }
+      @media (min-width: 420px) {
+        .actions {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .actions.secondary {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 360px) {
+        .brand {
+          gap: 10px;
+        }
+        .brand-mark {
+          width: 48px;
+          height: 48px;
+        }
+        h1 { font-size: 18px; }
+        .row {
+          grid-template-columns: 1fr;
+        }
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="shell">
       <section class="hero">
-        <div class="kicker">Context Orchestration</div>
-        <h1>Nomic Preview</h1>
-        <div class="status">${escapeHtml(state.status)}</div>
-        <div class="workspace">${escapeHtml(state.workspaceRoot ?? "No workspace loaded")}</div>
+        <div class="brand">
+          <img class="brand-mark" src="${state.iconUri}" alt="Nomic logo" />
+          <div class="brand-copy">
+            <div class="kicker">Context Orchestration</div>
+            <h1>Nomic Preview</h1>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="status">${escapeHtml(state.status)}</div>
+          <div class="workspace">${escapeHtml(state.workspaceRoot ?? "No workspace loaded")}</div>
+        </div>
       </section>
 
       <section class="card">
@@ -428,6 +580,11 @@ function getWebviewHtml(
           <div class="actions">
             <button class="ghost" id="indexButton">Index Workspace</button>
             <button class="ghost" id="targetButton">Switch Target View</button>
+            <button class="ghost" id="copyButton">Copy Payload</button>
+          </div>
+          <div class="actions secondary">
+            <button class="ghost" id="openPayloadButton">Open Payload</button>
+            <button class="ghost" id="openPromptButton">Open Prompt</button>
           </div>
         </div>
       </section>
@@ -503,6 +660,9 @@ function getWebviewHtml(
       const compileButton = document.getElementById("compileButton");
       const indexButton = document.getElementById("indexButton");
       const targetButton = document.getElementById("targetButton");
+      const copyButton = document.getElementById("copyButton");
+      const openPayloadButton = document.getElementById("openPayloadButton");
+      const openPromptButton = document.getElementById("openPromptButton");
 
       compileButton.addEventListener("click", () => {
         vscode.postMessage({
@@ -521,6 +681,18 @@ function getWebviewHtml(
           type: "switch-target",
           target: target.value
         });
+      });
+
+      copyButton.addEventListener("click", () => {
+        vscode.postMessage({ type: "copy-payload" });
+      });
+
+      openPayloadButton.addEventListener("click", () => {
+        vscode.postMessage({ type: "open-payload" });
+      });
+
+      openPromptButton.addEventListener("click", () => {
+        vscode.postMessage({ type: "open-compiled-prompt" });
       });
 
       document.querySelectorAll(".open-file").forEach((button) => {
@@ -551,6 +723,25 @@ function escapeHtml(value: string): string {
 
 function escapeAttribute(value: string): string {
   return escapeHtml(value);
+}
+
+function formatPayloadText(payload: AgentPayload): string {
+  return [
+    "# Target",
+    payload.target,
+    "",
+    "# System",
+    payload.system,
+    "",
+    "# User",
+    payload.user,
+    "",
+    "# Metadata",
+    `Included files: ${payload.metadata.includedFiles.join(", ") || "None"}`,
+    `Related tests: ${payload.metadata.relatedTests.join(", ") || "None"}`,
+    `Omitted files: ${payload.metadata.omittedPaths.join(", ") || "None"}`,
+    `Token estimate: ${payload.metadata.tokenEstimate}`
+  ].join("\n");
 }
 
 function getNonce(): string {
