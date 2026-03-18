@@ -1,4 +1,8 @@
-# Nomic
+<p align="center">
+  <img src="apps/vscode-extension/media/vscode_grey_logo.png" alt="Nomic logo" width="96" />
+</p>
+
+<h1 align="center">Nomic</h1>
 
 Nomic is a local-first context orchestration layer for AI coding agents.
 
