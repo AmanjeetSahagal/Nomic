@@ -32,10 +32,12 @@ async function main(): Promise<void> {
       const languageBreakdown = summarizeLanguages(result.files);
 
       console.log(`Indexed ${result.fileCount} files in ${repositoryRoot}`);
+      console.log(`Chunks: ${result.chunks.length}`);
+      console.log(`Edges: ${result.edges.length}`);
       console.log(`Test files: ${testFileCount}`);
       console.log(`Languages: ${languageBreakdown}`);
       console.log(
-        `Index metrics: added=${result.metrics.addedFiles}, changed=${result.metrics.changedFiles}, reused=${result.metrics.reusedFiles}, removed=${result.metrics.removedFiles}`
+        `Index metrics: added=${result.metrics.addedFiles}, changed=${result.metrics.changedFiles}, reused=${result.metrics.reusedFiles}, removed=${result.metrics.removedFiles}, reusedChunks=${result.metrics.reusedChunks}, reusedEdges=${result.metrics.reusedEdges}`
       );
       console.log("Saved index to .nomic/index.json");
       return;
@@ -53,14 +55,38 @@ async function main(): Promise<void> {
         target: parseTarget(process.env.NOMIC_AGENT_TARGET)
       };
       const compiled = await engine.compileTask(task);
+      const payload = await engine.formatForTarget(compiled, task.target);
 
       console.log(`Task: ${task.text}`);
       console.log(`Target: ${compiled.target}`);
+      console.log(`Prompt ID: ${compiled.promptId}`);
       console.log(`Included files: ${compiled.includedFiles.length}`);
       console.log(`Related tests: ${compiled.relatedTests.length}`);
       console.log(`Estimated tokens: ${compiled.tokenEstimate}`);
       console.log("");
-      const payload = await engine.formatForTarget(compiled, task.target);
+      console.log("Selection");
+      for (const reason of compiled.selectionReasons) {
+        console.log(`- ${reason.path} [${reason.role}/${reason.stage}] (${reason.score.toFixed(1)})`);
+        console.log(`  ${reason.reason}`);
+      }
+      console.log("");
+      console.log("Budget");
+      console.log(
+        `raw=${compiled.budgetUsage.raw}, summaries=${compiled.budgetUsage.summary}, dependencies=${compiled.budgetUsage.dependency}, tests=${compiled.budgetUsage.tests}, total=${compiled.budgetUsage.total}`
+      );
+      console.log("");
+      console.log("Omissions");
+      if (compiled.omittedPaths.length === 0 && compiled.omissionReasons.length === 0) {
+        console.log("None");
+      } else {
+        for (const omission of [...compiled.omittedPaths, ...compiled.omissionReasons]) {
+          console.log(`- ${omission}`);
+        }
+      }
+      console.log("");
+      console.log("Compiled Prompt Preview");
+      console.log(compiled.prompt);
+      console.log("");
       console.log(`# Target Payload: ${payload.target}`);
       console.log("");
       console.log("## System");
@@ -89,18 +115,28 @@ async function main(): Promise<void> {
       }
 
       for (const reason of reasons) {
-        console.log(`${reason.path} (${reason.score})`);
+        console.log(`${reason.path} [${reason.role}/${reason.stage}] (${reason.score.toFixed(1)})`);
         console.log(`  ${reason.reason}`);
       }
       return;
     }
     case "doctor": {
+      const diagnostics = await engine.diagnostics(process.cwd());
+
       console.log("Nomic doctor");
       console.log(`Node: ${process.version}`);
       console.log(`Working directory: ${process.cwd()}`);
       console.log("Parser: filesystem parser");
       console.log("Storage: .nomic/index.json");
       console.log("Session memory: .nomic/session-memory.json");
+      console.log(`Index present: ${diagnostics.hasIndex ? "yes" : "no"}`);
+      if (diagnostics.hasIndex) {
+        console.log(`Index generated at: ${diagnostics.generatedAt}`);
+        console.log(`Indexed files: ${diagnostics.fileCount}`);
+        console.log(`Indexed chunks: ${diagnostics.chunkCount}`);
+        console.log(`Graph edges: ${diagnostics.edgeCount}`);
+        console.log(`Reused files on last index: ${diagnostics.reusedFiles}`);
+      }
       return;
     }
     default: {

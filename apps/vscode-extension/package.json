@@ -18,7 +18,8 @@
     "onCommand:nomic.refreshPreview",
     "onCommand:nomic.copyPayload",
     "onCommand:nomic.openPayload",
-    "onCommand:nomic.openCompiledPrompt"
+    "onCommand:nomic.openCompiledPrompt",
+    "onCommand:nomic.sendToAgent"
   ],
   "contributes": {
     "viewsContainers": {
@@ -63,6 +64,10 @@
       {
         "command": "nomic.openCompiledPrompt",
         "title": "Nomic: Open Compiled Prompt"
+      },
+      {
+        "command": "nomic.sendToAgent",
+        "title": "Nomic: Approve And Send To Agent"
       }
     ]
   },

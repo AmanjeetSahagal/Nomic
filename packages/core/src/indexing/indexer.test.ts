@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -15,7 +15,7 @@ describe("FilesystemParserProvider", () => {
     );
   });
 
-  it("indexes source files, symbols, imports, and tests", async () => {
+  it("indexes source files, graph edges, chunks, and tests", async () => {
     const repositoryRoot = await createTempRepository();
 
     await writeFile(
@@ -24,7 +24,9 @@ describe("FilesystemParserProvider", () => {
         'import { hashPassword } from "./crypto";',
         "",
         "export class AuthService {}",
-        "export function loginUser() {}"
+        "export function loginUser() {",
+        "  return hashPassword('x');",
+        "}"
       ].join("\n"),
       "utf8"
     );
@@ -35,16 +37,22 @@ describe("FilesystemParserProvider", () => {
     );
     await writeFile(
       path.join(repositoryRoot, "tests", "auth.test.ts"),
-      'import { loginUser } from "../src/auth";',
+      'import { loginUser } from "../src/auth";\nloginUser();',
       "utf8"
     );
+    await writeFile(path.join(repositoryRoot, "docs", "auth.md"), "# Auth guide\nlogin flow", "utf8");
     await writeFile(path.join(repositoryRoot, "node_modules", "ignored.ts"), "export const ignored = true;", "utf8");
 
     const parser = new FilesystemParserProvider();
     const index = await parser.indexRepository({ repositoryRoot });
 
-    expect(index.fileCount).toBe(3);
-    expect(index.files.map((file) => file.path)).toEqual(["src/auth.ts", "src/crypto.ts", "tests/auth.test.ts"]);
+    expect(index.fileCount).toBe(4);
+    expect(index.files.map((file) => file.path)).toEqual([
+      "docs/auth.md",
+      "src/auth.ts",
+      "src/crypto.ts",
+      "tests/auth.test.ts"
+    ]);
 
     const authFile = index.files.find((file) => file.path === "src/auth.ts");
     expect(authFile).toMatchObject({
@@ -55,14 +63,20 @@ describe("FilesystemParserProvider", () => {
     expect(authFile?.symbols.map((symbol) => symbol.name)).toEqual(
       expect.arrayContaining(["auth.ts", "AuthService", "loginUser"])
     );
-
-    const testFile = index.files.find((file) => file.path === "tests/auth.test.ts");
-    expect(testFile?.isTest).toBe(true);
+    expect(index.chunks.some((chunk) => chunk.filePath === "src/auth.ts")).toBe(true);
+    expect(index.edges).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ from: "src/auth.ts", to: "src/crypto.ts", kind: "import" }),
+        expect.objectContaining({ from: "tests/auth.test.ts", to: "src/auth.ts", kind: "test" })
+      ])
+    );
     expect(index.metrics).toEqual({
-      addedFiles: 3,
+      addedFiles: 4,
       changedFiles: 0,
       removedFiles: 0,
-      reusedFiles: 0
+      reusedFiles: 0,
+      reusedChunks: 0,
+      reusedEdges: 0
     });
   });
 
@@ -91,12 +105,9 @@ describe("FilesystemParserProvider", () => {
     const nextCryptoRecord = secondIndex.files.find((file) => file.path === "src/crypto.ts");
     const nextAuthRecord = secondIndex.files.find((file) => file.path === "src/auth.ts");
 
-    expect(secondIndex.metrics).toEqual({
-      addedFiles: 0,
-      changedFiles: 1,
-      removedFiles: 0,
-      reusedFiles: 2
-    });
+    expect(secondIndex.metrics.changedFiles).toBe(1);
+    expect(secondIndex.metrics.reusedFiles).toBe(2);
+    expect(secondIndex.metrics.reusedChunks).toBeGreaterThan(0);
     expect(nextCryptoRecord).toEqual(originalCryptoRecord);
     expect(nextAuthRecord?.symbols.map((symbol) => symbol.name)).toContain("loginUser");
   });
@@ -107,6 +118,7 @@ async function createTempRepository(): Promise<string> {
   tempDirectories.push(root);
   await mkdir(path.join(root, "src"), { recursive: true });
   await mkdir(path.join(root, "tests"), { recursive: true });
+  await mkdir(path.join(root, "docs"), { recursive: true });
   await mkdir(path.join(root, "node_modules"), { recursive: true });
   return root;
 }

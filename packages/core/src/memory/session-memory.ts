@@ -10,12 +10,8 @@ import {
 export class InMemorySessionMemory implements SessionMemory {
   private readonly records: SessionRecord[] = [];
 
-  async remember(_task: UserTask, compiledPrompt: CompiledPrompt): Promise<void> {
-    this.records.unshift({
-      task: _task,
-      compiledPrompt,
-      createdAt: new Date().toISOString()
-    });
+  async remember(task: UserTask, compiledPrompt: CompiledPrompt): Promise<void> {
+    this.records.unshift(createSessionRecord(task, compiledPrompt));
   }
 
   async recent(limit: number, repositoryRoot?: string): Promise<SessionRecord[]> {
@@ -30,14 +26,7 @@ export class FileSessionMemory implements SessionMemory {
   async remember(task: UserTask, compiledPrompt: CompiledPrompt): Promise<void> {
     const repositoryRoot = task.repositoryRoot ?? process.cwd();
     const existing = await this.recent(20, repositoryRoot);
-    const records: SessionRecord[] = [
-      {
-        task,
-        compiledPrompt,
-        createdAt: new Date().toISOString()
-      },
-      ...existing
-    ].slice(0, 20);
+    const records: SessionRecord[] = [createSessionRecord(task, compiledPrompt), ...existing].slice(0, 20);
 
     await writeSessionRecords(repositoryRoot, records);
   }
@@ -71,4 +60,14 @@ function getSessionFilePath(repositoryRoot: string): string {
 
 function isMissingFileError(error: unknown): error is NodeJS.ErrnoException {
   return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT";
+}
+
+function createSessionRecord(task: UserTask, compiledPrompt: CompiledPrompt): SessionRecord {
+  return {
+    task,
+    compiledPrompt,
+    selectedFiles: compiledPrompt.includedFiles,
+    architectureSummary: compiledPrompt.dependencyNotes.slice(0, 5),
+    createdAt: new Date().toISOString()
+  };
 }

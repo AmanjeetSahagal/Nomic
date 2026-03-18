@@ -27,6 +27,7 @@ describe("SessionMemory", () => {
 
     expect(records).toHaveLength(1);
     expect(records[0]?.task.text).toBe("refactor auth");
+    expect(records[0]?.selectedFiles).toEqual(["src/auth.ts"]);
   });
 
   it("persists session records to disk", async () => {
@@ -42,6 +43,7 @@ describe("SessionMemory", () => {
     expect(records).toHaveLength(2);
     expect(records[0]?.task.text).toBe("improve auth tests");
     expect(records[1]?.compiledPrompt.includedFiles).toContain("src/auth.ts");
+    expect(records[0]?.architectureSummary).toEqual(["Preserve auth module boundaries"]);
   });
 });
 
@@ -55,12 +57,14 @@ function createTask(repositoryRoot: string, text: string): UserTask {
 
 function createPrompt(filePath: string): CompiledPrompt {
   return {
+    promptId: `prompt-${filePath}`,
     target: "codex",
     prompt: `Prompt for ${filePath}`,
     tokenEstimate: 10,
     includedFiles: [filePath],
     relatedTests: [],
     omittedPaths: [],
+    omissionReasons: [],
     tokenBudget: {
       maxContextTokens: 8000,
       rawCodeFraction: 0.5,
@@ -76,6 +80,9 @@ function createPrompt(filePath: string): CompiledPrompt {
       total: 10
     },
     selectionReasons: [],
-    summaries: []
+    summaries: [],
+    retrievalSummary: [],
+    dependencyNotes: ["Preserve auth module boundaries"],
+    sections: []
   };
 }

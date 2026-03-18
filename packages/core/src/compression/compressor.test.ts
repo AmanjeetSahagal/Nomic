@@ -16,7 +16,7 @@ describe("ContextCompressor", () => {
     );
   });
 
-  it("keeps top source files raw and summarizes the rest", async () => {
+  it("keeps top implementation files raw and summarizes dependencies", async () => {
     const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), "nomic-compressor-"));
     tempDirectories.push(repositoryRoot);
     await mkdir(path.join(repositoryRoot, "src"), { recursive: true });
@@ -35,7 +35,9 @@ describe("ContextCompressor", () => {
         addedFiles: 4,
         changedFiles: 0,
         removedFiles: 0,
-        reusedFiles: 0
+        reusedFiles: 0,
+        reusedChunks: 0,
+        reusedEdges: 0
       },
       files: [
         {
@@ -46,8 +48,8 @@ describe("ContextCompressor", () => {
           imports: ["./crypto"],
           isTest: false,
           symbols: [
-            { name: "auth.ts", kind: "module", path: "src/auth.ts" },
-            { name: "loginUser", kind: "function", path: "src/auth.ts" }
+            { id: "src/auth.ts#module", name: "auth.ts", kind: "module", path: "src/auth.ts", exported: true },
+            { id: "src/auth.ts#function:loginUser", name: "loginUser", kind: "function", path: "src/auth.ts", exported: true }
           ]
         },
         {
@@ -58,8 +60,8 @@ describe("ContextCompressor", () => {
           imports: [],
           isTest: false,
           symbols: [
-            { name: "crypto.ts", kind: "module", path: "src/crypto.ts" },
-            { name: "hashPassword", kind: "function", path: "src/crypto.ts" }
+            { id: "src/crypto.ts#module", name: "crypto.ts", kind: "module", path: "src/crypto.ts", exported: true },
+            { id: "src/crypto.ts#function:hashPassword", name: "hashPassword", kind: "function", path: "src/crypto.ts", exported: true }
           ]
         },
         {
@@ -70,8 +72,8 @@ describe("ContextCompressor", () => {
           imports: [],
           isTest: false,
           symbols: [
-            { name: "session.ts", kind: "module", path: "src/session.ts" },
-            { name: "SessionManager", kind: "class", path: "src/session.ts" }
+            { id: "src/session.ts#module", name: "session.ts", kind: "module", path: "src/session.ts", exported: true },
+            { id: "src/session.ts#class:SessionManager", name: "SessionManager", kind: "class", path: "src/session.ts", exported: true }
           ]
         },
         {
@@ -81,16 +83,79 @@ describe("ContextCompressor", () => {
           modifiedAtMs: 1,
           imports: [],
           isTest: true,
-          symbols: [{ name: "auth.test.ts", kind: "test", path: "tests/auth.test.ts" }]
+          symbols: [{ id: "tests/auth.test.ts#module", name: "auth.test.ts", kind: "test", path: "tests/auth.test.ts", exported: true }]
         }
-      ]
+      ],
+      symbols: [],
+      chunks: [],
+      edges: []
     };
 
     const candidates: ContextCandidate[] = [
-      { path: "src/auth.ts", reason: "Path matches auth", score: 10, source: "structural" },
-      { path: "src/crypto.ts", reason: "Imported by src/auth.ts", score: 7, source: "structural" },
-      { path: "src/session.ts", reason: "Path matches session", score: 6, source: "structural" },
-      { path: "tests/auth.test.ts", reason: "Related test for src/auth.ts", score: 5, source: "structural" }
+      {
+        path: "src/auth.ts",
+        reason: "Primary auth implementation",
+        score: 20,
+        source: "structural",
+        role: "primary",
+        stage: "seed",
+        dependencyDistance: 0,
+        structuralScore: 20,
+        semanticScore: 0,
+        recencyScore: 1,
+        fileImportanceScore: 5,
+        tokenCost: 10,
+        chunkIds: [],
+        expansionPath: ["src/auth.ts"]
+      },
+      {
+        path: "src/crypto.ts",
+        reason: "Dependency for auth hashing",
+        score: 12,
+        source: "structural",
+        role: "dependency",
+        stage: "graph",
+        dependencyDistance: 1,
+        structuralScore: 12,
+        semanticScore: 0,
+        recencyScore: 1,
+        fileImportanceScore: 4,
+        tokenCost: 8,
+        chunkIds: [],
+        expansionPath: ["src/auth.ts", "src/crypto.ts"]
+      },
+      {
+        path: "src/session.ts",
+        reason: "Secondary implementation context",
+        score: 15,
+        source: "structural",
+        role: "primary",
+        stage: "seed",
+        dependencyDistance: 0,
+        structuralScore: 15,
+        semanticScore: 0,
+        recencyScore: 1,
+        fileImportanceScore: 4,
+        tokenCost: 8,
+        chunkIds: [],
+        expansionPath: ["src/session.ts"]
+      },
+      {
+        path: "tests/auth.test.ts",
+        reason: "Related auth test",
+        score: 10,
+        source: "structural",
+        role: "test",
+        stage: "graph",
+        dependencyDistance: 1,
+        structuralScore: 10,
+        semanticScore: 0,
+        recencyScore: 1,
+        fileImportanceScore: 2,
+        tokenCost: 5,
+        chunkIds: [],
+        expansionPath: ["src/auth.ts", "tests/auth.test.ts"]
+      }
     ];
 
     const tokenBudget: TokenBudget = {
@@ -110,8 +175,7 @@ describe("ContextCompressor", () => {
     ]);
     expect(summaries.find((item) => item.path === "src/auth.ts")?.content).toContain("loginUser");
     expect(compression.omittedPaths).toContain("src/crypto.ts");
-    expect(summaries.find((item) => item.path === "src/session.ts")?.content).toContain("SessionManager");
-    expect(compression.omittedPaths).toContain("tests/auth.test.ts");
+    expect(compression.dependencyNotes.length).toBeGreaterThan(0);
     expect(compression.budgetUsage.total).toBeGreaterThan(0);
   });
 });

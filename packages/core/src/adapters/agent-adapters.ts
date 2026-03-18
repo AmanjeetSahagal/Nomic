@@ -8,15 +8,16 @@ export class CodexAdapter implements AgentAdapter {
       target: this.target,
       system: [
         "You are Codex working inside a repository-aware workflow.",
-        "Use the provided context first, preserve behavior unless the task requires change, and call out omitted files when blocked."
+        "Use the provided compiled context first, preserve behavior unless the task requires change, and call out omitted files when blocked."
       ].join(" "),
       user: [
         "# Compiled Task",
         compiledPrompt.prompt,
         "",
         "# Operating Notes",
+        `Prompt ID: ${compiledPrompt.promptId}`,
         "Prefer editing the listed files directly.",
-        "If the task appears under-specified, state the missing detail before making a risky change."
+        "If context is omitted by budget, say so before making a risky change."
       ].join("\n"),
       metadata: buildMetadata(compiledPrompt)
     };
@@ -38,6 +39,7 @@ export class ClaudeAdapter implements AgentAdapter {
         compiledPrompt.prompt,
         "",
         "Response expectations:",
+        `- Prompt ID: ${compiledPrompt.promptId}`,
         "- Explain the plan briefly before major edits.",
         "- Note assumptions when context was omitted by budget."
       ].join("\n"),
@@ -48,6 +50,7 @@ export class ClaudeAdapter implements AgentAdapter {
 
 function buildMetadata(compiledPrompt: CompiledPrompt): AgentPayload["metadata"] {
   return {
+    promptId: compiledPrompt.promptId,
     includedFiles: compiledPrompt.includedFiles,
     relatedTests: compiledPrompt.relatedTests,
     omittedPaths: compiledPrompt.omittedPaths,

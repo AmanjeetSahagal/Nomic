@@ -47,7 +47,9 @@ export class NomicEngine {
       (await this.indexRepository({ repositoryRoot }));
 
     const sessionContext = await this.dependencies.memory.recent(3, repositoryRoot);
-    const retrieval = applyTaskOverrides(await this.retriever.retrieve(task, index), index, task.overrides);
+    const memoryPinnedPaths = unique(sessionContext.flatMap((record) => record.selectedFiles).slice(0, 4));
+    const retrievalTask = mergeTaskOverrides(task, memoryPinnedPaths);
+    const retrieval = applyTaskOverrides(await this.retriever.retrieve(retrievalTask, index), index, retrievalTask.overrides);
     const compression = await this.compressor.compress(retrieval.candidates, index);
     const compiled = this.compiler.compile(task, {
       index,
@@ -65,14 +67,42 @@ export class NomicEngine {
     const index =
       (await this.dependencies.storage.readIndex(repositoryRoot)) ??
       (await this.indexRepository({ repositoryRoot }));
+    const sessionContext = await this.dependencies.memory.recent(3, repositoryRoot);
+    const memoryPinnedPaths = unique(sessionContext.flatMap((record) => record.selectedFiles).slice(0, 4));
+    const retrievalTask = mergeTaskOverrides(task, memoryPinnedPaths);
+    const retrieval = applyTaskOverrides(await this.retriever.retrieve(retrievalTask, index), index, retrievalTask.overrides);
 
-    const retrieval = applyTaskOverrides(await this.retriever.retrieve(task, index), index, task.overrides);
     return retrieval.candidates.map((candidate) => ({
       path: candidate.path,
       reason: candidate.reason,
       score: candidate.score,
-      source: candidate.source
+      source: candidate.source,
+      role: candidate.role,
+      stage: candidate.stage
     }));
+  }
+
+  async diagnostics(repositoryRoot = process.cwd()): Promise<{
+    hasIndex: boolean;
+    generatedAt?: string;
+    fileCount?: number;
+    chunkCount?: number;
+    edgeCount?: number;
+    reusedFiles?: number;
+  }> {
+    const index = await this.dependencies.storage.readIndex(repositoryRoot);
+    if (!index) {
+      return { hasIndex: false };
+    }
+
+    return {
+      hasIndex: true,
+      generatedAt: index.generatedAt,
+      fileCount: index.fileCount,
+      chunkCount: index.chunks.length,
+      edgeCount: index.edges.length,
+      reusedFiles: index.metrics.reusedFiles
+    };
   }
 
   async formatForTarget(compiledPrompt: CompiledPrompt, target: AgentTarget): Promise<AgentPayload> {
@@ -94,6 +124,24 @@ export function createNomicEngine(overrides: Partial<EngineDependencies> = {}): 
     parser: overrides.parser,
     embeddings: overrides.embeddings,
     summarizer: overrides.summarizer,
+    tokenBudget: overrides.tokenBudget,
     tokenEstimator: overrides.tokenEstimator
   });
+}
+
+function mergeTaskOverrides(task: UserTask, memoryPinnedPaths: string[]): UserTask {
+  const existingPinned = task.overrides?.pinnedPaths ?? [];
+  const excludedPaths = task.overrides?.excludedPaths ?? [];
+
+  return {
+    ...task,
+    overrides: {
+      pinnedPaths: unique([...existingPinned, ...memoryPinnedPaths]).filter((candidate) => !excludedPaths.includes(candidate)),
+      excludedPaths
+    }
+  };
+}
+
+function unique(values: string[]): string[] {
+  return [...new Set(values)];
 }

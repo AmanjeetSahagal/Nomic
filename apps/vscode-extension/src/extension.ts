@@ -62,6 +62,13 @@ export function activate(context: vscode.ExtensionContext): void {
       await provider.openCompiledPromptDocument();
     })
   );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("nomic.sendToAgent", async () => {
+      await revealNomicView();
+      await provider.sendToAgent();
+    })
+  );
 }
 
 export function deactivate(): void {}
@@ -129,6 +136,9 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
           return;
         case "open-compiled-prompt":
           await this.openCompiledPromptDocument();
+          return;
+        case "send-to-agent":
+          await this.sendToAgent();
           return;
         default:
           return;
@@ -222,6 +232,20 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
       language: "markdown"
     });
     await vscode.window.showTextDocument(document, { preview: false });
+  }
+
+  async sendToAgent(): Promise<void> {
+    if (!this.payload) {
+      void vscode.window.showWarningMessage("Compile context before approving a handoff.");
+      return;
+    }
+
+    await vscode.env.clipboard.writeText(formatPayloadText(this.payload));
+    this.status = `Approved ${this.payload.target} handoff ${this.payload.metadata.promptId}`;
+    this.render();
+    void vscode.window.showInformationMessage(
+      `Approved ${this.payload.target} handoff. Payload ${this.payload.metadata.promptId} copied to clipboard.`
+    );
   }
 
   private async compileCurrentTask(): Promise<void> {
@@ -385,6 +409,9 @@ type WebviewMessage =
     }
   | {
       type: "open-compiled-prompt";
+    }
+  | {
+      type: "send-to-agent";
     };
 
 interface TaskOverrideState {
@@ -701,6 +728,7 @@ function getWebviewHtml(
           <div class="actions secondary">
             <button class="ghost" id="openPayloadButton">Open Payload</button>
             <button class="ghost" id="openPromptButton">Open Prompt</button>
+            <button class="primary" id="sendButton">Approve Handoff</button>
           </div>
         </div>
       </section>
@@ -712,7 +740,18 @@ function getWebviewHtml(
           <div class="metric">Token Estimate<strong>${state.compiled?.tokenEstimate ?? 0}</strong></div>
           <div class="metric">Raw Blocks<strong>${rawCount}</strong></div>
           <div class="metric">Summaries<strong>${summaryCount}</strong></div>
+          <div class="metric">Prompt ID<strong>${escapeHtml(state.compiled?.promptId ?? "n/a")}</strong></div>
+          <div class="metric">Related Tests<strong>${state.compiled?.relatedTests.length ?? 0}</strong></div>
         </div>
+      </section>
+
+      <section class="card">
+        <div class="kicker">Retrieval</div>
+        ${
+          state.compiled?.retrievalSummary.length
+            ? `<pre>${escapeHtml(state.compiled.retrievalSummary.join("\n"))}</pre>`
+            : '<div class="empty">Compile a task to inspect retrieval rationale.</div>'
+        }
       </section>
 
       <section class="card">
@@ -804,6 +843,7 @@ function getWebviewHtml(
       const copyButton = document.getElementById("copyButton");
       const openPayloadButton = document.getElementById("openPayloadButton");
       const openPromptButton = document.getElementById("openPromptButton");
+      const sendButton = document.getElementById("sendButton");
 
       compileButton.addEventListener("click", () => {
         vscode.postMessage({
@@ -834,6 +874,10 @@ function getWebviewHtml(
 
       openPromptButton.addEventListener("click", () => {
         vscode.postMessage({ type: "open-compiled-prompt" });
+      });
+
+      sendButton.addEventListener("click", () => {
+        vscode.postMessage({ type: "send-to-agent" });
       });
 
       document.querySelectorAll(".open-file").forEach((button) => {
@@ -897,6 +941,9 @@ function formatPayloadText(payload: AgentPayload): string {
   return [
     "# Target",
     payload.target,
+    "",
+    "# Prompt ID",
+    payload.metadata.promptId,
     "",
     "# System",
     payload.system,

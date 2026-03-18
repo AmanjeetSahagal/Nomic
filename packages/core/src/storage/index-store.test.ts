@@ -30,7 +30,9 @@ describe("FileStorageBackend", () => {
         addedFiles: 1,
         changedFiles: 0,
         removedFiles: 0,
-        reusedFiles: 0
+        reusedFiles: 0,
+        reusedChunks: 0,
+        reusedEdges: 0
       },
       files: [
         {
@@ -40,9 +42,22 @@ describe("FileStorageBackend", () => {
           modifiedAtMs: 1,
           imports: [],
           isTest: false,
-          symbols: [{ name: "auth.ts", kind: "module", path: "src/auth.ts" }]
+          symbols: [{ id: "src/auth.ts#module", name: "auth.ts", kind: "module", path: "src/auth.ts", exported: true }]
         }
-      ]
+      ],
+      symbols: [{ id: "src/auth.ts#module", name: "auth.ts", kind: "module", path: "src/auth.ts", exported: true }],
+      chunks: [
+        {
+          id: "src/auth.ts#1-1",
+          filePath: "src/auth.ts",
+          kind: "code",
+          startLine: 1,
+          endLine: 1,
+          tokenEstimate: 5,
+          text: "export const auth = true;"
+        }
+      ],
+      edges: []
     };
 
     await backend.writeIndex(index);
