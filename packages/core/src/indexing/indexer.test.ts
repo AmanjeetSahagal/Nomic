@@ -67,7 +67,9 @@ describe("FilesystemParserProvider", () => {
     expect(index.edges).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ from: "src/auth.ts", to: "src/crypto.ts", kind: "import" }),
-        expect.objectContaining({ from: "tests/auth.test.ts", to: "src/auth.ts", kind: "test" })
+        expect.objectContaining({ from: "tests/auth.test.ts", to: "src/auth.ts", kind: "test" }),
+        expect.objectContaining({ from: "src/auth.ts", to: "src/crypto.ts", kind: "reference" }),
+        expect.objectContaining({ from: "src/auth.ts", to: "src/crypto.ts", kind: "caller" })
       ])
     );
     expect(index.metrics).toEqual({

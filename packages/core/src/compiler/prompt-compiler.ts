@@ -48,6 +48,7 @@ export class PromptCompiler {
 
     return {
       promptId,
+      compiledAt: new Date().toISOString(),
       target: task.target,
       prompt,
       tokenEstimate: this.tokenEstimator.estimate(prompt),
@@ -65,7 +66,17 @@ export class PromptCompiler {
         key,
         title,
         tokenEstimate: this.tokenEstimator.estimate(body)
-      }))
+      })),
+      diagnostics: {
+        indexMs: 0,
+        retrievalMs: 0,
+        compressionMs: 0,
+        compileMs: 0,
+        totalMs: 0,
+        fileCount: dependencies.index.fileCount,
+        chunkCount: dependencies.index.chunks.length,
+        edgeCount: dependencies.index.edges.length
+      }
     };
   }
 }

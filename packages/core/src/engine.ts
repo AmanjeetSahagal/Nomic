@@ -1,3 +1,4 @@
+import { performance } from "node:perf_hooks";
 import { ClaudeAdapter, CodexAdapter } from "./adapters/agent-adapters";
 import { PromptCompiler } from "./compiler/prompt-compiler";
 import { ContextCompressor } from "./compression/compressor";
@@ -8,6 +9,7 @@ import { FileStorageBackend } from "./storage/index-store";
 import {
   type AgentTarget,
   type AgentPayload,
+  type BenchmarkReport,
   type CompiledPrompt,
   type EngineDependencies,
   type IndexRepositoryRequest,
@@ -41,22 +43,41 @@ export class NomicEngine {
   }
 
   async compileTask(task: UserTask): Promise<CompiledPrompt> {
+    const startedAt = performance.now();
     const repositoryRoot = task.repositoryRoot ?? process.cwd();
+    const indexStartedAt = performance.now();
     const index =
       (await this.dependencies.storage.readIndex(repositoryRoot)) ??
       (await this.indexRepository({ repositoryRoot }));
+    const indexMs = performance.now() - indexStartedAt;
 
     const sessionContext = await this.dependencies.memory.recent(3, repositoryRoot);
     const memoryPinnedPaths = unique(sessionContext.flatMap((record) => record.selectedFiles).slice(0, 4));
     const retrievalTask = mergeTaskOverrides(task, memoryPinnedPaths);
+    const retrievalStartedAt = performance.now();
     const retrieval = applyTaskOverrides(await this.retriever.retrieve(retrievalTask, index), index, retrievalTask.overrides);
+    const retrievalMs = performance.now() - retrievalStartedAt;
+    const compressionStartedAt = performance.now();
     const compression = await this.compressor.compress(retrieval.candidates, index);
+    const compressionMs = performance.now() - compressionStartedAt;
+    const compileStartedAt = performance.now();
     const compiled = this.compiler.compile(task, {
       index,
       retrieval,
       compression,
       sessionContext
     });
+    const compileMs = performance.now() - compileStartedAt;
+    compiled.diagnostics = {
+      indexMs,
+      retrievalMs,
+      compressionMs,
+      compileMs,
+      totalMs: performance.now() - startedAt,
+      fileCount: index.fileCount,
+      chunkCount: index.chunks.length,
+      edgeCount: index.edges.length
+    };
 
     await this.dependencies.memory.remember(task, compiled);
     return compiled;
@@ -89,6 +110,7 @@ export class NomicEngine {
     chunkCount?: number;
     edgeCount?: number;
     reusedFiles?: number;
+    chunkReuseRatio?: number;
   }> {
     const index = await this.dependencies.storage.readIndex(repositoryRoot);
     if (!index) {
@@ -101,7 +123,41 @@ export class NomicEngine {
       fileCount: index.fileCount,
       chunkCount: index.chunks.length,
       edgeCount: index.edges.length,
-      reusedFiles: index.metrics.reusedFiles
+      reusedFiles: index.metrics.reusedFiles,
+      chunkReuseRatio: index.chunks.length === 0 ? 0 : index.metrics.reusedChunks / index.chunks.length
+    };
+  }
+
+  async benchmark(repositoryRoot: string, tasks: UserTask[]): Promise<BenchmarkReport> {
+    const indexStartedAt = performance.now();
+    await this.indexRepository({ repositoryRoot });
+    const indexMs = performance.now() - indexStartedAt;
+    const compileReports: BenchmarkReport["compileReports"] = [];
+
+    for (const task of tasks) {
+      const compiled = await this.compileTask({
+        ...task,
+        repositoryRoot
+      });
+      compileReports.push({
+        task: task.text,
+        target: task.target,
+        totalMs: compiled.diagnostics.totalMs,
+        tokenEstimate: compiled.tokenEstimate,
+        includedFiles: compiled.includedFiles.length
+      });
+    }
+
+    const averageCompileMs =
+      compileReports.reduce((total, report) => total + report.totalMs, 0) / Math.max(1, compileReports.length);
+    const peakTokenEstimate = Math.max(0, ...compileReports.map((report) => report.tokenEstimate));
+
+    return {
+      repositoryRoot,
+      indexMs,
+      compileReports,
+      averageCompileMs,
+      peakTokenEstimate
     };
   }
 

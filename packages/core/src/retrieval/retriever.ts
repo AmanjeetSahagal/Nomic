@@ -41,13 +41,45 @@ export class HybridRetriever {
 }
 
 export class LocalEmbeddingProvider implements EmbeddingProvider {
-  readonly name = "local-semantic-provider";
+  readonly name = "local-vector-provider";
 
   async search(task: UserTask, index: RepositoryIndex): Promise<ContextCandidate[]> {
     const analysis = analyzeTask(task.text);
+    const queryEmbedding = buildEmbedding(analysis.queryTerms.join(" "), []);
+    const chunkScores = index.chunks
+      .map((chunk) => scoreChunkEmbedding(chunk, queryEmbedding, analysis))
+      .filter((entry): entry is { chunk: ChunkRecord; score: number } => entry !== null)
+      .sort((left, right) => right.score - left.score || left.chunk.filePath.localeCompare(right.chunk.filePath))
+      .slice(0, 16);
 
-    return index.chunks
-      .map((chunk) => scoreChunkSemantically(chunk, analysis, index))
+    const bestByFile = new Map<
+      string,
+      { filePath: string; score: number; chunks: ChunkRecord[]; maxChunk: ChunkRecord }
+    >();
+
+    for (const { chunk, score } of chunkScores) {
+      const existing = bestByFile.get(chunk.filePath);
+      if (!existing) {
+        bestByFile.set(chunk.filePath, {
+          filePath: chunk.filePath,
+          score,
+          chunks: [chunk],
+          maxChunk: chunk
+        });
+        continue;
+      }
+
+      existing.score = Math.max(existing.score, score);
+      if (existing.chunks.length < 3) {
+        existing.chunks.push(chunk);
+      }
+      if (score > existing.score) {
+        existing.maxChunk = chunk;
+      }
+    }
+
+    return [...bestByFile.values()]
+      .map((entry) => buildSemanticCandidate(entry, index))
       .filter((candidate): candidate is ContextCandidate => candidate !== null)
       .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path))
       .slice(0, 8);
@@ -186,7 +218,8 @@ function expandFromSeed(
       }
 
       const nextDistance = current.distance + 1;
-      const role = edge.kind === "test" || targetFile.isTest ? "test" : nextDistance === 1 ? "dependency" : "semantic-support";
+      const role =
+        edge.kind === "test" || targetFile.isTest ? "test" : nextDistance === 1 ? "dependency" : "semantic-support";
       const structuralScore = Math.max(1, seed.structuralScore - nextDistance * 2 + edge.weight);
       const candidate: ContextCandidate = {
         path: targetFile.path,
@@ -274,48 +307,6 @@ function scoreStructuralFile(
   };
 }
 
-function scoreChunkSemantically(
-  chunk: ChunkRecord,
-  analysis: RetrievalAnalysis,
-  index: RepositoryIndex
-): ContextCandidate | null {
-  let overlap = 0;
-
-  for (const term of analysis.queryTerms) {
-    if (stemsOverlap(chunk.text, term) || chunk.filePath.toLowerCase().includes(term)) {
-      overlap += 1;
-    }
-  }
-
-  if (overlap === 0) {
-    return null;
-  }
-
-  const file = index.files.find((candidate) => candidate.path === chunk.filePath);
-  if (!file) {
-    return null;
-  }
-
-  const semanticScore = overlap * (chunk.kind === "doc" ? 4 : 5);
-
-  return {
-    path: chunk.filePath,
-    reason: `Semantic overlap in ${chunk.kind} chunk ${chunk.startLine}-${chunk.endLine}`,
-    score: semanticScore,
-    source: "semantic",
-    role: chunk.kind === "test" ? "test" : chunk.kind === "doc" ? "semantic-support" : "primary",
-    stage: "semantic",
-    dependencyDistance: chunk.kind === "doc" ? 2 : 1,
-    structuralScore: 0,
-    semanticScore,
-    recencyScore: normalizeRecency(file.modifiedAtMs, index),
-    fileImportanceScore: computeFileImportance(file.path, file.symbols.length, file.isTest),
-    tokenCost: chunk.tokenEstimate,
-    chunkIds: [chunk.id],
-    expansionPath: [chunk.filePath]
-  };
-}
-
 function rerankCandidates(
   structuralCandidates: ContextCandidate[],
   semanticCandidates: ContextCandidate[],
@@ -330,14 +321,16 @@ function rerankCandidates(
       continue;
     }
 
+    const previousScore = existing.score;
     existing.reason = appendReason(existing.reason, candidate.reason);
     existing.structuralScore = Math.max(existing.structuralScore, candidate.structuralScore);
     existing.semanticScore = Math.max(existing.semanticScore, candidate.semanticScore);
-    existing.score = Math.max(existing.score, candidate.score);
+    existing.score = Math.max(previousScore, candidate.score);
     existing.dependencyDistance = Math.min(existing.dependencyDistance, candidate.dependencyDistance);
     existing.tokenCost = Math.min(existing.tokenCost, candidate.tokenCost);
     existing.chunkIds = unique([...existing.chunkIds, ...candidate.chunkIds]);
-    existing.expansionPath = existing.expansionPath.length <= candidate.expansionPath.length ? existing.expansionPath : candidate.expansionPath;
+    existing.expansionPath =
+      existing.expansionPath.length <= candidate.expansionPath.length ? existing.expansionPath : candidate.expansionPath;
 
     if (existing.source !== candidate.source) {
       existing.source = existing.structuralScore > 0 ? "structural" : candidate.source;
@@ -347,29 +340,141 @@ function rerankCandidates(
     }
   }
 
-  const reranked = [...merged.values()].map((candidate) => {
-    const file = index.files.find((entry) => entry.path === candidate.path);
-    const structuralFloor =
-      candidate.structuralScore > 0 ? candidate.structuralScore + Math.max(0, 3 - candidate.dependencyDistance) : 0;
-    const score =
-      structuralFloor +
-      candidate.structuralScore * RERANK_WEIGHTS.structuralScore +
-      candidate.semanticScore * RERANK_WEIGHTS.semanticScore +
-      candidate.dependencyDistance * RERANK_WEIGHTS.dependencyDistance +
-      candidate.recencyScore * RERANK_WEIGHTS.recencyScore +
-      candidate.fileImportanceScore * RERANK_WEIGHTS.fileImportanceScore +
-      candidate.tokenCost * RERANK_WEIGHTS.tokenCost +
-      (file?.language === "markdown" ? -1 : 0);
+  return [...merged.values()]
+    .map((candidate) => {
+      const file = index.files.find((entry) => entry.path === candidate.path);
+      const structuralFloor =
+        candidate.structuralScore > 0 ? candidate.structuralScore + Math.max(0, 3 - candidate.dependencyDistance) : 0;
+      const score =
+        structuralFloor +
+        candidate.structuralScore * RERANK_WEIGHTS.structuralScore +
+        candidate.semanticScore * RERANK_WEIGHTS.semanticScore +
+        candidate.dependencyDistance * RERANK_WEIGHTS.dependencyDistance +
+        candidate.recencyScore * RERANK_WEIGHTS.recencyScore +
+        candidate.fileImportanceScore * RERANK_WEIGHTS.fileImportanceScore +
+        candidate.tokenCost * RERANK_WEIGHTS.tokenCost +
+        (file?.language === "markdown" ? -1 : 0);
 
-    return {
-      ...candidate,
-      score
-    };
-  });
-
-  return reranked
+      return {
+        ...candidate,
+        score
+      };
+    })
     .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path))
     .slice(0, 12);
+}
+
+function buildSemanticCandidate(
+  entry: { filePath: string; score: number; chunks: ChunkRecord[]; maxChunk: ChunkRecord },
+  index: RepositoryIndex
+): ContextCandidate | null {
+  const file = index.files.find((candidate) => candidate.path === entry.filePath);
+  if (!file) {
+    return null;
+  }
+
+  const semanticScore = entry.score * (entry.maxChunk.kind === "doc" ? 0.92 : 1);
+  return {
+    path: file.path,
+    reason: `Semantic vector match from chunks ${entry.chunks.map((chunk) => `${chunk.startLine}-${chunk.endLine}`).join(", ")}`,
+    score: semanticScore,
+    source: "semantic",
+    role: entry.maxChunk.kind === "test" ? "test" : entry.maxChunk.kind === "doc" ? "semantic-support" : "primary",
+    stage: "semantic",
+    dependencyDistance: entry.maxChunk.kind === "doc" ? 2 : 1,
+    structuralScore: 0,
+    semanticScore,
+    recencyScore: normalizeRecency(file.modifiedAtMs, index),
+    fileImportanceScore: computeFileImportance(file.path, file.symbols.length, file.isTest),
+    tokenCost: Math.min(...entry.chunks.map((chunk) => chunk.tokenEstimate)),
+    chunkIds: entry.chunks.map((chunk) => chunk.id),
+    expansionPath: [file.path]
+  };
+}
+
+function scoreChunkEmbedding(
+  chunk: ChunkRecord,
+  queryEmbedding: Map<string, number>,
+  analysis: RetrievalAnalysis
+): { chunk: ChunkRecord; score: number } | null {
+  const chunkEmbedding = buildEmbedding(chunk.text, analysis.queryTerms);
+  const cosine = cosineSimilarity(queryEmbedding, chunkEmbedding);
+  const lexicalBoost = analysis.queryTerms.reduce(
+    (total, term) => total + (chunk.text.toLowerCase().includes(term) || chunk.filePath.toLowerCase().includes(term) ? 0.1 : 0),
+    0
+  );
+  const score = cosine + lexicalBoost;
+
+  if (score <= 0.18) {
+    return null;
+  }
+
+  return {
+    chunk,
+    score
+  };
+}
+
+function buildEmbedding(text: string, queryTerms: string[]): Map<string, number> {
+  const tokens = tokenizeForEmbedding(text, queryTerms);
+  const counts = new Map<string, number>();
+
+  for (const token of tokens) {
+    counts.set(token, (counts.get(token) ?? 0) + 1);
+  }
+
+  const vector = new Map<string, number>();
+  const total = tokens.length || 1;
+  for (const [token, count] of counts) {
+    vector.set(token, count / total);
+  }
+
+  return vector;
+}
+
+function cosineSimilarity(left: Map<string, number>, right: Map<string, number>): number {
+  let dot = 0;
+  let leftNorm = 0;
+  let rightNorm = 0;
+
+  for (const value of left.values()) {
+    leftNorm += value * value;
+  }
+  for (const value of right.values()) {
+    rightNorm += value * value;
+  }
+  for (const [token, value] of left) {
+    dot += value * (right.get(token) ?? 0);
+  }
+
+  if (leftNorm === 0 || rightNorm === 0) {
+    return 0;
+  }
+
+  return dot / (Math.sqrt(leftNorm) * Math.sqrt(rightNorm));
+}
+
+function tokenizeForEmbedding(text: string, queryTerms: string[]): string[] {
+  const tokens = text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/i)
+    .map((part) => part.trim())
+    .filter((part) => part.length >= 2);
+
+  const trigrams = queryTerms.flatMap((term) => {
+    const normalized = term.toLowerCase();
+    if (normalized.length < 4) {
+      return [normalized];
+    }
+
+    const grams: string[] = [];
+    for (let index = 0; index <= normalized.length - 3; index += 1) {
+      grams.push(normalized.slice(index, index + 3));
+    }
+    return grams;
+  });
+
+  return [...tokens, ...trigrams];
 }
 
 function buildAdjacency(edges: IndexEdge[]): Map<string, IndexEdge[]> {
@@ -392,15 +497,15 @@ function buildEdgeReason(seedPath: string, kind: IndexEdge["kind"], fromPath: st
   if (kind === "import") {
     return `${targetPath} imported by ${fromPath} from seed ${seedPath}`;
   }
-
   if (kind === "test") {
     return `${targetPath} is a related test for ${fromPath}`;
   }
-
   if (kind === "reference") {
     return `${targetPath} referenced by ${fromPath} from seed ${seedPath}`;
   }
-
+  if (kind === "caller") {
+    return `${targetPath} calls or is called from ${fromPath}`;
+  }
   return `${targetPath} reached through ${kind} edge from ${fromPath}`;
 }
 
@@ -456,10 +561,6 @@ function estimateFileTokenCost(size: number): number {
 
 function appendReason(existing: string, next: string): string {
   return existing.includes(next) ? existing : `${existing}; ${next}`;
-}
-
-function stemsOverlap(value: string, term: string): boolean {
-  return value.toLowerCase().includes(term) || value.toLowerCase().includes(term.replace(/ing$|ed$|s$/g, ""));
 }
 
 function unique<T>(values: T[]): T[] {

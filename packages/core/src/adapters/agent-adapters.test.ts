@@ -29,6 +29,7 @@ describe("Agent adapters", () => {
 function createCompiledPrompt(): CompiledPrompt {
   return {
     promptId: "prompt-123",
+    compiledAt: new Date().toISOString(),
     target: "codex",
     prompt: "Refactor auth flow.",
     tokenEstimate: 120,
@@ -54,6 +55,16 @@ function createCompiledPrompt(): CompiledPrompt {
     summaries: [],
     retrievalSummary: [],
     dependencyNotes: [],
-    sections: []
+    sections: [],
+    diagnostics: {
+      indexMs: 1,
+      retrievalMs: 2,
+      compressionMs: 3,
+      compileMs: 4,
+      totalMs: 10,
+      fileCount: 2,
+      chunkCount: 3,
+      edgeCount: 4
+    }
   };
 }

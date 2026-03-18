@@ -138,6 +138,17 @@ export interface RetrievalResult {
   rerankWeights: Record<string, number>;
 }
 
+export interface CompiledPromptDiagnostics {
+  indexMs: number;
+  retrievalMs: number;
+  compressionMs: number;
+  compileMs: number;
+  totalMs: number;
+  fileCount: number;
+  chunkCount: number;
+  edgeCount: number;
+}
+
 export interface CompiledPromptSection {
   key:
     | "task"
@@ -155,6 +166,7 @@ export interface CompiledPromptSection {
 
 export interface CompiledPrompt {
   promptId: string;
+  compiledAt: string;
   target: AgentTarget;
   prompt: string;
   tokenEstimate: number;
@@ -169,6 +181,7 @@ export interface CompiledPrompt {
   retrievalSummary: string[];
   dependencyNotes: string[];
   sections: CompiledPromptSection[];
+  diagnostics: CompiledPromptDiagnostics;
 }
 
 export interface AgentPayload {
@@ -182,6 +195,22 @@ export interface AgentPayload {
     omittedPaths: string[];
     tokenEstimate: number;
   };
+}
+
+export interface BenchmarkTaskReport {
+  task: string;
+  target: AgentTarget;
+  totalMs: number;
+  tokenEstimate: number;
+  includedFiles: number;
+}
+
+export interface BenchmarkReport {
+  repositoryRoot: string;
+  indexMs: number;
+  compileReports: BenchmarkTaskReport[];
+  averageCompileMs: number;
+  peakTokenEstimate: number;
 }
 
 export interface SessionRecord {

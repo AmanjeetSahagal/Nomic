@@ -85,6 +85,8 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
   private pinnedPaths = new Set<string>();
   private excludedPaths = new Set<string>();
   private loadedWorkspaceRoot?: string;
+  private pendingApprovalPromptId?: string;
+  private handoffHistory: HandoffRecord[] = [];
 
   constructor(private readonly context: vscode.ExtensionContext) {}
 
@@ -241,6 +243,16 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     }
 
     await vscode.env.clipboard.writeText(formatPayloadText(this.payload));
+    if (this.workspaceRoot) {
+      const record: HandoffRecord = {
+        promptId: this.payload.metadata.promptId,
+        target: this.payload.target,
+        createdAt: new Date().toISOString()
+      };
+      this.handoffHistory = [record, ...this.handoffHistory.filter((entry) => entry.promptId !== record.promptId)].slice(0, 5);
+      await this.context.workspaceState.update(getHandoffStateKey(this.workspaceRoot), this.handoffHistory);
+      this.pendingApprovalPromptId = undefined;
+    }
     this.status = `Approved ${this.payload.target} handoff ${this.payload.metadata.promptId}`;
     this.render();
     void vscode.window.showInformationMessage(
@@ -277,6 +289,7 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
 
     this.compiled = await this.engine.compileTask(task);
     this.payload = await this.engine.formatForTarget(this.compiled, this.target);
+    this.pendingApprovalPromptId = this.compiled.promptId;
     this.status = `Compiled for ${this.target}`;
     this.render();
   }
@@ -337,6 +350,7 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     const saved = this.context.workspaceState.get<TaskOverrideState>(getOverrideStateKey(workspaceRoot));
     this.pinnedPaths = new Set(saved?.pinnedPaths ?? []);
     this.excludedPaths = new Set(saved?.excludedPaths ?? []);
+    this.handoffHistory = this.context.workspaceState.get<HandoffRecord[]>(getHandoffStateKey(workspaceRoot)) ?? [];
     this.loadedWorkspaceRoot = workspaceRoot;
   }
 
@@ -367,7 +381,9 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
       payload: this.payload,
       workspaceRoot: this.workspaceRoot,
       pinnedPaths: [...this.pinnedPaths],
-      excludedPaths: [...this.excludedPaths]
+      excludedPaths: [...this.excludedPaths],
+      pendingApprovalPromptId: this.pendingApprovalPromptId,
+      handoffHistory: this.handoffHistory
     });
   }
 }
@@ -419,6 +435,12 @@ interface TaskOverrideState {
   excludedPaths: string[];
 }
 
+interface HandoffRecord {
+  promptId: string;
+  target: AgentTarget;
+  createdAt: string;
+}
+
 function getWebviewHtml(
   webview: vscode.Webview,
   state: {
@@ -431,6 +453,8 @@ function getWebviewHtml(
     workspaceRoot?: string;
     pinnedPaths: string[];
     excludedPaths: string[];
+    pendingApprovalPromptId?: string;
+    handoffHistory: HandoffRecord[];
   }
 ): string {
   const nonce = getNonce();
@@ -755,6 +779,29 @@ function getWebviewHtml(
       </section>
 
       <section class="card">
+        <div class="kicker">Handoff</div>
+        ${
+          state.compiled
+            ? `<pre>${escapeHtml(
+                `pendingApproval=${state.pendingApprovalPromptId === state.compiled.promptId ? "yes" : "no"}\npromptId=${state.compiled.promptId}\ncompiledAt=${state.compiled.compiledAt}\nindexMs=${state.compiled.diagnostics.indexMs.toFixed(1)}\nretrievalMs=${state.compiled.diagnostics.retrievalMs.toFixed(1)}\ncompressionMs=${state.compiled.diagnostics.compressionMs.toFixed(1)}\ncompileMs=${state.compiled.diagnostics.compileMs.toFixed(1)}\ntotalMs=${state.compiled.diagnostics.totalMs.toFixed(1)}`
+              )}</pre>`
+            : '<div class="empty">Compile a task to prepare a handoff.</div>'
+        }
+        <h2>Recent Approvals</h2>
+        <div class="list">
+          ${
+            state.handoffHistory.length
+              ? state.handoffHistory
+                  .map(
+                    (entry) => `<div class="item"><div class="mono">${escapeHtml(entry.promptId)} :: ${escapeHtml(entry.target)}</div><div>${escapeHtml(entry.createdAt)}</div></div>`
+                  )
+                  .join("")
+              : '<div class="empty">No handoffs approved yet.</div>'
+          }
+        </div>
+      </section>
+
+      <section class="card">
         <div class="kicker">Files</div>
         <div class="pill-row">
           ${
@@ -961,6 +1008,10 @@ function formatPayloadText(payload: AgentPayload): string {
 
 function getOverrideStateKey(workspaceRoot: string): string {
   return `nomic.overrideState:${workspaceRoot}`;
+}
+
+function getHandoffStateKey(workspaceRoot: string): string {
+  return `nomic.handoffState:${workspaceRoot}`;
 }
 
 function getNonce(): string {

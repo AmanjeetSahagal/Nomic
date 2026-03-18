@@ -84,7 +84,7 @@ describe("HybridRetriever", () => {
       path: "docs/session-reliability.md",
       role: "primary"
     });
-    expect(docCandidate?.reason).toContain("Semantic overlap");
+    expect(docCandidate?.reason).toContain("Semantic vector match");
   });
 
   it("applies pinned and excluded overrides deterministically", async () => {

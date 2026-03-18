@@ -139,6 +139,25 @@ async function main(): Promise<void> {
       }
       return;
     }
+    case "benchmark": {
+      const repositoryRoot = args[0] ?? process.cwd();
+      const report = await engine.benchmark(repositoryRoot, [
+        { text: "refactor authentication login flow", target: "codex", repositoryRoot },
+        { text: "fix session reliability regression", target: "codex", repositoryRoot },
+        { text: "improve authentication documentation", target: "claude", repositoryRoot }
+      ]);
+
+      console.log("Nomic benchmark");
+      console.log(`Repository: ${report.repositoryRoot}`);
+      console.log(`Index ms: ${report.indexMs.toFixed(1)}`);
+      console.log(`Average compile ms: ${report.averageCompileMs.toFixed(1)}`);
+      console.log(`Peak token estimate: ${report.peakTokenEstimate}`);
+      for (const compile of report.compileReports) {
+        console.log(`- ${compile.target} :: ${compile.task}`);
+        console.log(`  totalMs=${compile.totalMs.toFixed(1)} tokens=${compile.tokenEstimate} files=${compile.includedFiles}`);
+      }
+      return;
+    }
     default: {
       printUsage();
     }
@@ -160,6 +179,7 @@ function printUsage(error?: string): void {
   console.log('  nomic ask "your task"');
   console.log('  nomic explain-selection "your task"');
   console.log("  nomic doctor");
+  console.log("  nomic benchmark [repository-root]");
 }
 
 function summarizeLanguages(files: Array<{ language: string }>): string {

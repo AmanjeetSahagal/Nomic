@@ -58,6 +58,7 @@ function createTask(repositoryRoot: string, text: string): UserTask {
 function createPrompt(filePath: string): CompiledPrompt {
   return {
     promptId: `prompt-${filePath}`,
+    compiledAt: new Date().toISOString(),
     target: "codex",
     prompt: `Prompt for ${filePath}`,
     tokenEstimate: 10,
@@ -83,6 +84,16 @@ function createPrompt(filePath: string): CompiledPrompt {
     summaries: [],
     retrievalSummary: [],
     dependencyNotes: ["Preserve auth module boundaries"],
-    sections: []
+    sections: [],
+    diagnostics: {
+      indexMs: 1,
+      retrievalMs: 2,
+      compressionMs: 3,
+      compileMs: 4,
+      totalMs: 10,
+      fileCount: 1,
+      chunkCount: 1,
+      edgeCount: 0
+    }
   };
 }
