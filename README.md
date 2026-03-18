@@ -19,6 +19,37 @@ Instead of sending an entire repository to tools like Codex or Claude, Nomic ind
 
 ## Product Surfaces
 
+### VS Code Extension
+
+The VS Code extension is the primary developer workflow today.
+
+It currently supports:
+
+- workspace indexing
+- task compilation from the sidebar
+- included/excluded file review
+- manual include, pin, and exclude overrides
+- payload preview for Codex and Claude
+- prompt opening and payload copying
+- approval-based handoff with recent approval history
+- compile and handoff timing diagnostics in the sidebar
+
+#### Basic Extension Workflow
+
+In the normal case, a developer uses the extension like this:
+
+1. Open a repository in VS Code.
+2. Open the Nomic sidebar.
+3. Click `Index Workspace`.
+4. Enter a task such as `refactor authentication login flow`.
+5. Choose `Codex` or `Claude`.
+6. Click `Compile`.
+7. Review the selected files, omitted files, retrieval rationale, token usage, and compiled payload.
+8. Optionally pin or exclude files and recompile.
+9. Click `Approve Handoff` when the context looks correct.
+
+This makes Nomic a review-and-approval layer between the codebase and the coding agent.
+
 ### CLI
 
 The CLI currently supports:
@@ -31,29 +62,16 @@ The CLI currently supports:
 
 `nomic ask` is a review-first flow. It shows selected files, selection rationale, token usage, omissions, the compiled prompt preview, and the final target payload.
 
-### VS Code Extension
-
-The VS Code extension currently supports:
-
-- workspace indexing
-- task compilation from the sidebar
-- included/excluded file review
-- manual include, pin, and exclude overrides
-- payload preview for Codex and Claude
-- prompt opening and payload copying
-- approval-based handoff with recent approval history
-- compile and handoff timing diagnostics in the sidebar
-
 ## Architecture
 
 Nomic is organized around one shared core engine used by both user surfaces:
 
 - `packages/core`
   indexing, retrieval, compression, prompt compilation, session memory, diagnostics, benchmarking, and agent adapters
-- `apps/cli`
-  terminal workflows for indexing, review, explanation, diagnostics, and benchmarking
 - `apps/vscode-extension`
   sidebar workflow for context preview, approval, and handoff
+- `apps/cli`
+  terminal workflows for indexing, review, explanation, diagnostics, and benchmarking
 
 ### Core Pipeline
 
@@ -119,8 +137,8 @@ The current implementation includes:
 - token-budgeted compression and deterministic prompt compilation
 - Codex and Claude adapters
 - session memory and engine diagnostics
-- CLI review workflows
 - VS Code preview and approval workflows
+- CLI review workflows
 - automated tests for indexing, retrieval, compression, storage, memory, and adapters
 
 Recent benchmark output on the built-in fixture:
