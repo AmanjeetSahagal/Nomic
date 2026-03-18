@@ -57,7 +57,14 @@ async function main(): Promise<void> {
       console.log(`Related tests: ${compiled.relatedTests.length}`);
       console.log(`Estimated tokens: ${compiled.tokenEstimate}`);
       console.log("");
-      console.log(compiled.prompt);
+      const payload = await engine.formatForTarget(compiled, task.target);
+      console.log(`# Target Payload: ${payload.target}`);
+      console.log("");
+      console.log("## System");
+      console.log(payload.system);
+      console.log("");
+      console.log("## User");
+      console.log(payload.user);
       return;
     }
     case "explain-selection": {

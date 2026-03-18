@@ -86,6 +86,18 @@ export interface CompiledPrompt {
   summaries: FileSummary[];
 }
 
+export interface AgentPayload {
+  target: AgentTarget;
+  system: string;
+  user: string;
+  metadata: {
+    includedFiles: string[];
+    relatedTests: string[];
+    omittedPaths: string[];
+    tokenEstimate: number;
+  };
+}
+
 export interface SessionRecord {
   task: UserTask;
   compiledPrompt: CompiledPrompt;
@@ -134,7 +146,7 @@ export interface SessionMemory {
 
 export interface AgentAdapter {
   target: AgentTarget;
-  format(compiledPrompt: CompiledPrompt): Promise<string>;
+  format(compiledPrompt: CompiledPrompt): Promise<AgentPayload>;
 }
 
 export interface EngineDependencies {

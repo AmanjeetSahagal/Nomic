@@ -12,10 +12,29 @@
     "Other"
   ],
   "activationEvents": [
+    "onView:nomic.preview",
     "onCommand:nomic.indexWorkspace",
-    "onCommand:nomic.compileContext"
+    "onCommand:nomic.compileContext",
+    "onCommand:nomic.refreshPreview"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nomic",
+          "title": "Nomic",
+          "icon": "media/nomic.svg"
+        }
+      ]
+    },
+    "views": {
+      "nomic": [
+        {
+          "id": "nomic.preview",
+          "name": "Prompt Preview"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "nomic.indexWorkspace",
@@ -24,6 +43,10 @@
       {
         "command": "nomic.compileContext",
         "title": "Nomic: Compile Context"
+      },
+      {
+        "command": "nomic.refreshPreview",
+        "title": "Nomic: Refresh Preview"
       }
     ]
   },

@@ -7,6 +7,7 @@ import { HybridRetriever } from "./retrieval/retriever";
 import { FileStorageBackend } from "./storage/index-store";
 import {
   type AgentTarget,
+  type AgentPayload,
   type CompiledPrompt,
   type EngineDependencies,
   type IndexRepositoryRequest,
@@ -68,7 +69,7 @@ export class NomicEngine {
     }));
   }
 
-  async formatForTarget(compiledPrompt: CompiledPrompt, target: AgentTarget): Promise<string> {
+  async formatForTarget(compiledPrompt: CompiledPrompt, target: AgentTarget): Promise<AgentPayload> {
     const adapter = this.dependencies.adapters[target];
     return adapter.format(compiledPrompt);
   }

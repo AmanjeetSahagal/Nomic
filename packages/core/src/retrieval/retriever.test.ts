@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { HybridRetriever } from "./retriever";
+import { HybridRetriever, LocalEmbeddingProvider } from "./retriever";
 import type { RepositoryIndex } from "../types/contracts";
 
 describe("HybridRetriever", () => {
@@ -48,6 +48,14 @@ describe("HybridRetriever", () => {
           imports: [],
           isTest: false,
           symbols: [{ name: "payments.ts", kind: "module", path: "src/payments.ts" }]
+        },
+        {
+          path: "docs/auth-architecture.md",
+          language: "markdown",
+          size: 120,
+          imports: [],
+          isTest: false,
+          symbols: [{ name: "auth-architecture.md", kind: "module", path: "docs/auth-architecture.md" }]
         }
       ]
     };
@@ -69,5 +77,51 @@ describe("HybridRetriever", () => {
     expect(result.candidates.find((candidate) => candidate.path === "src/crypto.ts")?.reason).toContain(
       "Imported by src/auth.ts"
     );
+    expect(result.candidates.find((candidate) => candidate.path === "src/auth.ts")?.reason).toContain(
+      "Semantic overlap"
+    );
+  });
+
+  it("retrieves semantic-only documentation hits through the embedding provider", async () => {
+    const retriever = new HybridRetriever(new LocalEmbeddingProvider());
+    const index: RepositoryIndex = {
+      repositoryRoot: "/repo",
+      fileCount: 2,
+      generatedAt: new Date().toISOString(),
+      files: [
+        {
+          path: "docs/session-reliability.md",
+          language: "markdown",
+          size: 100,
+          imports: [],
+          isTest: false,
+          symbols: [{ name: "session-reliability.md", kind: "module", path: "docs/session-reliability.md" }]
+        },
+        {
+          path: "src/auth.ts",
+          language: "typescript",
+          size: 80,
+          imports: [],
+          isTest: false,
+          symbols: [{ name: "AuthService", kind: "class", path: "src/auth.ts" }]
+        }
+      ]
+    };
+
+    const result = await retriever.retrieve(
+      {
+        text: "improve session reliability documentation",
+        target: "codex",
+        repositoryRoot: "/repo"
+      },
+      index
+    );
+
+    const docCandidate = result.candidates.find((candidate) => candidate.path === "docs/session-reliability.md");
+    expect(docCandidate).toMatchObject({
+      path: "docs/session-reliability.md",
+      source: "structural"
+    });
+    expect(docCandidate?.reason).toContain("Semantic overlap");
   });
 });

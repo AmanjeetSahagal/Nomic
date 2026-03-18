@@ -8,14 +8,12 @@ import {
 } from "../types/contracts";
 
 export class HybridRetriever {
-  constructor(private readonly embeddings?: EmbeddingProvider) {}
+  constructor(private readonly embeddings: EmbeddingProvider = new LocalEmbeddingProvider()) {}
 
   async retrieve(task: UserTask, index: RepositoryIndex): Promise<RetrievalResult> {
     const queryTerms = extractQueryTerms(task.text);
     const structuralCandidates = retrieveStructuralCandidates(queryTerms, index);
-    const semanticCandidates = this.embeddings
-      ? await this.embeddings.search(task, index)
-      : [];
+    const semanticCandidates = await this.embeddings.search(task, index);
 
     const candidates = mergeCandidates(structuralCandidates, semanticCandidates).sort(
       (left, right) => right.score - left.score || left.path.localeCompare(right.path)
@@ -26,6 +24,20 @@ export class HybridRetriever {
       relatedTests: candidates.filter((candidate) => isTestFilePath(candidate.path)).map((candidate) => candidate.path),
       queryTerms
     };
+  }
+}
+
+export class LocalEmbeddingProvider implements EmbeddingProvider {
+  readonly name = "local-semantic-provider";
+
+  async search(task: UserTask, index: RepositoryIndex): Promise<ContextCandidate[]> {
+    const queryTerms = extractQueryTerms(task.text);
+
+    return index.files
+      .map((file) => scoreSemantically(file, queryTerms))
+      .filter((candidate): candidate is ContextCandidate => candidate !== null)
+      .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path))
+      .slice(0, 6);
   }
 }
 
@@ -163,17 +175,67 @@ function mergeCandidates(
 
   for (const candidate of [...structuralCandidates, ...semanticCandidates]) {
     const existing = merged.get(candidate.path);
-    if (!existing || candidate.score > existing.score) {
+    if (!existing) {
+      merged.set(candidate.path, candidate);
+      continue;
+    }
+
+    if (existing.source === "structural" && candidate.source === "semantic") {
+      existing.reason = appendReason(existing.reason, candidate.reason);
+      existing.score = Math.max(existing.score, candidate.score + 1);
+      continue;
+    }
+
+    if (existing.source === "semantic" && candidate.source === "structural") {
+      merged.set(candidate.path, {
+        ...candidate,
+        reason: appendReason(candidate.reason, existing.reason),
+        score: Math.max(candidate.score, existing.score + 1)
+      });
+      continue;
+    }
+
+    if (candidate.score > existing.score) {
       merged.set(candidate.path, candidate);
       continue;
     }
 
     if (candidate.reason && !existing.reason.includes(candidate.reason)) {
-      existing.reason = `${existing.reason}; ${candidate.reason}`;
+      existing.reason = appendReason(existing.reason, candidate.reason);
     }
   }
 
   return [...merged.values()];
+}
+
+function scoreSemantically(file: FileRecord, queryTerms: string[]): ContextCandidate | null {
+  const semanticMatches = unique(
+    queryTerms.filter((term) => {
+      const haystacks = [
+        file.path.toLowerCase(),
+        ...file.imports.map((value) => value.toLowerCase()),
+        ...file.symbols.map((symbol) => symbol.name.toLowerCase())
+      ];
+
+      return haystacks.some((value) => value.includes(term) || stemsOverlap(value, term));
+    })
+  );
+
+  if (semanticMatches.length === 0) {
+    return null;
+  }
+
+  const score =
+    semanticMatches.length * 3 +
+    (file.language === "markdown" ? 2 : 0) +
+    (file.isTest ? 0 : 1);
+
+  return {
+    path: file.path,
+    reason: `Semantic overlap on ${semanticMatches.join(", ")}`,
+    score,
+    source: "semantic"
+  };
 }
 
 function extractQueryTerms(text: string): string[] {
@@ -209,6 +271,16 @@ function normalizeModulePath(value: string): string {
 
 function isTestFilePath(filePath: string): boolean {
   return /(^|\/)(test|tests|__tests__)\/|(\.|_)(test|spec)\./i.test(filePath);
+}
+
+function appendReason(existing: string, next: string): string {
+  return existing.includes(next) ? existing : `${existing}; ${next}`;
+}
+
+function stemsOverlap(value: string, term: string): boolean {
+  const normalizedValue = value.replace(/[^a-z0-9]+/g, " ");
+  const tokens = normalizedValue.split(/\s+/).filter(Boolean);
+  return tokens.some((token) => token.startsWith(term.slice(0, Math.min(term.length, 5))));
 }
 
 function unique(values: string[]): string[] {
