@@ -2,19 +2,27 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nomic.dev/schemas/benchmark-corpus-v1.json",
   "type": "object",
-  "required": ["schemaVersion", "repositories", "tasks"],
+  "additionalProperties": false,
+  "required": ["schemaVersion", "name", "repositories", "tasks"],
   "properties": {
     "schemaVersion": { "const": 1 },
+    "name": { "type": "string", "minLength": 1 },
     "repositories": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "url", "commit", "language"],
+        "additionalProperties": false,
+        "required": ["id", "url", "languages", "stage", "difficulty", "role", "excludedPaths"],
         "properties": {
-          "id": { "type": "string" },
+          "id": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
           "url": { "type": "string", "format": "uri" },
-          "commit": { "type": "string" },
-          "language": { "enum": ["typescript", "python"] }
+          "languages": { "type": "array", "items": { "enum": ["typescript", "python", "cpp"] }, "minItems": 1, "uniqueItems": true },
+          "stage": { "enum": [1, 2, 3, 4] },
+          "difficulty": { "enum": ["medium-high", "high", "very-high", "extreme"] },
+          "role": { "type": "string" },
+          "scopePaths": { "type": "array", "items": { "type": "string" } },
+          "excludedPaths": { "type": "array", "items": { "type": "string" } },
+          "heldOutEvaluation": { "type": "boolean" }
         }
       }
     },
@@ -22,17 +30,62 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "repositoryId", "query", "relevantFiles", "patchCommit", "split"],
+        "additionalProperties": false,
+        "required": ["id", "repositoryId", "baseCommit", "patchCommit", "pullRequest", "issue", "query", "taskType", "relevance", "patchTouchedFiles", "labels", "split", "review", "provenance"],
         "properties": {
           "id": { "type": "string" },
           "repositoryId": { "type": "string" },
-          "query": { "type": "string" },
-          "relevantFiles": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-          "relevantSymbols": { "type": "array", "items": { "type": "string" } },
-          "patchCommit": { "type": "string" },
-          "split": { "enum": ["train", "validation", "test"] }
+          "baseCommit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+          "patchCommit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+          "pullRequest": { "$ref": "#/$defs/pullRequest" },
+          "issue": { "$ref": "#/$defs/issue" },
+          "query": { "type": "string", "minLength": 40 },
+          "taskType": { "enum": ["bug-localization", "feature-location", "repository-navigation"] },
+          "relevance": { "$ref": "#/$defs/relevance" },
+          "patchTouchedFiles": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+          "labels": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "split": { "enum": ["train", "validation", "test"] },
+          "review": { "$ref": "#/$defs/review" },
+          "provenance": { "$ref": "#/$defs/provenance" }
         }
       }
+    }
+  },
+  "$defs": {
+    "pullRequest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["number", "url", "mergedAt"],
+      "properties": { "number": { "type": "integer" }, "url": { "type": "string" }, "mergedAt": { "type": "string", "format": "date-time" } }
+    },
+    "issue": {
+      "type": "object", "additionalProperties": false,
+      "required": ["number", "url", "title", "body", "createdAt"],
+      "properties": { "number": { "type": "integer" }, "url": { "type": "string" }, "title": { "type": "string" }, "body": { "type": "string" }, "createdAt": { "type": "string", "format": "date-time" } }
+    },
+    "symbol": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "path", "grade"],
+      "properties": { "name": { "type": "string" }, "path": { "type": "string" }, "grade": { "enum": [1, 2, 3] }, "startLine": { "type": "integer" }, "endLine": { "type": "integer" } }
+    },
+    "relevance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["primaryFiles", "supportingFiles", "relevantUnchangedFiles", "symbols"],
+      "properties": {
+        "primaryFiles": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+        "supportingFiles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "relevantUnchangedFiles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "symbols": { "type": "array", "items": { "$ref": "#/$defs/symbol" } }
+      }
+    },
+    "review": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status"],
+      "properties": { "status": { "enum": ["draft", "accepted", "rejected"] }, "reviewedAt": { "type": "string", "format": "date-time" }, "notes": { "type": "string" } }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["collectorVersion", "collectedAt", "queryUsesPreFixEvidenceOnly"],
+      "properties": { "collectorVersion": { "type": "string" }, "collectedAt": { "type": "string", "format": "date-time" }, "queryUsesPreFixEvidenceOnly": { "const": true } }
     }
   }
 }

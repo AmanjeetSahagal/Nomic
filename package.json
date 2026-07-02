@@ -18,7 +18,11 @@
     "extension:build": "npm run build --workspace @nomic/vscode-extension",
     "native:configure": "cmake -S native -B native/build -DNOMIC_BUILD_TESTS=ON",
     "native:build": "cmake --build native/build --config Release",
-    "native:test": "ctest --test-dir native/build --output-on-failure -C Release"
+    "native:test": "ctest --test-dir native/build --output-on-failure -C Release",
+    "corpus:collect": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js collect",
+    "corpus:review": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js review",
+    "corpus:validate": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js validate",
+    "corpus:stats": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js stats"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",

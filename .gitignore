@@ -9,3 +9,6 @@ ml/artifacts
 nomic-feedback-export.json
 __pycache__
 *.pyc
+benchmarks/cache
+benchmarks/results
+benchmarks/corpus/v1/drafts

@@ -20,7 +20,7 @@ def load_manifest(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def load_rows(path: Path, features: list[str]) -> list[dict[str, Any]]:
+def load_rows(path: Path, features: list[str], split_strategy: str) -> list[dict[str, Any]]:
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
     required = {"taskId", "repositoryId", "split", "label", "features"}
     for row in rows:
@@ -30,11 +30,25 @@ def load_rows(path: Path, features: list[str]) -> list[dict[str, Any]]:
         absent_features = set(features) - row["features"].keys()
         if absent_features:
             raise ValueError(f"row missing features: {sorted(absent_features)}")
-    validate_repository_splits(rows)
+    validate_splits(rows, split_strategy)
     return rows
 
 
-def validate_repository_splits(rows: list[dict[str, Any]]) -> None:
+def validate_splits(rows: list[dict[str, Any]], split_strategy: str) -> None:
+    if split_strategy == "temporal":
+        for row in rows:
+            if "mergedAt" not in row:
+                raise ValueError("temporal splits require mergedAt on every row")
+        ranks = {"train": 0, "validation": 1, "test": 2}
+        by_repository: dict[str, list[dict[str, Any]]] = {}
+        for row in rows:
+            by_repository.setdefault(row["repositoryId"], []).append(row)
+        for repository, repository_rows in by_repository.items():
+            ordered = sorted(repository_rows, key=lambda row: row["mergedAt"])
+            seen = [ranks[row["split"]] for row in ordered]
+            if seen != sorted(seen):
+                raise ValueError(f"temporal split order moves backward for {repository}")
+        return
     repositories: dict[str, set[str]] = {}
     for row in rows:
         repositories.setdefault(row["repositoryId"], set()).add(row["split"])
@@ -62,11 +76,12 @@ def main() -> None:
     parser.add_argument("dataset", type=Path)
     parser.add_argument("--manifest", type=Path, default=Path(__file__).with_name("feature-manifest.json"))
     parser.add_argument("--output", type=Path, default=Path(__file__).with_name("artifacts"))
+    parser.add_argument("--split-strategy", choices=["repository", "temporal"], default="repository")
     args = parser.parse_args()
 
     manifest = load_manifest(args.manifest)
     features = manifest["features"]
-    rows = load_rows(args.dataset, features)
+    rows = load_rows(args.dataset, features, args.split_strategy)
     x_train, y_train, train_groups = matrix(rows, features, "train")
     x_validation, y_validation, validation_groups = matrix(rows, features, "validation")
     if not len(x_train) or len(set(y_train.tolist())) < 2:

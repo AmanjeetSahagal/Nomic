@@ -143,6 +143,16 @@ Run the core benchmark fixture:
 npm run benchmark
 ```
 
+Build and review the public issue-to-patch corpus:
+
+```bash
+GITHUB_TOKEN=... npm run corpus:collect -- --repo django/django --limit 10 --scan 100
+npm run corpus:review -- --draft benchmarks/corpus/v1/drafts/django-django.json --list
+npm run corpus:validate
+```
+
+Corpus drafts are intentionally ignored until their pre-fix query text and graded relevance labels have been reviewed. See [the corpus methodology](benchmarks/corpus/v1/README.md).
+
 Build and test the native core when CMake and a C++20 toolchain are installed:
 
 ```bash

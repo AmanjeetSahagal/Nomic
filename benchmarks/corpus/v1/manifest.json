@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "name": "nomic-public-corpus-v1",
+  "repositories": [
+    {
+      "id": "django/django",
+      "url": "https://github.com/django/django",
+      "languages": [
+        "python"
+      ],
+      "stage": 1,
+      "difficulty": "medium-high",
+      "role": "Clean issue-to-fix corpus with disciplined regression tests",
+      "excludedPaths": [
+        "docs/",
+        "locale/",
+        "scripts/",
+        "package-lock.json"
+      ]
+    },
+    {
+      "id": "microsoft/TypeScript",
+      "url": "https://github.com/microsoft/TypeScript",
+      "languages": [
+        "typescript"
+      ],
+      "stage": 1,
+      "difficulty": "high",
+      "role": "Compiler and symbol-level TypeScript localization",
+      "excludedPaths": [
+        "Herebyfile.mjs",
+        "package-lock.json",
+        "tests/baselines/",
+        "tests/cases/fourslash/"
+      ]
+    },
+    {
+      "id": "microsoft/vscode",
+      "url": "https://github.com/microsoft/vscode",
+      "languages": [
+        "typescript"
+      ],
+      "stage": 2,
+      "difficulty": "very-high",
+      "role": "Large product architecture and cross-package retrieval",
+      "excludedPaths": [
+        "extensions/*/package.nls.json",
+        "package-lock.json",
+        "ThirdPartyNotices.txt"
+      ]
+    },
+    {
+      "id": "pytorch/pytorch",
+      "url": "https://github.com/pytorch/pytorch",
+      "languages": [
+        "python",
+        "cpp"
+      ],
+      "stage": 3,
+      "difficulty": "very-high",
+      "role": "Mixed Python-to-C++ localization",
+      "scopePaths": [
+        "torch/",
+        "torch/csrc/",
+        "aten/src/ATen/",
+        "test/"
+      ],
+      "excludedPaths": [
+        "third_party/",
+        "submodules/",
+        "package-lock.json"
+      ]
+    },
+    {
+      "id": "llvm/llvm-project",
+      "url": "https://github.com/llvm/llvm-project",
+      "languages": [
+        "cpp"
+      ],
+      "stage": 4,
+      "difficulty": "extreme",
+      "role": "Hard held-out C++ compiler localization benchmark",
+      "scopePaths": [
+        "clang/lib/Sema/",
+        "clang/lib/AST/",
+        "llvm/lib/Transforms/",
+        "llvm/lib/Analysis/"
+      ],
+      "excludedPaths": [
+        "third-party/",
+        "utils/",
+        "docs/"
+      ],
+      "heldOutEvaluation": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "django-django-issue-33647-pr-20480",
+      "repositoryId": "django/django",
+      "baseCommit": "79ab0993d0f2253e10ea638bcefc98ec2d890a47",
+      "patchCommit": "d6ae2ed868e43671afc4d433c3d8f4d27f7eb555",
+      "pullRequest": {
+        "number": 20480,
+        "url": "https://github.com/django/django/pull/20480",
+        "mergedAt": "2025-12-31T15:41:55Z"
+      },
+      "issue": {
+        "number": 33647,
+        "url": "https://code.djangoproject.com/ticket/33647",
+        "title": "bulk_update and bulk_create silently truncating values for size limited fields on postgres",
+        "body": "On postgres backend, `bulk_update` passes overlong values for size limited fields along without any notification/exception, instead truncating the value.\r\n\r\nRepro:\r\n{{{\r\n#!div style=\"font-size: 80%\"\r\nCode highlighting:\r\n  {{{#!python\r\n  # some model to repro\r\n  class TestModel(models.Model):\r\n      name = models.CharField(max_length=32)\r\n  \r\n  # in the shell\r\n  >>> from bulk_test.models import TestModel\r\n  >>> tm=TestModel(name='hello')\r\n  >>> tm.save()\r\n  >>> tm.name\r\n  'hello'\r\n  >>> tm.name='m'*100\r\n  >>> tm.save()  # good, raises:\r\n  ...\r\n  django.db.utils.DataError: value too long for type character varying(32)\r\n  \r\n  >>> TestModel.objects.all().values('name')\r\n  <QuerySet [{'name': 'hello'}]>\r\n  >>> TestModel.objects.all().update(name='z'*100)  # good, raises as well:\r\n  ...\r\n  django.db.utils.DataError: value too long for type character varying(32)\r\n  \r\n  >>> TestModel.objects.all().values('name')\r\n  <QuerySet [{'name': 'hello'}]>\r\n  >>> TestModel.objects.bulk_update([tm], ['name'])  # not raising, instead truncating:\r\n  1\r\n  >>> TestModel.objects.all().values('name')\r\n  <QuerySet [{'name': 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'}]>\r\n  }}}\r\n}}}\r\n\r\nNot sure, if this is intended/expected behavior, well it is inconsistent to `.save` or `.update`, which both raise here. I only tested postgres backend for this, it may apply to other size limiting databases as well (sqlite itself is not affected, as it does not limit values).\r\n\r\nIf this is intended, it may be a good idea to at least document the slightly different behavior, so users are aware of it, and can prepare their code to avoid silent truncation with follow-up errors. A better way prolly would fix `bulk_update` to spot value overflows and raise, but I am not sure, if thats feasible.",
+        "createdAt": "2022-04-15T13:11:01Z"
+      },
+      "query": "bulk_update and bulk_create silently truncating values for size limited fields on postgres\n\nOn postgres backend, `bulk_update` passes overlong values for size limited fields along without any notification/exception, instead truncating the value. Repro: {{{ #!div style=\"font-size: 80%\" Code highlighting: {{{#!python # some model to repro class TestModel(models.Model): name = models.CharField(max_length=32) # in the shell >>> from bulk_test.models import TestModel >>> tm=TestModel(name='hello') >>> tm.save() >>> tm.name 'hello' >>> tm.name='m'*100 >>> tm.save() # good, raises: ... django.db.utils.DataError: value too long for type character varying(32) >>> TestModel.objects.all().values('name') <QuerySet [{'name': 'hello'}]> >>> TestModel.objects.all().update(name='z'*100) # good, raises as well: ... django.db.utils.DataError: value too long for type character varying(32) >>> TestModel.objects.all().values('name') <QuerySet [{'name': 'hello'}]> >>> TestModel.objects.bulk_update([tm], ['name']) # not raising, instead truncating: 1 >>> TestModel.objects.all().values('name') <QuerySet [{'name': 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'}]> }}} }}} Not sure, if this is intended/expected behavior, well it is inconsistent to `.save` or `.update`, which both raise here. I only tested postgres backend for this, it may apply to other size limiting databases as well (sqlite itself is not affected, as it does not limit values). If this is intended, it may be a good idea to at least document the slightly different behavior, so users are aware of it, and can prepare their code to avoid silent truncation with follow-up errors. A better way prolly would fix `bulk_update` to spot value overflows and raise, but I am not sure, if thats feasible.",
+      "taskType": "bug-localization",
+      "relevance": {
+        "primaryFiles": [
+          "django/db/backends/postgresql/compiler.py"
+        ],
+        "supportingFiles": [
+          "tests/backends/postgresql/test_compilation.py"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": [
+          {
+            "name": "SQLInsertCompiler.assemble_as_sql",
+            "path": "django/db/backends/postgresql/compiler.py",
+            "grade": 3,
+            "startLine": 49,
+            "endLine": 62
+          }
+        ]
+      },
+      "patchTouchedFiles": [
+        "django/db/backends/postgresql/compiler.py",
+        "docs/releases/5.2.10.txt",
+        "docs/releases/6.0.1.txt",
+        "tests/backends/postgresql/test_compilation.py"
+      ],
+      "labels": [
+        "Bug",
+        "Database layer (models, ORM)"
+      ],
+      "split": "test",
+      "review": {
+        "status": "accepted",
+        "reviewedAt": "2026-07-02T22:34:38.378Z",
+        "notes": "Reviewed against public Django issue and commit diff; release notes excluded from relevance."
+      },
+      "provenance": {
+        "collectorVersion": "github-v1",
+        "collectedAt": "2026-07-02T22:27:33.669Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "django-django-issue-36829-pr-20471",
+      "repositoryId": "django/django",
+      "baseCommit": "c496a7df64ec0a80c2bab7f155aad567155fb37b",
+      "patchCommit": "79ab0993d0f2253e10ea638bcefc98ec2d890a47",
+      "pullRequest": {
+        "number": 20471,
+        "url": "https://github.com/django/django/pull/20471",
+        "mergedAt": "2025-12-31T15:14:00Z"
+      },
+      "issue": {
+        "number": 36829,
+        "url": "https://code.djangoproject.com/ticket/36829",
+        "title": "ClearableFileInput.use_fieldset became True in Django 6.0",
+        "body": "Howdy y'all,\r\n\r\n#35892 flipped `django.forms.widgets.ClearableFileInput.use_fieldset` from false to true.\r\n\r\nThe change can be found here: https://github.com/django/django/blame/4187da258fe212d494cb578a0bc2b52c4979ab95/django/forms/widgets.py#L533\r\n\r\nThis changes the form rendering outside the admin too. Probably just a small oversight and not an intentional change, since changes weren't accompanied by release notes.\r\n\r\nAnyhow, both the input and the `use_fieldset` are part of the public documentation, and changes must undergo deprecation.\r\n\r\nThe problem gets amplified with #36828, since the current fieldset implementation violates HTML and WCAG 2.1\r\n\r\nThe only affected version is 6.0. I would recommend providing a regression patch in the next bugfix release.\r\n\r\nCheers!\r\nJoe",
+        "createdAt": "2025-12-26T15:50:30Z"
+      },
+      "query": "ClearableFileInput.use_fieldset became True in Django 6.0\n\nHowdy y'all, #35892 flipped `django.forms.widgets.ClearableFileInput.use_fieldset` from false to true. The change can be found here: https://github.com/django/django/blame/4187da258fe212d494cb578a0bc2b52c4979ab95/django/forms/widgets.py#L533 This changes the form rendering outside the admin too. Probably just a small oversight and not an intentional change, since changes weren't accompanied by release notes. Anyhow, both the input and the `use_fieldset` are part of the public documentation, and changes must undergo deprecation. The problem gets amplified with #36828, since the current fieldset implementation violates HTML and WCAG 2.1 The only affected version is 6.0. I would recommend providing a regression patch in the next bugfix release. Cheers! Joe",
+      "taskType": "bug-localization",
+      "relevance": {
+        "primaryFiles": [
+          "django/contrib/admin/widgets.py",
+          "django/forms/widgets.py"
+        ],
+        "supportingFiles": [
+          "tests/forms_tests/widget_tests/test_clearablefileinput.py"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": [
+          {
+            "name": "AdminFileWidget",
+            "path": "django/contrib/admin/widgets.py",
+            "grade": 3,
+            "startLine": 123,
+            "endLine": 125
+          },
+          {
+            "name": "ClearableFileInput",
+            "path": "django/forms/widgets.py",
+            "grade": 3,
+            "startLine": 526,
+            "endLine": 578
+          }
+        ]
+      },
+      "patchTouchedFiles": [
+        "django/contrib/admin/widgets.py",
+        "django/forms/widgets.py",
+        "docs/releases/6.0.1.txt",
+        "tests/forms_tests/widget_tests/test_clearablefileinput.py"
+      ],
+      "labels": [
+        "Bug",
+        "Forms",
+        "selenium"
+      ],
+      "split": "test",
+      "review": {
+        "status": "accepted",
+        "reviewedAt": "2026-07-02T22:34:38.378Z",
+        "notes": "Reviewed against public Django issue and commit diff; release notes excluded from relevance."
+      },
+      "provenance": {
+        "collectorVersion": "github-v1",
+        "collectedAt": "2026-07-02T22:27:33.669Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    }
+  ]
+}
