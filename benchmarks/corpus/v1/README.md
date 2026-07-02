@@ -66,6 +66,7 @@ Compare BM25, heuristic, semantic-only when available, hybrid retrieval, and lat
 
 ## Pilot acceptance gate
 
+- Current reviewed pilot: 18 accepted tasks (9 Django, 9 TypeScript), each with production-file and symbol labels.
 - Two repositories: Django and TypeScript.
 - Ten reviewed tasks during pipeline debugging, then 50 total.
 - Both BM25 and heuristic baselines.
