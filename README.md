@@ -81,6 +81,12 @@ Nomic is organized around one shared core engine used by both user surfaces:
   sidebar workflow for context preview, approval, and handoff
 - `apps/cli`
   terminal workflows for indexing, review, explanation, diagnostics, and benchmarking
+- `native`
+  C++20 scanner, BM25 retrieval engine, SQLite index, and asynchronous Node-API addon
+- `ml`
+  versioned ranking features and reproducible logistic/LightGBM-to-ONNX training pipeline
+
+See [the architecture document](docs/architecture.md) for the migration boundary and native storage schema.
 
 ### Core Pipeline
 
@@ -137,6 +143,16 @@ Run the core benchmark fixture:
 npm run benchmark
 ```
 
+Build and test the native core when CMake and a C++20 toolchain are installed:
+
+```bash
+npm run native:configure
+npm run native:build
+npm run native:test
+```
+
+Set `NOMIC_INDEX_BACKEND=native` after building the addon, or provide its location with `NOMIC_NATIVE_ADDON_PATH`. TypeScript remains the default until native parser and graph parity gates pass.
+
 ## Current Status
 
 The current implementation includes:
@@ -149,12 +165,20 @@ The current implementation includes:
 - VS Code preview and approval workflows
 - CLI review workflows
 - automated tests for indexing, retrieval, compression, storage, memory, and adapters
+- versioned retrieval metrics, ranking features, and deterministic model fallback
+- an opt-in local feedback store with status, export, and deletion commands
+- a functional native C++ BM25/SQLite preview with asynchronous Node-API bindings
+- debounced VS Code file watching for incremental reindexing
+
+The native preview does not yet include Tree-sitter AST extraction, graph persistence, row-level incremental SQLite updates, prebuilt addon distribution, or a trained production ONNX artifact. Those remain gated on the reviewed public benchmark corpus rather than being represented as complete.
 
 Recent benchmark output on the built-in fixture:
 
-- indexing: about `15.8ms`
-- average compile time: about `1.9ms`
-- peak token estimate: `747`
+- indexing: about `15.6ms`
+- average compile time: about `1.6ms`
+- Recall@10: `1.0`
+- NDCG@10: about `0.82`
+- peak token estimate: `1366`
 
 These numbers come from the current local benchmark fixture and are intended as a sanity check, not a production benchmark claim.
 

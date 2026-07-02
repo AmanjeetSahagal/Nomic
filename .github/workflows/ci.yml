@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run benchmark
+
+  native-core:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake -S native -B native/build -DNOMIC_BUILD_TESTS=ON
+      - run: cmake --build native/build --config Release
+      - run: ctest --test-dir native/build --output-on-failure -C Release
+
+  native-addon:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Configure addon
+        run: cmake -S native -B native/build-addon -DNOMIC_BUILD_TESTS=OFF -DNOMIC_BUILD_NODE_ADDON=ON -DNODE_INCLUDE_DIR="$(node -p "require('path').resolve(process.execPath, '../../include/node')")"
+      - run: cmake --build native/build-addon --config Release
+      - name: Load addon
+        run: node -e "const a=require('./native/build-addon/nomic_native.node'); for(const n of ['openRepository','updateFiles','search','getDependencies','closeRepository']) if(typeof a[n] !== 'function') process.exit(1)"

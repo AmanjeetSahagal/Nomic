@@ -1,0 +1,17 @@
+{
+  "featureVersion": "nomic-ranking-v1",
+  "features": [
+    "lexicalScore",
+    "semanticScore",
+    "symbolOverlap",
+    "pathOverlap",
+    "dependencyDistance",
+    "inboundDependencies",
+    "fileImportance",
+    "recency",
+    "tokenCost",
+    "isTest"
+  ],
+  "label": "usefulness",
+  "group": "taskId"
+}

@@ -31,9 +31,12 @@ export interface BudgetUsage {
 export interface IndexedSymbol {
   id: string;
   name: string;
+  qualifiedName?: string;
   kind: "function" | "class" | "interface" | "module" | "test" | "unknown";
   path: string;
   exported: boolean;
+  startLine?: number;
+  endLine?: number;
 }
 
 export interface FileRecord {
@@ -44,6 +47,7 @@ export interface FileRecord {
   imports: string[];
   isTest: boolean;
   symbols: IndexedSymbol[];
+  contentHash?: string;
 }
 
 export interface IndexEdge {
@@ -70,9 +74,16 @@ export interface IndexingMetrics {
   reusedFiles: number;
   reusedChunks: number;
   reusedEdges: number;
+  parsedFiles?: number;
+  failedFiles?: number;
+  invalidatedSymbols?: number;
+  wallTimeMs?: number;
+  indexBytes?: number;
+  schemaVersion?: number;
 }
 
 export interface RepositoryIndex {
+  backend?: "typescript" | "native";
   repositoryRoot: string;
   fileCount: number;
   files: FileRecord[];
@@ -93,7 +104,7 @@ export interface ContextCandidate {
   path: string;
   reason: string;
   score: number;
-  source: "structural" | "semantic" | "manual";
+  source: "structural" | "semantic" | "lexical" | "manual";
   role: "primary" | "dependency" | "test" | "semantic-support" | "manual";
   stage: "seed" | "graph" | "semantic" | "override";
   dependencyDistance: number;
@@ -104,6 +115,34 @@ export interface ContextCandidate {
   tokenCost: number;
   chunkIds: string[];
   expansionPath: string[];
+  symbolId?: string;
+  startLine?: number;
+  endLine?: number;
+  lexicalScore?: number;
+  graphFeatures?: Record<string, number>;
+  rankerScore?: number;
+  featureVersion?: string;
+  modelVersion?: string;
+}
+
+export interface RankingFeatures {
+  lexicalScore: number;
+  semanticScore: number;
+  symbolOverlap: number;
+  pathOverlap: number;
+  dependencyDistance: number;
+  inboundDependencies: number;
+  fileImportance: number;
+  recency: number;
+  tokenCost: number;
+  isTest: number;
+}
+
+export interface CandidateRanker {
+  readonly name: string;
+  readonly featureVersion: string;
+  readonly modelVersion?: string;
+  rank(task: UserTask, candidates: ContextCandidate[], index: RepositoryIndex): Promise<ContextCandidate[]>;
 }
 
 export interface FileSummary {
@@ -203,6 +242,22 @@ export interface BenchmarkTaskReport {
   totalMs: number;
   tokenEstimate: number;
   includedFiles: number;
+  relevantFiles: string[];
+  retrievedFiles: string[];
+  recallAt5: number;
+  recallAt10: number;
+  reciprocalRank: number;
+  ndcgAt10: number;
+  contextPrecision: number;
+}
+
+export interface BenchmarkTask extends UserTask {
+  id?: string;
+  relevantFiles?: string[];
+  relevantSymbols?: string[];
+  repositoryCommit?: string;
+  patchCommit?: string;
+  split?: "train" | "validation" | "test";
 }
 
 export interface BenchmarkReport {
@@ -211,6 +266,25 @@ export interface BenchmarkReport {
   compileReports: BenchmarkTaskReport[];
   averageCompileMs: number;
   peakTokenEstimate: number;
+  recallAt5: number;
+  recallAt10: number;
+  mrr: number;
+  ndcgAt10: number;
+  contextPrecision: number;
+  queryP50Ms: number;
+  queryP95Ms: number;
+}
+
+export interface RetrievalFeedback {
+  schemaVersion: 1;
+  taskHash: string;
+  repositoryRoot: string;
+  candidatePaths: string[];
+  selectedPaths: string[];
+  acceptedPatchPaths: string[];
+  featureVersion?: string;
+  modelVersion?: string;
+  createdAt: string;
 }
 
 export interface SessionRecord {
@@ -224,6 +298,18 @@ export interface SessionRecord {
 export interface IndexRepositoryRequest {
   repositoryRoot: string;
   existingIndex?: RepositoryIndex | null;
+  maxFileSizeBytes?: number;
+  extensions?: string[];
+  respectGitignore?: boolean;
+  signal?: AbortSignal;
+  onProgress?: (progress: IndexProgress) => void;
+}
+
+export interface IndexProgress {
+  phase: "scan" | "parse" | "persist";
+  completed: number;
+  total?: number;
+  path?: string;
 }
 
 export interface CompileTaskDependencies {
@@ -276,6 +362,7 @@ export interface EngineDependencies {
   adapters: Record<AgentTarget, AgentAdapter>;
   tokenBudget?: TokenBudget;
   tokenEstimator?: TokenEstimator;
+  ranker?: CandidateRanker;
 }
 
 export const DEFAULT_TOKEN_BUDGET: TokenBudget = {

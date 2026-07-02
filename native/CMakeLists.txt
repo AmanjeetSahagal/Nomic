@@ -1,0 +1,41 @@
+cmake_minimum_required(VERSION 3.22)
+project(nomic_native VERSION 0.1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+option(NOMIC_BUILD_TESTS "Build native unit tests" ON)
+option(NOMIC_BUILD_NODE_ADDON "Build the optional Node-API addon" OFF)
+
+find_package(SQLite3 REQUIRED)
+
+add_library(nomic_core STATIC src/index.cpp)
+set_target_properties(nomic_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_include_directories(nomic_core PUBLIC include)
+target_link_libraries(nomic_core PUBLIC SQLite::SQLite3)
+target_compile_features(nomic_core PUBLIC cxx_std_20)
+
+if(MSVC)
+  target_compile_options(nomic_core PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(nomic_core PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+if(NOMIC_BUILD_TESTS)
+  enable_testing()
+  add_executable(nomic_core_test tests/index_test.cpp)
+  target_link_libraries(nomic_core_test PRIVATE nomic_core)
+  add_test(NAME nomic_core_test COMMAND nomic_core_test)
+endif()
+
+if(NOMIC_BUILD_NODE_ADDON)
+  if(NOT DEFINED NODE_INCLUDE_DIR)
+    message(FATAL_ERROR "Set NODE_INCLUDE_DIR to the directory containing node_api.h")
+  endif()
+  add_library(nomic_native MODULE addon/addon.cpp)
+  target_include_directories(nomic_native PRIVATE ${NODE_INCLUDE_DIR})
+  target_link_libraries(nomic_native PRIVATE nomic_core)
+  target_compile_definitions(nomic_native PRIVATE NODE_GYP_MODULE_NAME=nomic_native)
+  set_target_properties(nomic_native PROPERTIES PREFIX "" SUFFIX ".node")
+endif()

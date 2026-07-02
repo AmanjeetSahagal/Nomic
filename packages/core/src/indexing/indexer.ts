@@ -1,4 +1,6 @@
 import { readFile, readdir, stat } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { performance } from "node:perf_hooks";
 import path from "node:path";
 import ts from "typescript";
 import {
@@ -7,6 +9,7 @@ import {
   type IndexEdge,
   type IndexRepositoryRequest,
   type IndexedSymbol,
+  type IndexingMetrics,
   type ParserProvider,
   type RepositoryIndex
 } from "../types/contracts";
@@ -31,14 +34,16 @@ export class FilesystemParserProvider implements ParserProvider {
   readonly name = "filesystem-parser";
 
   async indexRepository(request: IndexRepositoryRequest): Promise<RepositoryIndex> {
+    const startedAt = performance.now();
     const repositoryRoot = path.resolve(request.repositoryRoot);
-    const filePaths = await walkRepository(repositoryRoot);
+    request.onProgress?.({ phase: "scan", completed: 0 });
+    const filePaths = await walkRepository(repositoryRoot, request);
     const previousFiles = new Map(
       (request.existingIndex?.files ?? []).map((file) => [file.path, file] satisfies [string, FileRecord])
     );
     const previousChunksByFile = groupChunksByFile(request.existingIndex?.chunks ?? []);
     const nextRelativePaths = new Set(filePaths.map((filePath) => path.relative(repositoryRoot, filePath)));
-    const metrics = {
+    const metrics: IndexingMetrics = {
       addedFiles: 0,
       changedFiles: 0,
       removedFiles: 0,
@@ -49,20 +54,24 @@ export class FilesystemParserProvider implements ParserProvider {
 
     const fileEntries = await Promise.all(
       filePaths.map(async (filePath) => {
+        if (request.signal?.aborted) {
+          throw new Error("Repository indexing cancelled.");
+        }
         const relativePath = path.relative(repositoryRoot, filePath);
         const fileStats = await stat(filePath);
         const previousFile = previousFiles.get(relativePath);
         const content = await readFile(filePath, "utf8");
+        const contentHash = createHash("sha256").update(content).digest("hex");
 
         if (
           previousFile &&
-          previousFile.size === fileStats.size &&
-          previousFile.modifiedAtMs === fileStats.mtimeMs
+          ((previousFile.contentHash && previousFile.contentHash === contentHash) ||
+            (!previousFile.contentHash && previousFile.size === fileStats.size && previousFile.modifiedAtMs === fileStats.mtimeMs))
         ) {
           metrics.reusedFiles += 1;
           metrics.reusedChunks += previousChunksByFile.get(relativePath)?.length ?? 0;
           return {
-            file: previousFile,
+            file: { ...previousFile, size: fileStats.size, modifiedAtMs: fileStats.mtimeMs, contentHash },
             content,
             parsed: parseFile(relativePath, content),
             reused: true
@@ -77,13 +86,17 @@ export class FilesystemParserProvider implements ParserProvider {
 
         const parsed = parseFile(relativePath, content);
         return {
-          file: buildFileRecord(relativePath, parsed, fileStats.mtimeMs, fileStats.size),
+          file: { ...buildFileRecord(relativePath, parsed, fileStats.mtimeMs, fileStats.size), contentHash },
           content,
           parsed,
           reused: false
         };
       })
     );
+    metrics.parsedFiles = fileEntries.filter((entry) => !entry.reused).length;
+    metrics.failedFiles = 0;
+    metrics.schemaVersion = 1;
+    request.onProgress?.({ phase: "parse", completed: fileEntries.length, total: filePaths.length });
 
     for (const previousPath of previousFiles.keys()) {
       if (!nextRelativePaths.has(previousPath)) {
@@ -108,8 +121,11 @@ export class FilesystemParserProvider implements ParserProvider {
     });
     const edges = buildEdges(files, fileEntries, fileMap, symbolMap);
     metrics.reusedEdges = Math.min(request.existingIndex?.edges.length ?? 0, edges.length);
+    metrics.wallTimeMs = performance.now() - startedAt;
+    request.onProgress?.({ phase: "persist", completed: files.length, total: files.length });
 
     return {
+      backend: "typescript",
       repositoryRoot,
       fileCount: files.length,
       files,
@@ -160,9 +176,12 @@ const TEXT_FILE_EXTENSIONS = new Set([
   ".yml"
 ]);
 
-async function walkRepository(repositoryRoot: string): Promise<string[]> {
+async function walkRepository(repositoryRoot: string, request: IndexRepositoryRequest): Promise<string[]> {
   const pending = [repositoryRoot];
   const files: string[] = [];
+  const ignoreRules = request.respectGitignore === false ? [] : await loadIgnoreRules(repositoryRoot);
+  const maximumFileSize = request.maxFileSizeBytes ?? 1024 * 1024;
+  const extensions = request.extensions ? new Set(request.extensions.map((extension) => extension.toLowerCase())) : TEXT_FILE_EXTENSIONS;
 
   while (pending.length > 0) {
     const currentDirectory = pending.pop();
@@ -174,6 +193,10 @@ async function walkRepository(repositoryRoot: string): Promise<string[]> {
 
     for (const entry of entries) {
       const fullPath = path.join(currentDirectory, entry.name);
+      const relativePath = path.relative(repositoryRoot, fullPath).split(path.sep).join("/");
+      if (matchesIgnoreRules(relativePath, entry.isDirectory(), ignoreRules)) {
+        continue;
+      }
 
       if (entry.isDirectory()) {
         if (!IGNORED_DIRECTORIES.has(entry.name)) {
@@ -186,7 +209,8 @@ async function walkRepository(repositoryRoot: string): Promise<string[]> {
         continue;
       }
 
-      if (shouldIndexFile(entry.name)) {
+      const fileStats = await stat(fullPath);
+      if (fileStats.size <= maximumFileSize && shouldIndexFile(entry.name, extensions)) {
         files.push(fullPath);
       }
     }
@@ -195,13 +219,45 @@ async function walkRepository(repositoryRoot: string): Promise<string[]> {
   return files;
 }
 
-function shouldIndexFile(fileName: string): boolean {
+function shouldIndexFile(fileName: string, extensions: Set<string> = TEXT_FILE_EXTENSIONS): boolean {
   const extension = path.extname(fileName).toLowerCase();
-  if (TEXT_FILE_EXTENSIONS.has(extension)) {
+  if (extensions.has(extension)) {
     return true;
   }
 
   return fileName === "Dockerfile" || fileName.endsWith(".env.example");
+}
+
+interface IgnoreRule { negated: boolean; directoryOnly: boolean; matcher: RegExp }
+
+async function loadIgnoreRules(repositoryRoot: string): Promise<IgnoreRule[]> {
+  try {
+    const contents = await readFile(path.join(repositoryRoot, ".gitignore"), "utf8");
+    return contents.split(/\r?\n/).flatMap((line): IgnoreRule[] => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) return [];
+      const negated = trimmed.startsWith("!");
+      const raw = (negated ? trimmed.slice(1) : trimmed).replace(/^\//, "");
+      const directoryOnly = raw.endsWith("/");
+      const pattern = raw.replace(/\/$/, "");
+      const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*/g, "§§").replace(/\*/g, "[^/]*").replace(/§§/g, ".*").replace(/\?/g, "[^/]");
+      const prefix = pattern.includes("/") ? "^" : "(^|.*/)";
+      return [{ negated, directoryOnly, matcher: new RegExp(`${prefix}${escaped}($|/)`) }];
+    });
+  } catch (error: unknown) {
+    if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") return [];
+    throw error;
+  }
+}
+
+function matchesIgnoreRules(relativePath: string, isDirectory: boolean, rules: IgnoreRule[]): boolean {
+  let ignored = false;
+  for (const rule of rules) {
+    if ((!rule.directoryOnly || isDirectory || relativePath.includes("/")) && rule.matcher.test(relativePath)) {
+      ignored = !rule.negated;
+    }
+  }
+  return ignored;
 }
 
 function buildFileRecord(relativePath: string, parsed: ParsedFileDetails, modifiedAtMs?: number, size?: number): FileRecord {
@@ -276,6 +332,7 @@ function parseTypeScriptFile(filePath: string, fileContents: string): ParsedFile
     {
       id: `${filePath}#module`,
       name: path.basename(filePath),
+      qualifiedName: path.basename(filePath),
       kind: isTestFile(filePath) ? "test" : "module",
       path: filePath,
       exported: true
@@ -305,16 +362,16 @@ function parseTypeScriptFile(filePath: string, fileContents: string): ParsedFile
     }
 
     if (ts.isClassDeclaration(node) && node.name) {
-      pushSymbol(symbols, seen, filePath, "class", node.name.text, hasExportModifier(node));
+      pushSymbol(symbols, seen, filePath, "class", node.name.text, hasExportModifier(node), sourceRange(sourceFile, node));
     } else if (ts.isInterfaceDeclaration(node)) {
-      pushSymbol(symbols, seen, filePath, "interface", node.name.text, hasExportModifier(node));
+      pushSymbol(symbols, seen, filePath, "interface", node.name.text, hasExportModifier(node), sourceRange(sourceFile, node));
     } else if (ts.isFunctionDeclaration(node) && node.name) {
-      pushSymbol(symbols, seen, filePath, "function", node.name.text, hasExportModifier(node));
+      pushSymbol(symbols, seen, filePath, "function", node.name.text, hasExportModifier(node), sourceRange(sourceFile, node));
     } else if (ts.isVariableStatement(node)) {
       const exported = hasExportModifier(node);
       for (const declaration of node.declarationList.declarations) {
         if (ts.isIdentifier(declaration.name) && declaration.initializer && isFunctionLikeInitializer(declaration.initializer)) {
-          pushSymbol(symbols, seen, filePath, "function", declaration.name.text, exported);
+          pushSymbol(symbols, seen, filePath, "function", declaration.name.text, exported, sourceRange(sourceFile, declaration));
         }
       }
     }
@@ -500,6 +557,7 @@ function extractRegexSymbols(filePath: string, fileContents: string): IndexedSym
     {
       id: `${filePath}#module`,
       name: path.basename(filePath),
+      qualifiedName: path.basename(filePath),
       kind: moduleKind,
       path: filePath,
       exported: true
@@ -526,7 +584,8 @@ function extractRegexSymbols(filePath: string, fileContents: string): IndexedSym
       if (!name) {
         continue;
       }
-      pushSymbol(symbols, seen, filePath, kind, name, /export\s+/.test(match[0] ?? ""));
+      const startLine = fileContents.slice(0, match.index ?? 0).split(/\r?\n/).length;
+      pushSymbol(symbols, seen, filePath, kind, name, /export\s+/.test(match[0] ?? ""), { startLine, endLine: startLine });
     }
   }
 
@@ -551,7 +610,8 @@ function pushSymbol(
   filePath: string,
   kind: IndexedSymbol["kind"],
   name: string,
-  exported: boolean
+  exported: boolean,
+  range?: { startLine: number; endLine: number }
 ): void {
   const id = `${filePath}#${kind}:${name}`;
   if (seen.has(id)) {
@@ -561,11 +621,20 @@ function pushSymbol(
   symbols.push({
     id,
     name,
+    qualifiedName: name,
     kind,
     path: filePath,
-    exported
+    exported,
+    ...range
   });
   seen.add(id);
+}
+
+function sourceRange(sourceFile: ts.SourceFile, node: ts.Node): { startLine: number; endLine: number } {
+  return {
+    startLine: sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1,
+    endLine: sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line + 1
+  };
 }
 
 function isTypeScriptLike(filePath: string): boolean {

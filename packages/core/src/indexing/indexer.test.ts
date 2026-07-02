@@ -72,14 +72,18 @@ describe("FilesystemParserProvider", () => {
         expect.objectContaining({ from: "src/auth.ts", to: "src/crypto.ts", kind: "caller" })
       ])
     );
-    expect(index.metrics).toEqual({
+    expect(index.metrics).toEqual(expect.objectContaining({
       addedFiles: 4,
       changedFiles: 0,
       removedFiles: 0,
       reusedFiles: 0,
       reusedChunks: 0,
-      reusedEdges: 0
-    });
+      reusedEdges: 0,
+      parsedFiles: 4,
+      failedFiles: 0,
+      schemaVersion: 1
+    }));
+    expect(authFile?.contentHash).toMatch(/^[a-f0-9]{64}$/);
   });
 
   it("reuses unchanged files and reports incremental metrics", async () => {
@@ -112,6 +116,29 @@ describe("FilesystemParserProvider", () => {
     expect(secondIndex.metrics.reusedChunks).toBeGreaterThan(0);
     expect(nextCryptoRecord).toEqual(originalCryptoRecord);
     expect(nextAuthRecord?.symbols.map((symbol) => symbol.name)).toContain("loginUser");
+  });
+
+  it("respects gitignore, file size limits, progress, and cancellation", async () => {
+    const repositoryRoot = await createTempRepository();
+    await writeFile(path.join(repositoryRoot, ".gitignore"), "generated/\n*.secret.ts\n", "utf8");
+    await mkdir(path.join(repositoryRoot, "generated"), { recursive: true });
+    await writeFile(path.join(repositoryRoot, "generated", "ignored.ts"), "export const ignored = true;", "utf8");
+    await writeFile(path.join(repositoryRoot, "src", "private.secret.ts"), "export const secret = true;", "utf8");
+    await writeFile(path.join(repositoryRoot, "src", "large.ts"), "x".repeat(100), "utf8");
+    await writeFile(path.join(repositoryRoot, "src", "kept.ts"), "export const kept = true;", "utf8");
+    const progress: string[] = [];
+    const parser = new FilesystemParserProvider();
+    const index = await parser.indexRepository({
+      repositoryRoot,
+      maxFileSizeBytes: 64,
+      onProgress: (event) => progress.push(event.phase)
+    });
+    expect(index.files.map((file) => file.path)).toEqual(["src/kept.ts"]);
+    expect(progress).toEqual(["scan", "parse", "persist"]);
+
+    const controller = new AbortController();
+    controller.abort();
+    await expect(parser.indexRepository({ repositoryRoot, signal: controller.signal })).rejects.toThrow("cancelled");
   });
 });
 

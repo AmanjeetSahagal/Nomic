@@ -2,15 +2,30 @@ import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { createNomicEngine } from "../engine";
-import type { UserTask } from "../types/contracts";
+import type { BenchmarkTask } from "../types/contracts";
 
 async function main(): Promise<void> {
   const repositoryRoot = await createFixtureRepository();
   const engine = createNomicEngine();
-  const tasks: UserTask[] = [
-    { text: "refactor authentication login flow", target: "codex", repositoryRoot },
-    { text: "fix session reliability regression", target: "codex", repositoryRoot },
-    { text: "improve authentication documentation", target: "claude", repositoryRoot }
+  const tasks: BenchmarkTask[] = [
+    {
+      text: "refactor authentication login flow",
+      target: "codex",
+      repositoryRoot,
+      relevantFiles: ["src/auth.ts", "src/crypto.ts", "src/session.ts", "tests/auth.test.ts"]
+    },
+    {
+      text: "fix session reliability regression",
+      target: "codex",
+      repositoryRoot,
+      relevantFiles: ["src/session.ts", "src/auth.ts", "tests/auth.test.ts"]
+    },
+    {
+      text: "improve authentication documentation",
+      target: "claude",
+      repositoryRoot,
+      relevantFiles: ["docs/auth.md", "src/auth.ts"]
+    }
   ];
   const report = await engine.benchmark(repositoryRoot, tasks);
 
@@ -19,6 +34,12 @@ async function main(): Promise<void> {
   console.log(`Index ms: ${report.indexMs.toFixed(1)}`);
   console.log(`Average compile ms: ${report.averageCompileMs.toFixed(1)}`);
   console.log(`Peak token estimate: ${report.peakTokenEstimate}`);
+  console.log(`Recall@5: ${report.recallAt5.toFixed(3)}`);
+  console.log(`Recall@10: ${report.recallAt10.toFixed(3)}`);
+  console.log(`MRR: ${report.mrr.toFixed(3)}`);
+  console.log(`NDCG@10: ${report.ndcgAt10.toFixed(3)}`);
+  console.log(`Context precision: ${report.contextPrecision.toFixed(3)}`);
+  console.log(`Query P50/P95 ms: ${report.queryP50Ms.toFixed(1)}/${report.queryP95Ms.toFixed(1)}`);
   for (const compile of report.compileReports) {
     console.log(`- ${compile.target} :: ${compile.task}`);
     console.log(`  totalMs=${compile.totalMs.toFixed(1)} tokens=${compile.tokenEstimate} files=${compile.includedFiles}`);

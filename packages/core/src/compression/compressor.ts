@@ -17,9 +17,11 @@ export class ContextCompressor {
   ) {}
 
   async compress(candidates: ContextCandidate[], index: RepositoryIndex): Promise<CompressionResult> {
-    const rankedCandidates = [...candidates].sort(
-      (left, right) => right.score - left.score || left.path.localeCompare(right.path)
-    );
+    const rankedCandidates = [...candidates].sort((left, right) => {
+      const leftUtility = left.score / Math.max(1, Math.log2(left.tokenCost + 2));
+      const rightUtility = right.score / Math.max(1, Math.log2(right.tokenCost + 2));
+      return rightUtility - leftUtility || right.score - left.score || left.path.localeCompare(right.path);
+    });
     const fileByPath = new Map(index.files.map((file) => [file.path, file]));
     const budgetCaps = {
       raw: Math.floor(this.tokenBudget.maxContextTokens * this.tokenBudget.rawCodeFraction),
@@ -157,7 +159,10 @@ async function createRawItem(
   repositoryRoot: string,
   candidate: ContextCandidate
 ): Promise<FileSummary> {
-  const content = await readRawFile(repositoryRoot, file.path);
+  const fullContent = await readRawFile(repositoryRoot, file.path);
+  const content = candidate.startLine && candidate.endLine
+    ? fullContent.split(/\r?\n/).slice(candidate.startLine - 1, candidate.endLine).join("\n")
+    : fullContent;
   const details = summarizeRawFile(file, candidate);
 
   return {

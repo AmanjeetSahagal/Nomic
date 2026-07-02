@@ -4,12 +4,14 @@ import { PromptCompiler } from "./compiler/prompt-compiler";
 import { ContextCompressor } from "./compression/compressor";
 import { FilesystemParserProvider, RepositoryIndexer } from "./indexing/indexer";
 import { FileSessionMemory } from "./memory/session-memory";
+import { NativeIndexClient, NativeLexicalProvider, NativeMirrorParserProvider } from "./native/native-client";
 import { applyTaskOverrides, HybridRetriever } from "./retrieval/retriever";
 import { FileStorageBackend } from "./storage/index-store";
 import {
   type AgentTarget,
   type AgentPayload,
   type BenchmarkReport,
+  type BenchmarkTask,
   type CompiledPrompt,
   type EngineDependencies,
   type IndexRepositoryRequest,
@@ -25,15 +27,15 @@ export class NomicEngine {
 
   constructor(private readonly dependencies: EngineDependencies) {
     this.indexer = new RepositoryIndexer(dependencies.parser ?? new FilesystemParserProvider());
-    this.retriever = new HybridRetriever(dependencies.embeddings);
+    this.retriever = new HybridRetriever(dependencies.embeddings, dependencies.ranker);
     this.compressor = new ContextCompressor(dependencies.summarizer, dependencies.tokenBudget);
     this.compiler = new PromptCompiler(dependencies.tokenEstimator);
   }
 
   async indexRepository(request: IndexRepositoryRequest): Promise<RepositoryIndex> {
-    const existingIndex =
-      request.existingIndex ??
-      (await this.dependencies.storage.readIndex(request.repositoryRoot));
+    const existingIndex = request.existingIndex !== undefined
+      ? request.existingIndex
+      : await this.dependencies.storage.readIndex(request.repositoryRoot);
     const index = await this.indexer.index({
       ...request,
       existingIndex
@@ -46,9 +48,10 @@ export class NomicEngine {
     const startedAt = performance.now();
     const repositoryRoot = task.repositoryRoot ?? process.cwd();
     const indexStartedAt = performance.now();
-    const index =
-      (await this.dependencies.storage.readIndex(repositoryRoot)) ??
-      (await this.indexRepository({ repositoryRoot }));
+    const storedIndex = await this.dependencies.storage.readIndex(repositoryRoot);
+    const index = isIndexCompatible(storedIndex)
+      ? storedIndex
+      : await this.indexRepository({ repositoryRoot, existingIndex: null });
     const indexMs = performance.now() - indexStartedAt;
 
     const sessionContext = await this.dependencies.memory.recent(3, repositoryRoot);
@@ -85,9 +88,10 @@ export class NomicEngine {
 
   async explainSelection(task: UserTask): Promise<CompiledPrompt["selectionReasons"]> {
     const repositoryRoot = task.repositoryRoot ?? process.cwd();
-    const index =
-      (await this.dependencies.storage.readIndex(repositoryRoot)) ??
-      (await this.indexRepository({ repositoryRoot }));
+    const storedIndex = await this.dependencies.storage.readIndex(repositoryRoot);
+    const index = isIndexCompatible(storedIndex)
+      ? storedIndex
+      : await this.indexRepository({ repositoryRoot, existingIndex: null });
     const sessionContext = await this.dependencies.memory.recent(3, repositoryRoot);
     const memoryPinnedPaths = unique(sessionContext.flatMap((record) => record.selectedFiles).slice(0, 4));
     const retrievalTask = mergeTaskOverrides(task, memoryPinnedPaths);
@@ -111,10 +115,14 @@ export class NomicEngine {
     edgeCount?: number;
     reusedFiles?: number;
     chunkReuseRatio?: number;
+    backend: "typescript" | "native";
+    nativeAddonPath?: string;
   }> {
+    const nativeDiagnostics = NativeIndexClient.diagnostics();
+    const backend = process.env.NOMIC_INDEX_BACKEND === "native" ? "native" : "typescript";
     const index = await this.dependencies.storage.readIndex(repositoryRoot);
     if (!index) {
-      return { hasIndex: false };
+      return { hasIndex: false, backend, nativeAddonPath: nativeDiagnostics.addonPath };
     }
 
     return {
@@ -124,11 +132,13 @@ export class NomicEngine {
       chunkCount: index.chunks.length,
       edgeCount: index.edges.length,
       reusedFiles: index.metrics.reusedFiles,
-      chunkReuseRatio: index.chunks.length === 0 ? 0 : index.metrics.reusedChunks / index.chunks.length
+      chunkReuseRatio: index.chunks.length === 0 ? 0 : index.metrics.reusedChunks / index.chunks.length,
+      backend,
+      nativeAddonPath: nativeDiagnostics.addonPath
     };
   }
 
-  async benchmark(repositoryRoot: string, tasks: UserTask[]): Promise<BenchmarkReport> {
+  async benchmark(repositoryRoot: string, tasks: BenchmarkTask[]): Promise<BenchmarkReport> {
     const indexStartedAt = performance.now();
     await this.indexRepository({ repositoryRoot });
     const indexMs = performance.now() - indexStartedAt;
@@ -139,25 +149,39 @@ export class NomicEngine {
         ...task,
         repositoryRoot
       });
+      const relevantFiles = task.relevantFiles ?? [];
+      const retrievedFiles = compiled.selectionReasons.map((reason) => reason.path);
       compileReports.push({
         task: task.text,
         target: task.target,
         totalMs: compiled.diagnostics.totalMs,
         tokenEstimate: compiled.tokenEstimate,
-        includedFiles: compiled.includedFiles.length
+        includedFiles: compiled.includedFiles.length,
+        relevantFiles,
+        retrievedFiles,
+        ...computeRetrievalMetrics(retrievedFiles, relevantFiles)
       });
     }
 
     const averageCompileMs =
       compileReports.reduce((total, report) => total + report.totalMs, 0) / Math.max(1, compileReports.length);
     const peakTokenEstimate = Math.max(0, ...compileReports.map((report) => report.tokenEstimate));
+    const labelledReports = compileReports.filter((report) => report.relevantFiles.length > 0);
+    const latencies = compileReports.map((report) => report.totalMs);
 
     return {
       repositoryRoot,
       indexMs,
       compileReports,
       averageCompileMs,
-      peakTokenEstimate
+      peakTokenEstimate,
+      recallAt5: average(labelledReports.map((report) => report.recallAt5)),
+      recallAt10: average(labelledReports.map((report) => report.recallAt10)),
+      mrr: average(labelledReports.map((report) => report.reciprocalRank)),
+      ndcgAt10: average(labelledReports.map((report) => report.ndcgAt10)),
+      contextPrecision: average(labelledReports.map((report) => report.contextPrecision)),
+      queryP50Ms: percentile(latencies, 0.5),
+      queryP95Ms: percentile(latencies, 0.95)
     };
   }
 
@@ -168,6 +192,12 @@ export class NomicEngine {
 }
 
 export function createNomicEngine(overrides: Partial<EngineDependencies> = {}): NomicEngine {
+  const nativeBackend = !overrides.parser && !overrides.embeddings && process.env.NOMIC_INDEX_BACKEND === "native";
+  const nativeClient = nativeBackend ? NativeIndexClient.load() : undefined;
+  const parser = overrides.parser ?? (nativeClient
+    ? new NativeMirrorParserProvider(nativeClient, new FilesystemParserProvider())
+    : undefined);
+  const embeddings = overrides.embeddings ?? (nativeClient ? new NativeLexicalProvider(nativeClient) : undefined);
   return new NomicEngine({
     storage: overrides.storage ?? new FileStorageBackend(),
     memory: overrides.memory ?? new FileSessionMemory(),
@@ -177,8 +207,8 @@ export function createNomicEngine(overrides: Partial<EngineDependencies> = {}): 
         claude: new ClaudeAdapter(),
         codex: new CodexAdapter()
       } satisfies EngineDependencies["adapters"]),
-    parser: overrides.parser,
-    embeddings: overrides.embeddings,
+    parser,
+    embeddings,
     summarizer: overrides.summarizer,
     tokenBudget: overrides.tokenBudget,
     tokenEstimator: overrides.tokenEstimator
@@ -200,4 +230,56 @@ function mergeTaskOverrides(task: UserTask, memoryPinnedPaths: string[]): UserTa
 
 function unique(values: string[]): string[] {
   return [...new Set(values)];
+}
+
+function isIndexCompatible(index: RepositoryIndex | null): index is RepositoryIndex {
+  if (!index) {
+    return false;
+  }
+  const configuredBackend = process.env.NOMIC_INDEX_BACKEND === "native" ? "native" : "typescript";
+  return configuredBackend === "typescript"
+    ? index.backend === undefined || index.backend === "typescript"
+    : index.backend === "native";
+}
+
+function computeRetrievalMetrics(retrieved: string[], relevant: string[]): {
+  recallAt5: number;
+  recallAt10: number;
+  reciprocalRank: number;
+  ndcgAt10: number;
+  contextPrecision: number;
+} {
+  const relevantSet = new Set(relevant);
+  if (relevantSet.size === 0) {
+    return { recallAt5: 0, recallAt10: 0, reciprocalRank: 0, ndcgAt10: 0, contextPrecision: 0 };
+  }
+  const hitsAt = (limit: number): number =>
+    new Set(retrieved.slice(0, limit).filter((path) => relevantSet.has(path))).size;
+  const firstRelevant = retrieved.findIndex((path) => relevantSet.has(path));
+  const dcg = retrieved.slice(0, 10).reduce(
+    (total, path, index) => total + (relevantSet.has(path) ? 1 / Math.log2(index + 2) : 0),
+    0
+  );
+  const idealDcg = Array.from({ length: Math.min(10, relevantSet.size) }, (_, index) => 1 / Math.log2(index + 2))
+    .reduce((total, value) => total + value, 0);
+
+  return {
+    recallAt5: hitsAt(5) / relevantSet.size,
+    recallAt10: hitsAt(10) / relevantSet.size,
+    reciprocalRank: firstRelevant === -1 ? 0 : 1 / (firstRelevant + 1),
+    ndcgAt10: idealDcg === 0 ? 0 : dcg / idealDcg,
+    contextPrecision: retrieved.length === 0 ? 0 : hitsAt(retrieved.length) / retrieved.length
+  };
+}
+
+function average(values: number[]): number {
+  return values.length === 0 ? 0 : values.reduce((total, value) => total + value, 0) / values.length;
+}
+
+function percentile(values: number[], quantile: number): number {
+  if (values.length === 0) {
+    return 0;
+  }
+  const sorted = [...values].sort((left, right) => left - right);
+  return sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * quantile) - 1)] ?? 0;
 }

@@ -12,6 +12,7 @@ const CONTAINER_ID = "nomic";
 
 export function activate(context: vscode.ExtensionContext): void {
   const provider = new NomicPreviewProvider(context);
+  const watcher = vscode.workspace.createFileSystemWatcher("**/*");
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(VIEW_ID, provider, {
@@ -19,6 +20,13 @@ export function activate(context: vscode.ExtensionContext): void {
         retainContextWhenHidden: true
       }
     })
+  );
+
+  context.subscriptions.push(
+    watcher,
+    watcher.onDidCreate((uri) => provider.handleWorkspaceFileChange(uri)),
+    watcher.onDidChange((uri) => provider.handleWorkspaceFileChange(uri)),
+    watcher.onDidDelete((uri) => provider.handleWorkspaceFileChange(uri))
   );
 
   context.subscriptions.push(
@@ -87,6 +95,8 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
   private loadedWorkspaceRoot?: string;
   private pendingApprovalPromptId?: string;
   private handoffHistory: HandoffRecord[] = [];
+  private pendingChangedPaths = new Set<string>();
+  private updateTimer?: NodeJS.Timeout;
 
   constructor(private readonly context: vscode.ExtensionContext) {}
 
@@ -182,6 +192,41 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     this.status = `Indexed ${result.fileCount} files`;
     this.workspaceRoot = workspaceRoot;
     this.render();
+  }
+
+  handleWorkspaceFileChange(uri: vscode.Uri): void {
+    const workspaceRoot = this.getWorkspaceRoot(false);
+    if (!workspaceRoot || !uri.fsPath.startsWith(workspaceRoot) || uri.fsPath.includes(`${vscode.Uri.file(workspaceRoot).fsPath}/.nomic/`)) {
+      return;
+    }
+    this.pendingChangedPaths.add(uri.fsPath);
+    if (this.updateTimer) {
+      clearTimeout(this.updateTimer);
+    }
+    this.updateTimer = setTimeout(() => void this.flushWorkspaceChanges(workspaceRoot), 300);
+  }
+
+  private async flushWorkspaceChanges(workspaceRoot: string): Promise<void> {
+    const changedCount = this.pendingChangedPaths.size;
+    this.pendingChangedPaths.clear();
+    this.updateTimer = undefined;
+    if (changedCount === 0) {
+      return;
+    }
+    this.status = `Updating index for ${changedCount} changed file${changedCount === 1 ? "" : "s"}`;
+    this.render();
+    try {
+      const result = await this.engine.indexRepository({ repositoryRoot: workspaceRoot });
+      this.status = `Index updated: ${result.metrics.changedFiles} changed, ${result.metrics.addedFiles} added, ${result.metrics.removedFiles} removed`;
+      if (this.taskText) {
+        await this.compileCurrentTask();
+      } else {
+        this.render();
+      }
+    } catch (error: unknown) {
+      this.status = `Index update failed: ${error instanceof Error ? error.message : String(error)}`;
+      this.render();
+    }
   }
 
   async refresh(): Promise<void> {
@@ -294,12 +339,14 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     this.render();
   }
 
-  private getWorkspaceRoot(): string | undefined {
+  private getWorkspaceRoot(showWarning = true): string | undefined {
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
     if (!workspaceFolder) {
       this.status = "Open a workspace to use Nomic";
       this.render();
-      void vscode.window.showWarningMessage("Open a workspace before using Nomic.");
+      if (showWarning) {
+        void vscode.window.showWarningMessage("Open a workspace before using Nomic.");
+      }
       return undefined;
     }
 

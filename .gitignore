@@ -5,3 +5,7 @@ dist
 .vscode-test
 coverage
 *.log
+ml/artifacts
+nomic-feedback-export.json
+__pycache__
+*.pyc

@@ -1,5 +1,6 @@
 import {
   type ChunkRecord,
+  type CandidateRanker,
   type ContextCandidate,
   type EmbeddingProvider,
   type IndexEdge,
@@ -9,6 +10,7 @@ import {
   type TaskOverrides,
   type UserTask
 } from "../types/contracts";
+import { HeuristicCandidateRanker } from "../ranking/ranker";
 
 const RERANK_WEIGHTS = {
   structuralScore: 1.4,
@@ -20,13 +22,17 @@ const RERANK_WEIGHTS = {
 } as const;
 
 export class HybridRetriever {
-  constructor(private readonly embeddings: EmbeddingProvider = new LocalEmbeddingProvider()) {}
+  constructor(
+    private readonly embeddings: EmbeddingProvider = new LocalEmbeddingProvider(),
+    private readonly ranker: CandidateRanker = new HeuristicCandidateRanker()
+  ) {}
 
   async retrieve(task: UserTask, index: RepositoryIndex): Promise<RetrievalResult> {
     const analysis = analyzeTask(task.text);
     const structuralCandidates = retrieveStructuralCandidates(analysis, index);
     const semanticCandidates = await this.embeddings.search(task, index);
-    const candidates = rerankCandidates(structuralCandidates, semanticCandidates, index);
+    const mergedCandidates = rerankCandidates(structuralCandidates, semanticCandidates, index);
+    const candidates = (await this.ranker.rank(task, mergedCandidates, index)).slice(0, 12);
 
     return {
       analysis,
@@ -264,6 +270,7 @@ function scoreStructuralFile(
   let score = 0;
   const reasons: string[] = [];
   const normalizedPath = file.path.toLowerCase();
+  let matchedSymbol: RepositoryIndex["symbols"][number] | undefined;
 
   for (const term of analysis.queryTerms) {
     if (normalizedPath.includes(term)) {
@@ -273,6 +280,7 @@ function scoreStructuralFile(
 
     const symbolMatches = file.symbols.filter((symbol) => symbol.name.toLowerCase().includes(term));
     if (symbolMatches.length > 0) {
+      matchedSymbol ??= symbolMatches[0];
       score += symbolMatches.length * 5;
       reasons.push(`Symbol matches "${term}"`);
     }
@@ -303,7 +311,10 @@ function scoreStructuralFile(
     fileImportanceScore: computeFileImportance(file.path, file.symbols.length, file.isTest),
     tokenCost: estimateFileTokenCost(file.size),
     chunkIds: index.chunks.filter((chunk) => chunk.filePath === file.path).map((chunk) => chunk.id),
-    expansionPath: [file.path]
+    expansionPath: [file.path],
+    symbolId: matchedSymbol?.id,
+    startLine: matchedSymbol?.startLine,
+    endLine: matchedSymbol?.endLine
   };
 }
 
@@ -387,6 +398,8 @@ function buildSemanticCandidate(
     recencyScore: normalizeRecency(file.modifiedAtMs, index),
     fileImportanceScore: computeFileImportance(file.path, file.symbols.length, file.isTest),
     tokenCost: Math.min(...entry.chunks.map((chunk) => chunk.tokenEstimate)),
+    startLine: entry.maxChunk.startLine,
+    endLine: entry.maxChunk.endLine,
     chunkIds: entry.chunks.map((chunk) => chunk.id),
     expansionPath: [file.path]
   };
@@ -525,12 +538,19 @@ function extractQueryTerms(text: string): string[] {
     "file"
   ]);
 
-  return unique(
-    text
+  const terms = text
       .split(/[^a-z0-9]+/i)
       .map((part) => part.trim().toLowerCase())
-      .filter((part) => part.length >= 3 && !stopWords.has(part))
-  );
+      .filter((part) => part.length >= 3 && !stopWords.has(part));
+  return unique(terms.flatMap((term) => [term, ...queryAliases(term)]));
+}
+
+function queryAliases(term: string): string[] {
+  if (term.startsWith("authenticat") || term === "authorization") return ["auth"];
+  if (term.startsWith("document")) return ["docs", "doc"];
+  if (term === "tests" || term === "testing") return ["test", "spec"];
+  if (term === "configuration") return ["config"];
+  return [];
 }
 
 function normalizeRecency(modifiedAtMs: number, index: RepositoryIndex): number {

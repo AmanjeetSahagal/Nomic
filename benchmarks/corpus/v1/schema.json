@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nomic.dev/schemas/benchmark-corpus-v1.json",
+  "type": "object",
+  "required": ["schemaVersion", "repositories", "tasks"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "url", "commit", "language"],
+        "properties": {
+          "id": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "commit": { "type": "string" },
+          "language": { "enum": ["typescript", "python"] }
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "repositoryId", "query", "relevantFiles", "patchCommit", "split"],
+        "properties": {
+          "id": { "type": "string" },
+          "repositoryId": { "type": "string" },
+          "query": { "type": "string" },
+          "relevantFiles": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "relevantSymbols": { "type": "array", "items": { "type": "string" } },
+          "patchCommit": { "type": "string" },
+          "split": { "enum": ["train", "validation", "test"] }
+        }
+      }
+    }
+  }
+}

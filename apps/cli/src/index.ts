@@ -1,32 +1,21 @@
 #!/usr/bin/env node
 
 import {
-  ClaudeAdapter,
-  CodexAdapter,
-  FileSessionMemory,
-  FileStorageBackend,
-  FilesystemParserProvider,
+  LocalFeedbackStore,
   createNomicEngine,
   type AgentTarget,
   type UserTask
 } from "@nomic/core";
 
 const [command, ...args] = process.argv.slice(2);
+const defaultRepositoryRoot = process.env.INIT_CWD ?? process.cwd();
 
 async function main(): Promise<void> {
-  const engine = createNomicEngine({
-    adapters: {
-      claude: new ClaudeAdapter(),
-      codex: new CodexAdapter()
-    },
-    memory: new FileSessionMemory(),
-    parser: new FilesystemParserProvider(),
-    storage: new FileStorageBackend()
-  });
+  const engine = createNomicEngine();
 
   switch (command) {
     case "index": {
-      const repositoryRoot = args[0] ?? process.cwd();
+      const repositoryRoot = args[0] ?? defaultRepositoryRoot;
       const result = await engine.indexRepository({ repositoryRoot });
       const testFileCount = result.files.filter((file) => file.isTest).length;
       const languageBreakdown = summarizeLanguages(result.files);
@@ -39,7 +28,7 @@ async function main(): Promise<void> {
       console.log(
         `Index metrics: added=${result.metrics.addedFiles}, changed=${result.metrics.changedFiles}, reused=${result.metrics.reusedFiles}, removed=${result.metrics.removedFiles}, reusedChunks=${result.metrics.reusedChunks}, reusedEdges=${result.metrics.reusedEdges}`
       );
-      console.log("Saved index to .nomic/index.json");
+      console.log(`Saved orchestration index to .nomic/index.json${result.backend === "native" ? " and native index to .nomic/index.sqlite" : ""}`);
       return;
     }
     case "ask": {
@@ -52,7 +41,8 @@ async function main(): Promise<void> {
 
       const task: UserTask = {
         text: taskText,
-        target: parseTarget(process.env.NOMIC_AGENT_TARGET)
+        target: parseTarget(process.env.NOMIC_AGENT_TARGET),
+        repositoryRoot: defaultRepositoryRoot
       };
       const compiled = await engine.compileTask(task);
       const payload = await engine.formatForTarget(compiled, task.target);
@@ -106,7 +96,8 @@ async function main(): Promise<void> {
 
       const reasons = await engine.explainSelection({
         text: taskText,
-        target: parseTarget(process.env.NOMIC_AGENT_TARGET)
+        target: parseTarget(process.env.NOMIC_AGENT_TARGET),
+        repositoryRoot: defaultRepositoryRoot
       });
 
       if (reasons.length === 0) {
@@ -121,13 +112,15 @@ async function main(): Promise<void> {
       return;
     }
     case "doctor": {
-      const diagnostics = await engine.diagnostics(process.cwd());
+      const diagnostics = await engine.diagnostics(defaultRepositoryRoot);
 
       console.log("Nomic doctor");
       console.log(`Node: ${process.version}`);
-      console.log(`Working directory: ${process.cwd()}`);
-      console.log("Parser: filesystem parser");
-      console.log("Storage: .nomic/index.json");
+      console.log(`Repository: ${defaultRepositoryRoot}`);
+      console.log(`Backend: ${diagnostics.backend}`);
+      console.log(`Native addon: ${diagnostics.nativeAddonPath}`);
+      console.log("Parser: filesystem parser with optional native BM25 mirror");
+      console.log(`Storage: .nomic/index.json${diagnostics.backend === "native" ? " + .nomic/index.sqlite" : ""}`);
       console.log("Session memory: .nomic/session-memory.json");
       console.log(`Index present: ${diagnostics.hasIndex ? "yes" : "no"}`);
       if (diagnostics.hasIndex) {
@@ -140,7 +133,7 @@ async function main(): Promise<void> {
       return;
     }
     case "benchmark": {
-      const repositoryRoot = args[0] ?? process.cwd();
+      const repositoryRoot = args[0] ?? defaultRepositoryRoot;
       const report = await engine.benchmark(repositoryRoot, [
         { text: "refactor authentication login flow", target: "codex", repositoryRoot },
         { text: "fix session reliability regression", target: "codex", repositoryRoot },
@@ -152,10 +145,36 @@ async function main(): Promise<void> {
       console.log(`Index ms: ${report.indexMs.toFixed(1)}`);
       console.log(`Average compile ms: ${report.averageCompileMs.toFixed(1)}`);
       console.log(`Peak token estimate: ${report.peakTokenEstimate}`);
+      console.log("Retrieval quality metrics: unavailable for unlabelled ad-hoc tasks");
+      console.log(`Query P50/P95 ms: ${report.queryP50Ms.toFixed(1)}/${report.queryP95Ms.toFixed(1)}`);
       for (const compile of report.compileReports) {
         console.log(`- ${compile.target} :: ${compile.task}`);
         console.log(`  totalMs=${compile.totalMs.toFixed(1)} tokens=${compile.tokenEstimate} files=${compile.includedFiles}`);
       }
+      return;
+    }
+    case "feedback": {
+      const action = args[0] ?? "status";
+      const store = new LocalFeedbackStore();
+      if (action === "status") {
+        const records = await store.read(defaultRepositoryRoot);
+        console.log(`Feedback opt-in: ${store.isEnabled() ? "enabled" : "disabled"}`);
+        console.log(`Local feedback records: ${records.length}`);
+        return;
+      }
+      if (action === "export") {
+        const destination = args[1] ?? "nomic-feedback-export.json";
+        const count = await store.export(defaultRepositoryRoot, destination);
+        console.log(`Exported ${count} feedback records to ${destination}`);
+        return;
+      }
+      if (action === "clear") {
+        await store.clear(defaultRepositoryRoot);
+        console.log("Cleared local Nomic feedback records.");
+        return;
+      }
+      printUsage(`Unknown feedback action: ${action}`);
+      process.exitCode = 1;
       return;
     }
     default: {
@@ -180,6 +199,7 @@ function printUsage(error?: string): void {
   console.log('  nomic explain-selection "your task"');
   console.log("  nomic doctor");
   console.log("  nomic benchmark [repository-root]");
+  console.log("  nomic feedback [status|export [path]|clear]");
 }
 
 function summarizeLanguages(files: Array<{ language: string }>): string {
