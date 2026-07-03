@@ -22,7 +22,8 @@
     "corpus:collect": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js collect",
     "corpus:review": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js review",
     "corpus:validate": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js validate",
-    "corpus:stats": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js stats"
+    "corpus:stats": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js stats",
+    "corpus:benchmark": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js benchmark"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",

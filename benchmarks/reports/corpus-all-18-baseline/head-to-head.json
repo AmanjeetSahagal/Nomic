@@ -1,0 +1,10 @@
+{
+  "pairedTasks": 18,
+  "improves": 1,
+  "ties": 13,
+  "worsens": 4,
+  "improvesFraction": 0.05555555555555555,
+  "tiesFraction": 0.7222222222222222,
+  "worsensFraction": 0.2222222222222222,
+  "meanTokenSavingsFraction": 0.29717817264509216
+}

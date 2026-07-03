@@ -1,0 +1,74 @@
+[
+  {
+    "mode": "bm25",
+    "repositoryId": "django/django",
+    "taskType": "bug-localization",
+    "tasks": 8,
+    "missesAt5": 3,
+    "missesAt10": 3,
+    "mrr": 0.5625
+  },
+  {
+    "mode": "bm25",
+    "repositoryId": "django/django",
+    "taskType": "feature-location",
+    "tasks": 1,
+    "missesAt5": 1,
+    "missesAt10": 1,
+    "mrr": 0
+  },
+  {
+    "mode": "bm25",
+    "repositoryId": "microsoft/TypeScript",
+    "taskType": "bug-localization",
+    "tasks": 8,
+    "missesAt5": 8,
+    "missesAt10": 8,
+    "mrr": 0
+  },
+  {
+    "mode": "bm25",
+    "repositoryId": "microsoft/TypeScript",
+    "taskType": "feature-location",
+    "tasks": 1,
+    "missesAt5": 1,
+    "missesAt10": 1,
+    "mrr": 0
+  },
+  {
+    "mode": "heuristic",
+    "repositoryId": "django/django",
+    "taskType": "bug-localization",
+    "tasks": 8,
+    "missesAt5": 6,
+    "missesAt10": 6,
+    "mrr": 0.25
+  },
+  {
+    "mode": "heuristic",
+    "repositoryId": "django/django",
+    "taskType": "feature-location",
+    "tasks": 1,
+    "missesAt5": 1,
+    "missesAt10": 1,
+    "mrr": 0
+  },
+  {
+    "mode": "heuristic",
+    "repositoryId": "microsoft/TypeScript",
+    "taskType": "bug-localization",
+    "tasks": 8,
+    "missesAt5": 8,
+    "missesAt10": 7,
+    "mrr": 0.017857142857142856
+  },
+  {
+    "mode": "heuristic",
+    "repositoryId": "microsoft/TypeScript",
+    "taskType": "feature-location",
+    "tasks": 1,
+    "missesAt5": 1,
+    "missesAt10": 1,
+    "mrr": 0
+  }
+]

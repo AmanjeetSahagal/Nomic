@@ -3,6 +3,7 @@ import path from "node:path";
 import type { CorpusCollectionDraft, CorpusManifest, CorpusTask } from "./corpus-contracts";
 import { collectGitHubCorpus } from "./github-corpus-collector";
 import { validateCorpus } from "./corpus-validator";
+import { runCorpusBenchmark, type CorpusRetrievalMode } from "./corpus-runner";
 
 const [command, ...rawArgs] = process.argv.slice(2);
 const root = process.env.INIT_CWD ?? process.cwd();
@@ -15,6 +16,7 @@ async function main(): Promise<void> {
   if (command === "validate") return validate(args);
   if (command === "review") return review(args);
   if (command === "stats") return stats();
+  if (command === "benchmark") return benchmark(args);
   usage();
   process.exitCode = 1;
 }
@@ -96,6 +98,16 @@ async function stats(): Promise<void> {
   console.log(JSON.stringify({ repositories: manifest.repositories.length, tasks: manifest.tasks.length, byRepository }, null, 2));
 }
 
+async function benchmark(args: Map<string, string>): Promise<void> {
+  const modeValue = args.get("mode") ?? "all";
+  const modes: CorpusRetrievalMode[] = modeValue === "all" ? ["bm25", "heuristic"] : modeValue.split(",") as CorpusRetrievalMode[];
+  if (modes.some((mode) => mode !== "bm25" && mode !== "heuristic")) throw new Error("--mode must be bm25, heuristic, or all");
+  const outputDirectory = args.get("output") ?? path.join(root, "benchmarks", "results", new Date().toISOString().replace(/[:.]/g, "-"));
+  const result = await runCorpusBenchmark({ manifestPath, cacheDirectory: path.join(root, "benchmarks", "cache"), outputDirectory, modes, repositoryId: args.get("repository"), limit: args.has("limit") ? positiveInteger(required(args, "limit"), "limit") : undefined, repetitions: args.has("repetitions") ? positiveInteger(required(args, "repetitions"), "repetitions") : 5 });
+  console.log(`Completed ${result.results.length} task-mode runs with ${result.failures.length} failures.`);
+  console.log(`Results: ${outputDirectory}`);
+}
+
 function selection(value: string | undefined, tasks: CorpusTask[]): Set<string> {
   if (!value) return new Set();
   if (value === "all") return new Set(tasks.map((task) => task.id));
@@ -148,6 +160,7 @@ function usage(): void {
   console.log("  corpus review --draft path [--list | --accept id[,id] | --reject id[,id]]");
   console.log("  corpus validate [--input path] [--allow-drafts]");
   console.log("  corpus stats");
+  console.log("  corpus benchmark [--mode all|bm25|heuristic] [--repository owner/repo] [--limit N]");
 }
 
 void main().catch((error: unknown) => {

@@ -64,6 +64,16 @@ Also report repository-held-out evaluation, initially holding out LLVM and later
 
 Compare BM25, heuristic, semantic-only when available, hybrid retrieval, and later the trained ranker. Report Recall@5/10, MRR, graded NDCG@10, selected tokens, context precision, query P50/P95, index time, peak memory, and index size. Record machine details, cold/warm status, one warm-up, five measured repetitions, configuration version, Git commit, and per-task failures.
 
+Run the implemented BM25 and heuristic comparison with exact pre-fix checkouts:
+
+```bash
+npm run corpus:benchmark -- --mode all --repository django/django --limit 1
+# Full reviewed pilot:
+npm run corpus:benchmark -- --mode all
+```
+
+The runner writes `run-metadata.json`, `per-task-results.jsonl`, `aggregate-results.json`, `head-to-head.json`, `quality-breakdown.json`, `failure-summary.json`, `failures.jsonl`, and `comparison.md` under the ignored `benchmarks/results/` directory. The report separates retrieval misses from execution failures and includes median/P95 token and latency distributions.
+
 ## Pilot acceptance gate
 
 - Current reviewed pilot: 18 accepted tasks (9 Django, 9 TypeScript), each with production-file and symbol labels.
