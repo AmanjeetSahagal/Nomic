@@ -140,6 +140,18 @@ describe("FilesystemParserProvider", () => {
     controller.abort();
     await expect(parser.indexRepository({ repositoryRoot, signal: controller.signal })).rejects.toThrow("cancelled");
   });
+
+  it("falls back safely when the TypeScript parser rejects an intentionally invalid fixture", async () => {
+    const repositoryRoot = await createTempRepository();
+    await writeFile(
+      path.join(repositoryRoot, "tests", "decoratorOnAwait.ts"),
+      "declare function dec<T>(target: T): T;\n\n@dec\nawait 1\n",
+      "utf8"
+    );
+    const index = await new FilesystemParserProvider().indexRepository({ repositoryRoot });
+    expect(index.files.map((file) => file.path)).toContain("tests/decoratorOnAwait.ts");
+    expect(index.chunks.some((chunk) => chunk.filePath === "tests/decoratorOnAwait.ts")).toBe(true);
+  });
 });
 
 async function createTempRepository(): Promise<string> {

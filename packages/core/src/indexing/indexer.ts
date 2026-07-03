@@ -309,9 +309,17 @@ function isTestFile(filePath: string): boolean {
 
 function parseFile(filePath: string, fileContents: string): ParsedFileDetails {
   if (isTypeScriptLike(filePath)) {
-    return parseTypeScriptFile(filePath, fileContents);
+    try {
+      return parseTypeScriptFile(filePath, fileContents);
+    } catch {
+      return parseFileWithRegex(filePath, fileContents);
+    }
   }
 
+  return parseFileWithRegex(filePath, fileContents);
+}
+
+function parseFileWithRegex(filePath: string, fileContents: string): ParsedFileDetails {
   const imports = extractImports(fileContents);
   return {
     imports,
