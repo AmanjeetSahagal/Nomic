@@ -12,15 +12,24 @@ export class HeuristicCandidateRanker implements CandidateRanker {
   readonly name = "heuristic-fallback";
   readonly featureVersion = RANKING_FEATURE_VERSION;
   readonly modelVersion = "heuristic-v1";
+  private readonly inboundDependencyCache = new WeakMap<RepositoryIndex, Map<string, number>>();
 
   async rank(
     task: UserTask,
     candidates: ContextCandidate[],
     index: RepositoryIndex
   ): Promise<ContextCandidate[]> {
+    let inboundDependencies = this.inboundDependencyCache.get(index);
+    if (!inboundDependencies) {
+      inboundDependencies = new Map<string, number>();
+      for (const edge of index.edges) {
+        inboundDependencies.set(edge.to, (inboundDependencies.get(edge.to) ?? 0) + 1);
+      }
+      this.inboundDependencyCache.set(index, inboundDependencies);
+    }
     return candidates
       .map((candidate) => {
-        const features = extractRankingFeatures(task, candidate, index);
+        const features = extractRankingFeatures(task, candidate, index, inboundDependencies);
         const rankerScore = candidate.score + scoreFeatureBoost(features);
         return {
           ...candidate,
@@ -70,13 +79,15 @@ export class ResilientCandidateRanker implements CandidateRanker {
 export function extractRankingFeatures(
   task: UserTask,
   candidate: ContextCandidate,
-  index: RepositoryIndex
+  index: RepositoryIndex,
+  inboundCounts?: Map<string, number>
 ): RankingFeatures {
   const terms = tokenize(task.text);
   const pathTerms = tokenize(candidate.path);
   const file = index.files.find((entry) => entry.path === candidate.path);
   const symbolTerms = new Set((file?.symbols ?? []).flatMap((symbol) => tokenize(symbol.name)));
-  const inboundDependencies = index.edges.filter((edge) => edge.to === candidate.path).length;
+  const inboundDependencies = inboundCounts?.get(candidate.path)
+    ?? index.edges.filter((edge) => edge.to === candidate.path).length;
 
   return {
     lexicalScore: candidate.lexicalScore ?? candidate.structuralScore,

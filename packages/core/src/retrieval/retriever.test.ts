@@ -182,6 +182,52 @@ describe("HybridRetriever", () => {
     });
     expect(retrieval.relatedTests).toEqual([]);
   });
+
+  it("prioritizes an exact symbol match even when its source file is large", async () => {
+    const index = createRepositoryIndex("/repo", {
+      files: [
+        {
+          path: "src/fields.py", language: "python", size: 100_000, modifiedAtMs: 1, imports: [], isTest: false,
+          symbols: [{ id: "decimal", name: "DecimalField", kind: "class", path: "src/fields.py", exported: true, startLine: 25, endLine: 40 }]
+        },
+        {
+          path: "docs/database.md", language: "markdown", size: 500, modifiedAtMs: 1, imports: [], isTest: false,
+          symbols: [{ id: "docs", name: "database.md", kind: "module", path: "docs/database.md", exported: true }]
+        }
+      ],
+      chunks: [
+        { id: "field", filePath: "src/fields.py", kind: "code", startLine: 24, endLine: 47, tokenEstimate: 80, text: "class DecimalField" },
+        { id: "docs", filePath: "docs/database.md", kind: "doc", startLine: 1, endLine: 5, tokenEstimate: 20, text: "Database numeric precision documentation" }
+      ],
+      edges: []
+    });
+
+    const result = await new HybridRetriever().retrieve(
+      { text: "DecimalField database numeric precision bug", target: "codex", repositoryRoot: "/repo" },
+      index
+    );
+
+    expect(result.candidates[0]?.path).toBe("src/fields.py");
+    expect(result.candidates[0]?.tokenCost).toBe(80);
+  });
+
+  it("does not let many partial symbol matches outweigh one exact identifier", async () => {
+    const noisySymbols = Array.from({ length: 100 }, (_, index) => ({
+      id: `test-${index}`, name: `test_database_case_${index}`, kind: "function" as const,
+      path: "tests/database.py", exported: false
+    }));
+    const index = createRepositoryIndex("/repo", {
+      files: [
+        { path: "src/fields.py", language: "python", size: 1000, modifiedAtMs: 1, imports: [], isTest: false, symbols: [{ id: "decimal", name: "DecimalField", kind: "class", path: "src/fields.py", exported: true }] },
+        { path: "tests/database.py", language: "python", size: 10_000, modifiedAtMs: 1, imports: [], isTest: true, symbols: noisySymbols }
+      ],
+      chunks: [], edges: []
+    });
+    const result = await new HybridRetriever().retrieve(
+      { text: "DecimalField database bug", target: "codex", repositoryRoot: "/repo" }, index
+    );
+    expect(result.candidates[0]?.path).toBe("src/fields.py");
+  });
 });
 
 function createRepositoryIndex(repositoryRoot: string, overrides: Partial<RepositoryIndex> = {}): RepositoryIndex {
