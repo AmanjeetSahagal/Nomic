@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "corpus": "nomic-public-corpus-v1",
+  "generatedAt": "2026-07-03T05:57:21.608Z",
+  "gitCommit": "5731f90c0e13dea05bfd12bd09781fe3b517c271",
+  "machine": {
+    "platform": "darwin",
+    "release": "25.5.0",
+    "arch": "arm64",
+    "cpus": 11,
+    "cpuModel": "Apple M3 Pro",
+    "memoryBytes": 19327352832,
+    "node": "v22.19.0"
+  },
+  "repetitions": 5,
+  "modes": [
+    "bm25",
+    "bm25_body",
+    "bm25_packed",
+    "bm25_path",
+    "bm25_symbol",
+    "bm25_path_symbol",
+    "bm25_graph",
+    "bm25_semantic",
+    "heuristic"
+  ]
+}

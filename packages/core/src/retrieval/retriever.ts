@@ -10,6 +10,7 @@ import {
   type TaskOverrides,
   type UserTask
 } from "../types/contracts";
+import { performance } from "node:perf_hooks";
 import { HeuristicCandidateRanker } from "../ranking/ranker";
 
 const RERANK_WEIGHTS = {
@@ -53,16 +54,29 @@ export class HybridRetriever {
   ) {}
 
   async retrieve(task: UserTask, index: RepositoryIndex): Promise<RetrievalResult> {
+    const totalStarted = performance.now();
+    const analysisStarted = performance.now();
     const analysis = analyzeTask(task.text);
+    const analysisMs = performance.now() - analysisStarted;
+    const lookupStarted = performance.now();
     let lookup = this.lookupCache.get(index);
     if (!lookup) {
       lookup = buildRetrievalLookup(index);
       this.lookupCache.set(index, lookup);
     }
+    const lookupMs = performance.now() - lookupStarted;
+    const structuralStarted = performance.now();
     const structuralCandidates = retrieveStructuralCandidates(analysis, index, lookup);
+    const structuralMs = performance.now() - structuralStarted;
+    const semanticStarted = performance.now();
     const semanticCandidates = await this.embeddings.search(task, index);
+    const semanticMs = performance.now() - semanticStarted;
+    const mergeStarted = performance.now();
     const mergedCandidates = rerankCandidates(structuralCandidates, semanticCandidates, lookup);
+    const candidateMergeMs = performance.now() - mergeStarted;
+    const rankingStarted = performance.now();
     const candidates = (await this.ranker.rank(task, mergedCandidates, index)).slice(0, 12);
+    const rankingMs = performance.now() - rankingStarted;
 
     return {
       analysis,
@@ -71,7 +85,16 @@ export class HybridRetriever {
       structuralCandidates,
       semanticCandidates,
       truncationReasons: candidates.length >= 12 ? ["Ranked candidate set truncated to the top 12 files."] : [],
-      rerankWeights: { ...RERANK_WEIGHTS }
+      rerankWeights: { ...RERANK_WEIGHTS },
+      stageTimingsMs: {
+        analysis: analysisMs,
+        lookup: lookupMs,
+        structural: structuralMs,
+        semantic: semanticMs,
+        candidateMerge: candidateMergeMs,
+        ranking: rankingMs,
+        total: performance.now() - totalStarted
+      }
     };
   }
 }

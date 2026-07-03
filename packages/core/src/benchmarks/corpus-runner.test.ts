@@ -33,13 +33,19 @@ describe("corpus runner", () => {
   });
 
   it("summarizes paired rank movement and token savings", () => {
-    const base: Omit<CorpusTaskResult, "taskId" | "mode" | "firstRelevantRank" | "selectedTokens"> = { repositoryId: "owner/repo", taskType: "bug-localization", split: "test", rankedPaths: [], primaryFiles: ["a"], recallAt5: 1, recallAt10: 1, reciprocalRank: 1, ndcgAt10: 1, contextPrecision: 1, queryMedianMs: 1, indexMs: 1 };
+    const base: Omit<CorpusTaskResult, "taskId" | "mode" | "firstRelevantRank" | "selectedTokens"> = {
+      repositoryId: "owner/repo", taskType: "bug-localization", split: "test", rankedPaths: [], primaryFiles: ["a"],
+      recallAt5: 1, recallAt10: 1, reciprocalRank: 1, ndcgAt10: 1, contextPrecision: 1,
+      firstRelevantCandidateRank: 1, firstPrimaryCandidateRank: 1, candidatePoolPaths: ["a"], relevantCandidatePresent: true, primaryCandidatePresent: true,
+      packedFileCount: 1, relevantSymbolIncluded: true, coldQueryMs: 1, queryMedianMs: 1,
+      stageMedianMs: {}, sourceCounts: { seed: 1 }, indexMs: 1, indexStageTimingsMs: {}
+    };
     const rows: CorpusTaskResult[] = [
       { ...base, taskId: "improves", mode: "bm25", firstRelevantRank: 3, selectedTokens: 100 },
       { ...base, taskId: "improves", mode: "heuristic", firstRelevantRank: 1, selectedTokens: 50 },
       { ...base, taskId: "ties", mode: "bm25", firstRelevantRank: null, selectedTokens: 100 },
       { ...base, taskId: "ties", mode: "heuristic", firstRelevantRank: null, selectedTokens: 100 }
     ];
-    expect(compareModes(rows)).toMatchObject({ pairedTasks: 2, improves: 1, ties: 1, worsens: 0, meanTokenSavingsFraction: .25 });
+    expect(compareModes(rows)).toMatchObject({ pairedTasks: 2, improves: 1, ties: 1, worsens: 0, bothFailedTop10: 1, meanTokenSavingsFraction: .25 });
   });
 });

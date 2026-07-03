@@ -100,8 +100,13 @@ async function stats(): Promise<void> {
 
 async function benchmark(args: Map<string, string>): Promise<void> {
   const modeValue = args.get("mode") ?? "all";
-  const modes: CorpusRetrievalMode[] = modeValue === "all" ? ["bm25", "heuristic"] : modeValue.split(",") as CorpusRetrievalMode[];
-  if (modes.some((mode) => mode !== "bm25" && mode !== "heuristic")) throw new Error("--mode must be bm25, heuristic, or all");
+  const availableModes: CorpusRetrievalMode[] = ["bm25", "bm25_body", "bm25_packed", "bm25_path", "bm25_symbol", "bm25_path_symbol", "bm25_graph", "bm25_semantic", "heuristic"];
+  const modes: CorpusRetrievalMode[] = modeValue === "all"
+    ? ["bm25", "heuristic"]
+    : modeValue === "ablations"
+      ? availableModes
+      : modeValue.split(",") as CorpusRetrievalMode[];
+  if (modes.some((mode) => !availableModes.includes(mode))) throw new Error(`--mode must be all, ablations, or one of: ${availableModes.join(", ")}`);
   const outputDirectory = args.get("output") ?? path.join(root, "benchmarks", "results", new Date().toISOString().replace(/[:.]/g, "-"));
   const result = await runCorpusBenchmark({ manifestPath, cacheDirectory: path.join(root, "benchmarks", "cache"), outputDirectory, modes, repositoryId: args.get("repository"), limit: args.has("limit") ? positiveInteger(required(args, "limit"), "limit") : undefined, repetitions: args.has("repetitions") ? positiveInteger(required(args, "repetitions"), "repetitions") : 5 });
   console.log(`Completed ${result.results.length} task-mode runs with ${result.failures.length} failures.`);
@@ -160,7 +165,7 @@ function usage(): void {
   console.log("  corpus review --draft path [--list | --accept id[,id] | --reject id[,id]]");
   console.log("  corpus validate [--input path] [--allow-drafts]");
   console.log("  corpus stats");
-  console.log("  corpus benchmark [--mode all|bm25|heuristic] [--repository owner/repo] [--limit N]");
+  console.log("  corpus benchmark [--mode all|ablations|bm25|heuristic|...] [--repository owner/repo] [--limit N]");
 }
 
 void main().catch((error: unknown) => {

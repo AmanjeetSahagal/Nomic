@@ -80,6 +80,7 @@ export interface IndexingMetrics {
   wallTimeMs?: number;
   indexBytes?: number;
   schemaVersion?: number;
+  stageTimingsMs?: Record<string, number>;
 }
 
 export interface RepositoryIndex {
@@ -175,6 +176,7 @@ export interface RetrievalResult {
   semanticCandidates: ContextCandidate[];
   truncationReasons: string[];
   rerankWeights: Record<string, number>;
+  stageTimingsMs?: Record<string, number>;
 }
 
 export interface CompiledPromptDiagnostics {

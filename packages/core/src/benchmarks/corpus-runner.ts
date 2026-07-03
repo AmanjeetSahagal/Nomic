@@ -5,12 +5,21 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { promisify } from "node:util";
 import { FilesystemParserProvider } from "../indexing/indexer";
-import { HybridRetriever } from "../retrieval/retriever";
+import { HybridRetriever, LocalEmbeddingProvider } from "../retrieval/retriever";
 import type { ContextCandidate, RepositoryIndex } from "../types/contracts";
 import type { CorpusManifest, CorpusRepository, CorpusTask } from "./corpus-contracts";
 
 const exec = promisify(execFile);
-export type CorpusRetrievalMode = "bm25" | "heuristic";
+export type CorpusRetrievalMode =
+  | "bm25"
+  | "bm25_body"
+  | "bm25_packed"
+  | "bm25_path"
+  | "bm25_symbol"
+  | "bm25_path_symbol"
+  | "bm25_graph"
+  | "bm25_semantic"
+  | "heuristic";
 
 export interface CorpusRunOptions {
   manifestPath: string;
@@ -26,8 +35,17 @@ export interface CorpusTaskResult {
   taskId: string; repositoryId: string; taskType: CorpusTask["taskType"]; mode: CorpusRetrievalMode; split: string;
   rankedPaths: string[]; primaryFiles: string[]; recallAt5: number; recallAt10: number;
   reciprocalRank: number; ndcgAt10: number; contextPrecision: number;
-  firstRelevantRank: number | null; selectedTokens: number; queryMedianMs: number; indexMs: number;
+  firstRelevantRank: number | null; firstRelevantCandidateRank: number | null;
+  firstPrimaryCandidateRank: number | null; candidatePoolPaths: string[];
+  relevantCandidatePresent: boolean; primaryCandidatePresent: boolean;
+  selectedTokens: number; packedFileCount: number; relevantSymbolIncluded: boolean;
+  coldQueryMs: number; queryMedianMs: number; stageMedianMs: Record<string, number>; indexMs: number;
+  indexStageTimingsMs: Record<string, number>;
+  sourceCounts: Record<string, number>;
 }
+
+interface Bm25Options { pathBoost: boolean; symbolBoost: boolean; packChunks: boolean }
+interface RetrievalExecution { candidates: ContextCandidate[]; stageTimingsMs: Record<string, number> }
 
 interface Bm25Document {
   file: RepositoryIndex["files"][number]; terms: string[]; counts: Map<string, number>;
@@ -73,27 +91,80 @@ export async function runCorpusBenchmark(options: CorpusRunOptions): Promise<{ r
 
 export async function runTask(task: CorpusTask, index: RepositoryIndex, mode: CorpusRetrievalMode, repetitions: number, indexMs: number): Promise<CorpusTaskResult> {
   const heuristicRetriever = new HybridRetriever();
-  const retrieve = mode === "bm25"
-    ? async () => retrieveBm25(task.query, index, 50)
-    : async () => (await heuristicRetriever.retrieve({ text: task.query, target: "codex", repositoryRoot: index.repositoryRoot }, index)).candidates;
+  const semanticProvider = new LocalEmbeddingProvider();
+  let graphLookup: Map<string, RepositoryIndex["edges"]> | undefined;
+  const retrieve = mode === "heuristic"
+    ? async (): Promise<RetrievalExecution> => {
+      const result = await heuristicRetriever.retrieve({ text: task.query, target: "codex", repositoryRoot: index.repositoryRoot }, index);
+      return { candidates: result.candidates, stageTimingsMs: result.stageTimingsMs ?? {} };
+    }
+    : mode === "bm25_graph"
+      ? async (): Promise<RetrievalExecution> => {
+        const base = retrieveBm25WithDiagnostics(task.query, index, 50, bm25Options(mode));
+        const started = performance.now();
+        graphLookup ??= buildCorpusGraphLookup(index);
+        const graphCandidates = expandBm25Graph(base.candidates, index, graphLookup, task.query);
+        const candidates = fuseRankedCandidates(base.candidates, graphCandidates, 50);
+        return { candidates, stageTimingsMs: { ...base.stageTimingsMs, graph: performance.now() - started } };
+      }
+      : mode === "bm25_semantic"
+        ? async (): Promise<RetrievalExecution> => {
+          const base = retrieveBm25WithDiagnostics(task.query, index, 50, bm25Options(mode));
+          const started = performance.now();
+          const semantic = await semanticProvider.search({ text: task.query, target: "codex", repositoryRoot: index.repositoryRoot }, index);
+          const candidates = fuseRankedCandidates(base.candidates, semantic, 50);
+          return { candidates, stageTimingsMs: { ...base.stageTimingsMs, semantic: performance.now() - started } };
+        }
+        : async (): Promise<RetrievalExecution> => retrieveBm25WithDiagnostics(task.query, index, 50, bm25Options(mode));
+  const coldStarted = performance.now();
   await retrieve();
+  const coldQueryMs = performance.now() - coldStarted;
   const latencies: number[] = [];
+  const stageTimings = new Map<string, number[]>();
   let candidates: ContextCandidate[] = [];
   for (let iteration = 0; iteration < repetitions; iteration += 1) {
-    const started = performance.now(); candidates = await retrieve(); latencies.push(performance.now() - started);
+    const started = performance.now(); const execution = await retrieve(); latencies.push(performance.now() - started);
+    candidates = execution.candidates;
+    for (const [stage, duration] of Object.entries(execution.stageTimingsMs)) {
+      const values = stageTimings.get(stage); if (values) values.push(duration); else stageTimings.set(stage, [duration]);
+    }
   }
   const top = candidates.slice(0, 10);
   const rankedPaths = top.map((candidate) => candidate.path);
   const metrics = gradedMetrics(rankedPaths, task);
+  const relevantPaths = new Set([...task.relevance.primaryFiles, ...task.relevance.supportingFiles, ...task.relevance.relevantUnchangedFiles]);
+  const firstRelevantCandidate = candidates.findIndex((candidate) => relevantPaths.has(candidate.path));
+  const primaryPaths = new Set(task.relevance.primaryFiles);
+  const firstPrimaryCandidate = candidates.findIndex((candidate) => primaryPaths.has(candidate.path));
+  const sourceCounts: Record<string, number> = {};
+  for (const candidate of candidates) sourceCounts[candidate.stage] = (sourceCounts[candidate.stage] ?? 0) + 1;
   return {
     taskId: task.id, repositoryId: task.repositoryId, taskType: task.taskType, mode, split: task.split, rankedPaths,
     primaryFiles: task.relevance.primaryFiles, ...metrics,
+    firstRelevantCandidateRank: firstRelevantCandidate < 0 ? null : firstRelevantCandidate + 1,
+    firstPrimaryCandidateRank: firstPrimaryCandidate < 0 ? null : firstPrimaryCandidate + 1,
+    candidatePoolPaths: candidates.map((candidate) => candidate.path),
+    relevantCandidatePresent: firstRelevantCandidate >= 0,
+    primaryCandidatePresent: firstPrimaryCandidate >= 0,
     selectedTokens: top.reduce((sum, candidate) => sum + candidate.tokenCost, 0),
-    queryMedianMs: median(latencies), indexMs
+    packedFileCount: top.filter((candidate) => candidate.chunkIds.length > 0).length,
+    relevantSymbolIncluded: includesRelevantSymbol(task, top, index),
+    coldQueryMs,
+    queryMedianMs: median(latencies),
+    stageMedianMs: Object.fromEntries([...stageTimings].map(([stage, values]) => [stage, median(values)])),
+    sourceCounts,
+    indexMs,
+    indexStageTimingsMs: index.metrics.stageTimingsMs ?? {}
   };
 }
 
 export function retrieveBm25(query: string, index: RepositoryIndex, limit: number): ContextCandidate[] {
+  return retrieveBm25WithDiagnostics(query, index, limit, bm25Options("bm25")).candidates;
+}
+
+function retrieveBm25WithDiagnostics(query: string, index: RepositoryIndex, limit: number, options: Bm25Options): RetrievalExecution {
+  const totalStarted = performance.now();
+  const prepareStarted = performance.now();
   let prepared = bm25DocumentCache.get(index);
   if (!prepared) {
     const chunksByFile = new Map<string, RepositoryIndex["chunks"]>();
@@ -124,6 +195,8 @@ export function retrieveBm25(query: string, index: RepositoryIndex, limit: numbe
     };
     bm25DocumentCache.set(index, prepared);
   }
+  const prepareMs = performance.now() - prepareStarted;
+  const scoringStarted = performance.now();
   const queryTerms = [...new Set(tokenize(query))];
   const identifierTerms = extractIdentifierTerms(query);
   const scores = new Map<number, number>();
@@ -136,15 +209,20 @@ export function retrieveBm25(query: string, index: RepositoryIndex, limit: numbe
       const bm25 = idf * (posting.frequency * 2.2) / (posting.frequency + 1.2 * (0.25 + 0.75 * document.terms.length / Math.max(1, prepared.averageLength)));
       scores.set(posting.documentIndex, (scores.get(posting.documentIndex) ?? 0) + bm25);
     }
-    for (const documentIndex of prepared.pathPostings.get(term) ?? []) scores.set(documentIndex, (scores.get(documentIndex) ?? 0) + idf * 5);
+    if (options.pathBoost) for (const documentIndex of prepared.pathPostings.get(term) ?? []) scores.set(documentIndex, (scores.get(documentIndex) ?? 0) + idf * 5);
     const symbolWeight = 120 + (identifierTerms.has(term) ? 200 : 0);
-    for (const documentIndex of prepared.symbolPostings.get(term) ?? []) scores.set(documentIndex, (scores.get(documentIndex) ?? 0) + idf * symbolWeight);
+    if (options.symbolBoost) for (const documentIndex of prepared.symbolPostings.get(term) ?? []) scores.set(documentIndex, (scores.get(documentIndex) ?? 0) + idf * symbolWeight);
   }
-  return [...scores.entries()].sort((left, right) => right[1] - left[1] || prepared.documents[left[0]].file.path.localeCompare(prepared.documents[right[0]].file.path)).slice(0, limit).map(([documentIndex, score]): ContextCandidate => {
+  const ranked = [...scores.entries()].sort((left, right) => right[1] - left[1] || prepared.documents[left[0]].file.path.localeCompare(prepared.documents[right[0]].file.path)).slice(0, limit);
+  const scoringMs = performance.now() - scoringStarted;
+  const packingStarted = performance.now();
+  const candidates = ranked.map(([documentIndex, score]): ContextCandidate => {
     const { file, chunks } = prepared.documents[documentIndex];
-    const selectedChunks = selectBm25Chunks(chunks, queryTerms, 2);
+    const selectedChunks = options.packChunks ? selectBm25Chunks(chunks, queryTerms, 2) : chunks;
     return { path: file.path, reason: `BM25 score ${score.toFixed(3)}`, score, source: "lexical", role: file.isTest ? "test" : "primary", stage: "seed", dependencyDistance: 0, structuralScore: 0, semanticScore: 0, lexicalScore: score, recencyScore: 0, fileImportanceScore: file.symbols.length, tokenCost: selectedChunks.length ? selectedChunks.reduce((sum, chunk) => sum + chunk.tokenEstimate, 0) : Math.ceil(file.size / 4), chunkIds: selectedChunks.map((chunk) => chunk.id), expansionPath: [file.path] };
   });
+  const packingMs = performance.now() - packingStarted;
+  return { candidates, stageTimingsMs: { prepare: prepareMs, scoring: scoringMs, packing: packingMs, total: performance.now() - totalStarted } };
 }
 
 export function gradedMetrics(rankedPaths: string[], task: CorpusTask) {
@@ -175,6 +253,8 @@ export async function writeCorpusArtifacts(options: CorpusRunOptions, manifest: 
   const headToHead = compareModes(results);
   const failureBreakdown = summarizeFailures(failures);
   const qualityBreakdown = summarizeQuality(results);
+  const failureAnalysis = analyzeTaskOutcomes(manifest, results);
+  const stageSummary = summarizeStages(results);
   const metadata = { schemaVersion: 1, corpus: manifest.name, generatedAt: new Date().toISOString(), gitCommit: await currentCommit(), machine: { platform: os.platform(), release: os.release(), arch: os.arch(), cpus: os.cpus().length, cpuModel: os.cpus()[0]?.model, memoryBytes: os.totalmem(), node: process.version }, repetitions: options.repetitions ?? 5, modes: options.modes };
   await writeFile(path.join(options.outputDirectory, "run-metadata.json"), JSON.stringify(metadata, null, 2) + "\n");
   await writeFile(path.join(options.outputDirectory, "per-task-results.jsonl"), results.map((result) => JSON.stringify(result)).join("\n") + "\n");
@@ -182,6 +262,8 @@ export async function writeCorpusArtifacts(options: CorpusRunOptions, manifest: 
   await writeFile(path.join(options.outputDirectory, "head-to-head.json"), JSON.stringify(headToHead, null, 2) + "\n");
   await writeFile(path.join(options.outputDirectory, "failure-summary.json"), JSON.stringify(failureBreakdown, null, 2) + "\n");
   await writeFile(path.join(options.outputDirectory, "quality-breakdown.json"), JSON.stringify(qualityBreakdown, null, 2) + "\n");
+  await writeFile(path.join(options.outputDirectory, "failure-analysis.json"), JSON.stringify(failureAnalysis, null, 2) + "\n");
+  await writeFile(path.join(options.outputDirectory, "stage-summary.json"), JSON.stringify(stageSummary, null, 2) + "\n");
   await writeFile(path.join(options.outputDirectory, "failures.jsonl"), failures.map((failure) => JSON.stringify(failure)).join("\n") + (failures.length ? "\n" : ""));
   const rows = aggregates.map((item) => `| ${item.mode} | ${item.tasks} | ${item.recallAt5.toFixed(3)} | ${item.recallAt10.toFixed(3)} | ${item.mrr.toFixed(3)} | ${item.ndcgAt10.toFixed(3)} | ${item.medianTokens.toFixed(0)} | ${item.p95Tokens.toFixed(0)} | ${item.medianMs.toFixed(1)} | ${item.p95Ms.toFixed(1)} |`).join("\n");
   const comparisonRows: Array<[string, number, number]> = [
@@ -194,27 +276,97 @@ export async function writeCorpusArtifacts(options: CorpusRunOptions, manifest: 
     ? failureBreakdown.map((item) => `| ${item.repositoryId} | ${item.taskType} | ${item.count} |`).join("\n")
     : "| none | none | 0 |";
   const qualityRows = qualityBreakdown.map((item) => `| ${item.mode} | ${item.repositoryId} | ${item.taskType} | ${item.tasks} | ${item.missesAt5} | ${item.missesAt10} | ${item.mrr.toFixed(3)} |`).join("\n");
-  await writeFile(path.join(options.outputDirectory, "comparison.md"), `# Corpus comparison\n\n| Mode | Tasks | Recall@5 | Recall@10 | MRR | NDCG@10 | Median tokens | P95 tokens | Median ms | P95 ms |\n|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${rows}\n\n## First relevant rank\n\n| Comparison | Count | Percentage |\n|---|---:|---:|\n${comparisonTable}\n\nPaired tasks: ${headToHead.pairedTasks}. Mean heuristic token savings: ${(headToHead.meanTokenSavingsFraction * 100).toFixed(1)}%.\n\n## Retrieval misses\n\n| Mode | Repository | Task type | Tasks | No primary hit @5 | No primary hit @10 | MRR |\n|---|---|---|---:|---:|---:|---:|\n${qualityRows}\n\n## Execution failures\n\n| Repository | Task type | Count |\n|---|---|---:|\n${failureRows}\n`);
+  await writeFile(path.join(options.outputDirectory, "comparison.md"), `# Corpus comparison\n\n| Mode | Tasks | Recall@5 | Recall@10 | MRR | NDCG@10 | Median tokens | P95 tokens | Median ms | P95 ms |\n|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${rows}\n\n## First relevant rank\n\n| Comparison | Count | Percentage |\n|---|---:|---:|\n${comparisonTable}\n\nSuccessful same-rank ties: ${headToHead.successfulSameRank}. Both failed in top 10: ${headToHead.bothFailedTop10}. Correct file absent from both candidate pools: ${headToHead.bothAbsentCandidatePools}.\n\nPaired tasks: ${headToHead.pairedTasks}. Mean heuristic token savings: ${(headToHead.meanTokenSavingsFraction * 100).toFixed(1)}%.\n\n## Retrieval misses\n\n| Mode | Repository | Task type | Tasks | No primary hit @5 | No primary hit @10 | MRR |\n|---|---|---|---:|---:|---:|---:|\n${qualityRows}\n\n## Execution failures\n\n| Repository | Task type | Count |\n|---|---|---:|\n${failureRows}\n`);
 }
 
-function aggregate(mode: CorpusRetrievalMode, rows: CorpusTaskResult[]) { const avg = (values: number[]) => values.reduce((a, b) => a + b, 0) / Math.max(1, values.length); return { mode, tasks: rows.length, recallAt5: avg(rows.map((r) => r.recallAt5)), recallAt10: avg(rows.map((r) => r.recallAt10)), mrr: avg(rows.map((r) => r.reciprocalRank)), ndcgAt10: avg(rows.map((r) => r.ndcgAt10)), contextPrecision: avg(rows.map((r) => r.contextPrecision)), meanTokens: avg(rows.map((r) => r.selectedTokens)), medianTokens: median(rows.map((r) => r.selectedTokens)), p95Tokens: percentile(rows.map((r) => r.selectedTokens), .95), medianMs: median(rows.map((r) => r.queryMedianMs)), p95Ms: percentile(rows.map((r) => r.queryMedianMs), .95) }; }
+function aggregate(mode: CorpusRetrievalMode, rows: CorpusTaskResult[]) { const avg = (values: number[]) => values.reduce((a, b) => a + b, 0) / Math.max(1, values.length); return { mode, tasks: rows.length, recallAt5: avg(rows.map((r) => r.recallAt5)), recallAt10: avg(rows.map((r) => r.recallAt10)), mrr: avg(rows.map((r) => r.reciprocalRank)), ndcgAt10: avg(rows.map((r) => r.ndcgAt10)), contextPrecision: avg(rows.map((r) => r.contextPrecision)), meanTokens: avg(rows.map((r) => r.selectedTokens)), medianTokens: median(rows.map((r) => r.selectedTokens)), p95Tokens: percentile(rows.map((r) => r.selectedTokens), .95), medianColdMs: median(rows.map((r) => r.coldQueryMs)), p95ColdMs: percentile(rows.map((r) => r.coldQueryMs), .95), medianMs: median(rows.map((r) => r.queryMedianMs)), p95Ms: percentile(rows.map((r) => r.queryMedianMs), .95) }; }
 export function compareModes(rows: CorpusTaskResult[]) {
   const byTask = new Map<string, Partial<Record<CorpusRetrievalMode, CorpusTaskResult>>>();
   for (const row of rows) byTask.set(row.taskId, { ...byTask.get(row.taskId), [row.mode]: row });
-  let improves = 0; let ties = 0; let worsens = 0; const tokenSavings: number[] = [];
+  let improves = 0; let ties = 0; let worsens = 0; let successfulSameRank = 0; let bothFailedTop10 = 0; let bothAbsentCandidatePools = 0; const tokenSavings: number[] = [];
   for (const pair of byTask.values()) {
     if (!pair.bm25 || !pair.heuristic) continue;
     const bm25Rank = pair.bm25.firstRelevantRank ?? Number.POSITIVE_INFINITY;
     const heuristicRank = pair.heuristic.firstRelevantRank ?? Number.POSITIVE_INFINITY;
-    if (heuristicRank < bm25Rank) improves += 1; else if (heuristicRank > bm25Rank) worsens += 1; else ties += 1;
+    if (heuristicRank < bm25Rank) improves += 1;
+    else if (heuristicRank > bm25Rank) worsens += 1;
+    else {
+      ties += 1;
+      if (Number.isFinite(bm25Rank)) successfulSameRank += 1;
+      else {
+        bothFailedTop10 += 1;
+        if (!pair.bm25.primaryCandidatePresent && !pair.heuristic.primaryCandidatePresent) bothAbsentCandidatePools += 1;
+      }
+    }
     if (pair.bm25.selectedTokens > 0) tokenSavings.push((pair.bm25.selectedTokens - pair.heuristic.selectedTokens) / pair.bm25.selectedTokens);
   }
   const pairedTasks = improves + ties + worsens;
-  return { pairedTasks, improves, ties, worsens, improvesFraction: pairedTasks ? improves / pairedTasks : 0, tiesFraction: pairedTasks ? ties / pairedTasks : 0, worsensFraction: pairedTasks ? worsens / pairedTasks : 0, meanTokenSavingsFraction: tokenSavings.reduce((sum, value) => sum + value, 0) / Math.max(1, tokenSavings.length) };
+  return { pairedTasks, improves, ties, worsens, successfulSameRank, bothFailedTop10, bothAbsentCandidatePools, improvesFraction: pairedTasks ? improves / pairedTasks : 0, tiesFraction: pairedTasks ? ties / pairedTasks : 0, worsensFraction: pairedTasks ? worsens / pairedTasks : 0, meanTokenSavingsFraction: tokenSavings.reduce((sum, value) => sum + value, 0) / Math.max(1, tokenSavings.length) };
 }
 function summarizeFailures(failures: unknown[]) { const counts = new Map<string, { repositoryId: string; taskType: string; count: number }>(); for (const value of failures) { if (!value || typeof value !== "object") continue; const failure = value as { repositoryId?: string; taskType?: string }; const repositoryId = failure.repositoryId ?? "unknown"; const taskType = failure.taskType ?? "unknown"; const key = `${repositoryId}\0${taskType}`; const entry = counts.get(key); if (entry) entry.count += 1; else counts.set(key, { repositoryId, taskType, count: 1 }); } return [...counts.values()].sort((left, right) => left.repositoryId.localeCompare(right.repositoryId) || left.taskType.localeCompare(right.taskType)); }
 function summarizeQuality(rows: CorpusTaskResult[]) { const groups = new Map<string, CorpusTaskResult[]>(); for (const row of rows) { const key = `${row.mode}\0${row.repositoryId}\0${row.taskType}`; const values = groups.get(key); if (values) values.push(row); else groups.set(key, [row]); } return [...groups.values()].map((values) => ({ mode: values[0].mode, repositoryId: values[0].repositoryId, taskType: values[0].taskType, tasks: values.length, missesAt5: values.filter((row) => row.recallAt5 === 0).length, missesAt10: values.filter((row) => row.recallAt10 === 0).length, mrr: values.reduce((sum, row) => sum + row.reciprocalRank, 0) / values.length })).sort((left, right) => left.mode.localeCompare(right.mode) || left.repositoryId.localeCompare(right.repositoryId) || left.taskType.localeCompare(right.taskType)); }
+function analyzeTaskOutcomes(manifest: CorpusManifest, rows: CorpusTaskResult[]) { const tasks = new Map(manifest.tasks.map((task) => [task.id, task])); return rows.map((row) => { const task = tasks.get(row.taskId); if (!task) return { taskId: row.taskId, mode: row.mode, failureCategory: "data-label-failure" }; const query = task.query.toLowerCase(); const exactPathInQuery = task.relevance.primaryFiles.some((filePath) => query.includes(filePath.toLowerCase()) || query.includes(path.posix.basename(filePath).toLowerCase())); const exactSymbolInQuery = task.relevance.symbols.some((symbol) => query.includes(symbol.name.toLowerCase())); const failureCategory = row.recallAt10 > 0 ? (task.relevance.symbols.length > 0 && !row.relevantSymbolIncluded ? "context-packing-failure" : "success") : !row.primaryCandidatePresent ? "candidate-generation-failure" : "reranking-failure"; return { taskId: row.taskId, repositoryId: row.repositoryId, taskType: row.taskType, mode: row.mode, firstRelevantRank: row.firstRelevantRank, firstPrimaryCandidateRank: row.firstPrimaryCandidateRank, primaryCandidatePresent: row.primaryCandidatePresent, exactPathInQuery, exactSymbolInQuery, graphExpandedCandidates: row.sourceCounts.graph ?? 0, semanticCandidates: row.sourceCounts.semantic ?? 0, selectedTokens: row.selectedTokens, packedFileCount: row.packedFileCount, relevantSymbolIncluded: row.relevantSymbolIncluded, coldQueryMs: row.coldQueryMs, warmQueryMedianMs: row.queryMedianMs, stageMedianMs: row.stageMedianMs, failureCategory }; }); }
+function summarizeStages(rows: CorpusTaskResult[]) { const values = new Map<string, number[]>(); for (const row of rows) { for (const [stage, duration] of Object.entries(row.stageMedianMs)) { const key = `${row.mode}\0${stage}`; const entries = values.get(key); if (entries) entries.push(duration); else values.set(key, [duration]); } } return [...values.entries()].map(([key, durations]) => { const [mode, stage] = key.split("\0"); return { mode, stage, medianMs: median(durations), p95Ms: percentile(durations, .95) }; }).sort((left, right) => left.mode.localeCompare(right.mode) || left.stage.localeCompare(right.stage)); }
 function tokenize(value: string) { return value.toLowerCase().split(/[^a-z0-9_]+/).filter((term) => term.length >= 2); }
+function bm25Options(mode: CorpusRetrievalMode): Bm25Options {
+  if (mode === "bm25") return { pathBoost: true, symbolBoost: true, packChunks: true };
+  if (mode === "bm25_path") return { pathBoost: true, symbolBoost: false, packChunks: false };
+  if (mode === "bm25_symbol") return { pathBoost: false, symbolBoost: true, packChunks: false };
+  if (mode === "bm25_path_symbol") return { pathBoost: true, symbolBoost: true, packChunks: false };
+  if (mode === "bm25_packed" || mode === "bm25_graph" || mode === "bm25_semantic") return { pathBoost: false, symbolBoost: false, packChunks: true };
+  return { pathBoost: false, symbolBoost: false, packChunks: false };
+}
+function includesRelevantSymbol(task: CorpusTask, candidates: ContextCandidate[], index: RepositoryIndex): boolean {
+  if (task.relevance.symbols.length === 0) return false;
+  const chunks = new Map(index.chunks.map((chunk) => [chunk.id, chunk]));
+  for (const label of task.relevance.symbols) {
+    for (const candidate of candidates) {
+      if (candidate.path !== label.path) continue;
+      if (candidate.symbolId?.toLowerCase().includes(label.name.toLowerCase())) return true;
+      for (const chunkId of candidate.chunkIds) {
+        const chunk = chunks.get(chunkId); if (!chunk) continue;
+        if (label.startLine && label.endLine && chunk.startLine <= label.endLine && chunk.endLine >= label.startLine) return true;
+        if (chunk.text.toLowerCase().includes(label.name.toLowerCase())) return true;
+      }
+    }
+  }
+  return false;
+}
+function buildCorpusGraphLookup(index: RepositoryIndex): Map<string, RepositoryIndex["edges"]> {
+  const adjacency = new Map<string, RepositoryIndex["edges"]>();
+  for (const edge of index.edges) {
+    const edges = adjacency.get(edge.from); if (edges) edges.push(edge); else adjacency.set(edge.from, [edge]);
+  }
+  for (const [filePath, edges] of adjacency) adjacency.set(filePath, edges.sort((left, right) => right.weight - left.weight || left.to.localeCompare(right.to)).slice(0, 16));
+  return adjacency;
+}
+function expandBm25Graph(base: ContextCandidate[], index: RepositoryIndex, adjacency: Map<string, RepositoryIndex["edges"]>, query: string): ContextCandidate[] {
+  const files = new Map(index.files.map((file) => [file.path, file]));
+  const chunks = new Map<string, RepositoryIndex["chunks"]>();
+  for (const chunk of index.chunks) { const values = chunks.get(chunk.filePath); if (values) values.push(chunk); else chunks.set(chunk.filePath, [chunk]); }
+  const queryTerms = [...new Set(tokenize(query))]; const expanded = new Map<string, ContextCandidate>();
+  for (const seed of base.slice(0, 5)) {
+    for (const edge of adjacency.get(seed.path) ?? []) {
+      if (expanded.size >= 32 || expanded.has(edge.to) || base.some((candidate) => candidate.path === edge.to)) continue;
+      const file = files.get(edge.to); if (!file) continue;
+      const selectedChunks = selectBm25Chunks(chunks.get(file.path) ?? [], queryTerms, 2);
+      expanded.set(file.path, { path: file.path, reason: `${edge.kind} graph neighbor of ${seed.path}`, score: edge.weight, source: "structural", role: file.isTest ? "test" : "dependency", stage: "graph", dependencyDistance: 1, structuralScore: edge.weight, semanticScore: 0, lexicalScore: 0, recencyScore: 0, fileImportanceScore: file.symbols.length, tokenCost: selectedChunks.reduce((sum, chunk) => sum + chunk.tokenEstimate, 0), chunkIds: selectedChunks.map((chunk) => chunk.id), expansionPath: [seed.path, file.path] });
+    }
+  }
+  return [...expanded.values()];
+}
+function fuseRankedCandidates(primary: ContextCandidate[], secondary: ContextCandidate[], limit: number): ContextCandidate[] {
+  const fused = new Map<string, ContextCandidate & { score: number }>();
+  const add = (candidate: ContextCandidate, rank: number) => {
+    const contribution = 1 / (60 + rank);
+    const existing = fused.get(candidate.path);
+    if (existing) { existing.score += contribution; existing.chunkIds = [...new Set([...existing.chunkIds, ...candidate.chunkIds])]; return; }
+    fused.set(candidate.path, { ...candidate, score: contribution });
+  };
+  primary.forEach((candidate, index) => add(candidate, index + 1));
+  secondary.forEach((candidate, index) => add(candidate, index + 1));
+  return [...fused.values()].sort((left, right) => right.score - left.score || left.path.localeCompare(right.path)).slice(0, limit);
+}
 function extractIdentifierTerms(value: string): Set<string> { return new Set([...value.matchAll(/`([^`]+)`/g)].flatMap((match) => tokenize(match[1] ?? ""))); }
 function addPosting<T>(postings: Map<string, T[]>, term: string, value: T) { const values = postings.get(term); if (values) values.push(value); else postings.set(term, [value]); }
 function addSetPosting(postings: Map<string, Set<number>>, term: string, value: number) { const values = postings.get(term); if (values) values.add(value); else postings.set(term, new Set([value])); }

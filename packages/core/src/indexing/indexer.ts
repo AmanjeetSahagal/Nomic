@@ -38,6 +38,7 @@ export class FilesystemParserProvider implements ParserProvider {
     const repositoryRoot = path.resolve(request.repositoryRoot);
     request.onProgress?.({ phase: "scan", completed: 0 });
     const filePaths = await walkRepository(repositoryRoot, request);
+    const scanMs = performance.now() - startedAt;
     const previousFiles = new Map(
       (request.existingIndex?.files ?? []).map((file) => [file.path, file] satisfies [string, FileRecord])
     );
@@ -52,6 +53,7 @@ export class FilesystemParserProvider implements ParserProvider {
       reusedEdges: 0
     };
 
+    const parseStartedAt = performance.now();
     const fileEntries = await Promise.all(
       filePaths.map(async (filePath) => {
         if (request.signal?.aborted) {
@@ -93,6 +95,7 @@ export class FilesystemParserProvider implements ParserProvider {
         };
       })
     );
+    const parseMs = performance.now() - parseStartedAt;
     metrics.parsedFiles = fileEntries.filter((entry) => !entry.reused).length;
     metrics.failedFiles = 0;
     metrics.schemaVersion = 1;
@@ -104,6 +107,7 @@ export class FilesystemParserProvider implements ParserProvider {
       }
     }
 
+    const featureStartedAt = performance.now();
     const files = fileEntries.map((entry) => entry.file).sort((left, right) => left.path.localeCompare(right.path));
     const symbols = files.flatMap((file) => file.symbols);
     const symbolMap = new Map(
@@ -122,6 +126,7 @@ export class FilesystemParserProvider implements ParserProvider {
     const edges = buildEdges(files, fileEntries, fileMap, symbolMap);
     metrics.reusedEdges = Math.min(request.existingIndex?.edges.length ?? 0, edges.length);
     metrics.wallTimeMs = performance.now() - startedAt;
+    metrics.stageTimingsMs = { scan: scanMs, parse: parseMs, featureExtraction: performance.now() - featureStartedAt };
     request.onProgress?.({ phase: "persist", completed: files.length, total: files.length });
 
     return {
