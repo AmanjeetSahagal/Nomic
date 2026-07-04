@@ -100,7 +100,7 @@ async function stats(): Promise<void> {
 
 async function benchmark(args: Map<string, string>): Promise<void> {
   const modeValue = args.get("mode") ?? "all";
-  const availableModes: CorpusRetrievalMode[] = ["bm25", "bm25_body", "bm25_packed", "bm25_path", "bm25_symbol", "bm25_path_symbol", "bm25_graph", "bm25_semantic", "heuristic"];
+  const availableModes: CorpusRetrievalMode[] = ["bm25", "bm25_body", "bm25_packed", "bm25_path", "bm25_symbol", "bm25_symbol_packed", "bm25_path_symbol", "bm25_graph", "bm25_semantic", "heuristic"];
   const modes: CorpusRetrievalMode[] = modeValue === "all"
     ? ["bm25", "heuristic"]
     : modeValue === "ablations"

@@ -179,6 +179,18 @@ export interface RetrievalResult {
   stageTimingsMs?: Record<string, number>;
 }
 
+export interface RetrievalProvider {
+  retrieve(task: UserTask, index: RepositoryIndex): Promise<RetrievalResult>;
+}
+
+export interface RetrievalOptions {
+  exactPathOverride?: boolean;
+  graphExpansion?: boolean;
+  semanticExpansion?: boolean;
+  maxCandidates?: number;
+  chunksPerFile?: number;
+}
+
 export interface CompiledPromptDiagnostics {
   indexMs: number;
   retrievalMs: number;
@@ -365,6 +377,8 @@ export interface EngineDependencies {
   tokenBudget?: TokenBudget;
   tokenEstimator?: TokenEstimator;
   ranker?: CandidateRanker;
+  retriever?: RetrievalProvider;
+  retrievalOptions?: RetrievalOptions;
 }
 
 export const DEFAULT_TOKEN_BUDGET: TokenBudget = {

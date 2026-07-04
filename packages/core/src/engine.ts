@@ -6,6 +6,7 @@ import { FilesystemParserProvider, RepositoryIndexer } from "./indexing/indexer"
 import { FileSessionMemory } from "./memory/session-memory";
 import { NativeIndexClient, NativeLexicalProvider, NativeMirrorParserProvider } from "./native/native-client";
 import { applyTaskOverrides, HybridRetriever } from "./retrieval/retriever";
+import { Bm25SymbolPackedRetriever } from "./retrieval/bm25-symbol-retriever";
 import { FileStorageBackend } from "./storage/index-store";
 import {
   type AgentTarget,
@@ -16,18 +17,28 @@ import {
   type EngineDependencies,
   type IndexRepositoryRequest,
   type RepositoryIndex,
+  type RetrievalProvider,
   type UserTask
 } from "./types/contracts";
 
 export class NomicEngine {
   private readonly indexer: RepositoryIndexer;
-  private readonly retriever: HybridRetriever;
+  private readonly retriever: RetrievalProvider;
   private readonly compressor: ContextCompressor;
   private readonly compiler: PromptCompiler;
 
   constructor(private readonly dependencies: EngineDependencies) {
     this.indexer = new RepositoryIndexer(dependencies.parser ?? new FilesystemParserProvider());
-    this.retriever = new HybridRetriever(dependencies.embeddings, dependencies.ranker);
+    this.retriever = dependencies.retriever ?? (process.env.NOMIC_RETRIEVAL_BACKEND === "heuristic"
+      ? new HybridRetriever(dependencies.embeddings, dependencies.ranker)
+      : new Bm25SymbolPackedRetriever(
+        dependencies.retrievalOptions ?? {
+          exactPathOverride: process.env.NOMIC_ENABLE_PATH_OVERRIDE === "1",
+          graphExpansion: process.env.NOMIC_ENABLE_GRAPH_EXPANSION === "1",
+          semanticExpansion: process.env.NOMIC_ENABLE_SEMANTIC_EXPANSION === "1"
+        },
+        dependencies.embeddings
+      ));
     this.compressor = new ContextCompressor(dependencies.summarizer, dependencies.tokenBudget);
     this.compiler = new PromptCompiler(dependencies.tokenEstimator);
   }
@@ -117,12 +128,13 @@ export class NomicEngine {
     chunkReuseRatio?: number;
     backend: "typescript" | "native";
     nativeAddonPath?: string;
+    retrievalBackend: "bm25-symbol-packed" | "heuristic-experimental";
   }> {
     const nativeDiagnostics = NativeIndexClient.diagnostics();
     const backend = process.env.NOMIC_INDEX_BACKEND === "native" ? "native" : "typescript";
     const index = await this.dependencies.storage.readIndex(repositoryRoot);
     if (!index) {
-      return { hasIndex: false, backend, nativeAddonPath: nativeDiagnostics.addonPath };
+      return { hasIndex: false, backend, nativeAddonPath: nativeDiagnostics.addonPath, retrievalBackend: process.env.NOMIC_RETRIEVAL_BACKEND === "heuristic" ? "heuristic-experimental" : "bm25-symbol-packed" };
     }
 
     return {
@@ -134,7 +146,8 @@ export class NomicEngine {
       reusedFiles: index.metrics.reusedFiles,
       chunkReuseRatio: index.chunks.length === 0 ? 0 : index.metrics.reusedChunks / index.chunks.length,
       backend,
-      nativeAddonPath: nativeDiagnostics.addonPath
+      nativeAddonPath: nativeDiagnostics.addonPath,
+      retrievalBackend: process.env.NOMIC_RETRIEVAL_BACKEND === "heuristic" ? "heuristic-experimental" : "bm25-symbol-packed"
     };
   }
 
@@ -211,7 +224,10 @@ export function createNomicEngine(overrides: Partial<EngineDependencies> = {}): 
     embeddings,
     summarizer: overrides.summarizer,
     tokenBudget: overrides.tokenBudget,
-    tokenEstimator: overrides.tokenEstimator
+    tokenEstimator: overrides.tokenEstimator,
+    ranker: overrides.ranker,
+    retriever: overrides.retriever,
+    retrievalOptions: overrides.retrievalOptions
   });
 }
 

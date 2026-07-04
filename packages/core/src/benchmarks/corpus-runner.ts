@@ -16,6 +16,7 @@ export type CorpusRetrievalMode =
   | "bm25_packed"
   | "bm25_path"
   | "bm25_symbol"
+  | "bm25_symbol_packed"
   | "bm25_path_symbol"
   | "bm25_graph"
   | "bm25_semantic"
@@ -50,6 +51,7 @@ interface RetrievalExecution { candidates: ContextCandidate[]; stageTimingsMs: R
 interface Bm25Document {
   file: RepositoryIndex["files"][number]; terms: string[]; counts: Map<string, number>;
   pathTerms: string[]; symbolTerms: string[][]; chunks: RepositoryIndex["chunks"];
+  chunkTerms: Array<{ chunk: RepositoryIndex["chunks"][number]; terms: Set<string> }>;
 }
 
 interface Bm25PreparedIndex {
@@ -176,7 +178,7 @@ function retrieveBm25WithDiagnostics(query: string, index: RepositoryIndex, limi
       const chunks = chunksByFile.get(file.path) ?? [];
       const terms = tokenize(chunks.map((chunk) => chunk.text).join(" "));
       const counts = new Map<string, number>(); for (const term of terms) counts.set(term, (counts.get(term) ?? 0) + 1);
-      return { file, terms, counts, pathTerms: tokenize(file.path), symbolTerms: file.symbols.map((symbol) => tokenize(symbol.name)), chunks };
+      return { file, terms, counts, pathTerms: tokenize(file.path), symbolTerms: file.symbols.map((symbol) => tokenize(symbol.name)), chunks, chunkTerms: chunks.map((chunk) => ({ chunk, terms: new Set(tokenize(chunk.text)) })) };
     });
     const bodyPostings = new Map<string, Array<{ documentIndex: number; frequency: number }>>();
     const pathPostings = new Map<string, Set<number>>();
@@ -217,8 +219,8 @@ function retrieveBm25WithDiagnostics(query: string, index: RepositoryIndex, limi
   const scoringMs = performance.now() - scoringStarted;
   const packingStarted = performance.now();
   const candidates = ranked.map(([documentIndex, score]): ContextCandidate => {
-    const { file, chunks } = prepared.documents[documentIndex];
-    const selectedChunks = options.packChunks ? selectBm25Chunks(chunks, queryTerms, 2) : chunks;
+    const { file, chunks, chunkTerms } = prepared.documents[documentIndex];
+    const selectedChunks = options.packChunks ? selectPreparedBm25Chunks(chunkTerms, queryTerms, 2) : chunks;
     return { path: file.path, reason: `BM25 score ${score.toFixed(3)}`, score, source: "lexical", role: file.isTest ? "test" : "primary", stage: "seed", dependencyDistance: 0, structuralScore: 0, semanticScore: 0, lexicalScore: score, recencyScore: 0, fileImportanceScore: file.symbols.length, tokenCost: selectedChunks.length ? selectedChunks.reduce((sum, chunk) => sum + chunk.tokenEstimate, 0) : Math.ceil(file.size / 4), chunkIds: selectedChunks.map((chunk) => chunk.id), expansionPath: [file.path] };
   });
   const packingMs = performance.now() - packingStarted;
@@ -272,11 +274,15 @@ export async function writeCorpusArtifacts(options: CorpusRunOptions, manifest: 
     ["Heuristic worsens first relevant rank", headToHead.worsens, headToHead.worsensFraction]
   ];
   const comparisonTable = comparisonRows.map(([label, count, fraction]) => `| ${label} | ${count} | ${(fraction * 100).toFixed(1)}% |`).join("\n");
+  const includesBm25HeuristicPair = results.some((result) => result.mode === "bm25") && results.some((result) => result.mode === "heuristic");
+  const headToHeadSection = includesBm25HeuristicPair
+    ? `\n## First relevant rank\n\n| Comparison | Count | Percentage |\n|---|---:|---:|\n${comparisonTable}\n\nSuccessful same-rank ties: ${headToHead.successfulSameRank}. Both failed in top 10: ${headToHead.bothFailedTop10}. Correct file absent from both candidate pools: ${headToHead.bothAbsentCandidatePools}.\n\nPaired tasks: ${headToHead.pairedTasks}. Mean heuristic token savings: ${(headToHead.meanTokenSavingsFraction * 100).toFixed(1)}%.\n`
+    : "";
   const failureRows = failureBreakdown.length > 0
     ? failureBreakdown.map((item) => `| ${item.repositoryId} | ${item.taskType} | ${item.count} |`).join("\n")
     : "| none | none | 0 |";
   const qualityRows = qualityBreakdown.map((item) => `| ${item.mode} | ${item.repositoryId} | ${item.taskType} | ${item.tasks} | ${item.missesAt5} | ${item.missesAt10} | ${item.mrr.toFixed(3)} |`).join("\n");
-  await writeFile(path.join(options.outputDirectory, "comparison.md"), `# Corpus comparison\n\n| Mode | Tasks | Recall@5 | Recall@10 | MRR | NDCG@10 | Median tokens | P95 tokens | Median ms | P95 ms |\n|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${rows}\n\n## First relevant rank\n\n| Comparison | Count | Percentage |\n|---|---:|---:|\n${comparisonTable}\n\nSuccessful same-rank ties: ${headToHead.successfulSameRank}. Both failed in top 10: ${headToHead.bothFailedTop10}. Correct file absent from both candidate pools: ${headToHead.bothAbsentCandidatePools}.\n\nPaired tasks: ${headToHead.pairedTasks}. Mean heuristic token savings: ${(headToHead.meanTokenSavingsFraction * 100).toFixed(1)}%.\n\n## Retrieval misses\n\n| Mode | Repository | Task type | Tasks | No primary hit @5 | No primary hit @10 | MRR |\n|---|---|---|---:|---:|---:|---:|\n${qualityRows}\n\n## Execution failures\n\n| Repository | Task type | Count |\n|---|---|---:|\n${failureRows}\n`);
+  await writeFile(path.join(options.outputDirectory, "comparison.md"), `# Corpus comparison\n\n| Mode | Tasks | Recall@5 | Recall@10 | MRR | NDCG@10 | Median tokens | P95 tokens | Median ms | P95 ms |\n|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${rows}\n${headToHeadSection}\n## Retrieval misses\n\n| Mode | Repository | Task type | Tasks | No primary hit @5 | No primary hit @10 | MRR |\n|---|---|---|---:|---:|---:|---:|\n${qualityRows}\n\n## Execution failures\n\n| Repository | Task type | Count |\n|---|---|---:|\n${failureRows}\n`);
 }
 
 function aggregate(mode: CorpusRetrievalMode, rows: CorpusTaskResult[]) { const avg = (values: number[]) => values.reduce((a, b) => a + b, 0) / Math.max(1, values.length); return { mode, tasks: rows.length, recallAt5: avg(rows.map((r) => r.recallAt5)), recallAt10: avg(rows.map((r) => r.recallAt10)), mrr: avg(rows.map((r) => r.reciprocalRank)), ndcgAt10: avg(rows.map((r) => r.ndcgAt10)), contextPrecision: avg(rows.map((r) => r.contextPrecision)), meanTokens: avg(rows.map((r) => r.selectedTokens)), medianTokens: median(rows.map((r) => r.selectedTokens)), p95Tokens: percentile(rows.map((r) => r.selectedTokens), .95), medianColdMs: median(rows.map((r) => r.coldQueryMs)), p95ColdMs: percentile(rows.map((r) => r.coldQueryMs), .95), medianMs: median(rows.map((r) => r.queryMedianMs)), p95Ms: percentile(rows.map((r) => r.queryMedianMs), .95) }; }
@@ -313,6 +319,7 @@ function bm25Options(mode: CorpusRetrievalMode): Bm25Options {
   if (mode === "bm25_path") return { pathBoost: true, symbolBoost: false, packChunks: false };
   if (mode === "bm25_symbol") return { pathBoost: false, symbolBoost: true, packChunks: false };
   if (mode === "bm25_path_symbol") return { pathBoost: true, symbolBoost: true, packChunks: false };
+  if (mode === "bm25_symbol_packed") return { pathBoost: false, symbolBoost: true, packChunks: true };
   if (mode === "bm25_packed" || mode === "bm25_graph" || mode === "bm25_semantic") return { pathBoost: false, symbolBoost: false, packChunks: true };
   return { pathBoost: false, symbolBoost: false, packChunks: false };
 }
@@ -371,6 +378,7 @@ function extractIdentifierTerms(value: string): Set<string> { return new Set([..
 function addPosting<T>(postings: Map<string, T[]>, term: string, value: T) { const values = postings.get(term); if (values) values.push(value); else postings.set(term, [value]); }
 function addSetPosting(postings: Map<string, Set<number>>, term: string, value: number) { const values = postings.get(term); if (values) values.add(value); else postings.set(term, new Set([value])); }
 function selectBm25Chunks(chunks: RepositoryIndex["chunks"], queryTerms: string[], limit: number) { return chunks.map((chunk) => { const terms = new Set(tokenize(chunk.text)); return { chunk, overlap: queryTerms.reduce((score, term) => score + (terms.has(term) ? 1 : 0), 0) }; }).sort((left, right) => right.overlap - left.overlap || left.chunk.startLine - right.chunk.startLine).slice(0, limit).map((entry) => entry.chunk); }
+function selectPreparedBm25Chunks(chunks: Array<{ chunk: RepositoryIndex["chunks"][number]; terms: Set<string> }>, queryTerms: string[], limit: number) { return chunks.map(({ chunk, terms }) => ({ chunk, overlap: queryTerms.reduce((score, term) => score + (terms.has(term) ? 1 : 0), 0) })).sort((left, right) => right.overlap - left.overlap || left.chunk.startLine - right.chunk.startLine).slice(0, limit).map((entry) => entry.chunk); }
 function median(values: number[]) { return percentile(values, .5); }
 function percentile(values: number[], q: number) { const sorted = [...values].sort((a, b) => a - b); return sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * q) - 1)] ?? 0; }
 async function currentCommit() { try { return (await exec("git", ["rev-parse", "HEAD"])).stdout.trim(); } catch { return "unknown"; } }

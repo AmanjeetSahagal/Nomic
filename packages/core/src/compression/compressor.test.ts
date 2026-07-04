@@ -178,4 +178,24 @@ describe("ContextCompressor", () => {
     expect(compression.dependencyNotes.length).toBeGreaterThan(0);
     expect(compression.budgetUsage.total).toBeGreaterThan(0);
   });
+
+  it("packs selected chunks instead of reading the whole file", async () => {
+    const repositoryRoot = await mkdtemp(path.join(os.tmpdir(), "nomic-compressor-chunks-"));
+    tempDirectories.push(repositoryRoot);
+    await mkdir(path.join(repositoryRoot, "src"), { recursive: true });
+    await writeFile(path.join(repositoryRoot, "src", "large.ts"), "UNWANTED\n".repeat(1_000), "utf8");
+    const file = { path: "src/large.ts", language: "typescript", size: 9_000, modifiedAtMs: 1, imports: [], isTest: false, symbols: [] };
+    const index: RepositoryIndex = {
+      repositoryRoot, fileCount: 1, files: [file], symbols: [], edges: [], generatedAt: "",
+      chunks: [
+        { id: "wanted", filePath: file.path, kind: "code", startLine: 10, endLine: 12, tokenEstimate: 4, text: "export function wanted() {}" },
+        { id: "unwanted", filePath: file.path, kind: "code", startLine: 100, endLine: 120, tokenEstimate: 100, text: "UNWANTED" }
+      ],
+      metrics: { addedFiles: 1, changedFiles: 0, removedFiles: 0, reusedFiles: 0, reusedChunks: 0, reusedEdges: 0 }
+    };
+    const candidate: ContextCandidate = { path: file.path, reason: "packed", score: 20, source: "lexical", role: "primary", stage: "seed", dependencyDistance: 0, structuralScore: 0, semanticScore: 0, recencyScore: 0, fileImportanceScore: 0, tokenCost: 4, chunkIds: ["wanted"], expansionPath: [file.path] };
+    const result = await new ContextCompressor(undefined, { maxContextTokens: 100, rawCodeFraction: 1, summaryFraction: 0, dependencyFraction: 0, testFraction: 0 }).compress([candidate], index);
+    expect(result.items[0]?.content).toBe("export function wanted() {}");
+    expect(result.items[0]?.estimatedTokens).toBeLessThan(10);
+  });
 });

@@ -72,6 +72,8 @@ npm run corpus:benchmark -- --mode all --repository django/django --limit 1
 npm run corpus:benchmark -- --mode all
 # Controlled component ladder:
 npm run corpus:benchmark -- --mode ablations
+# Promoted final pipeline report:
+npm run corpus:benchmark -- --mode bm25_body,bm25_packed,bm25_symbol_packed
 ```
 
 The runner writes `run-metadata.json`, `per-task-results.jsonl`, `aggregate-results.json`, `head-to-head.json`, `quality-breakdown.json`, `failure-analysis.json`, `stage-summary.json`, `failure-summary.json`, `failures.jsonl`, and `comparison.md` under the ignored `benchmarks/results/` directory. The report separates retrieval misses from execution failures and includes cold/warm stage timing plus median/P95 token and latency distributions.

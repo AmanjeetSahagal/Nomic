@@ -51,7 +51,7 @@ export class ContextCompressor {
       const rawPreferred = shouldKeepRaw(candidate);
 
       if (rawPreferred) {
-        const rawItem = await createRawItem(file, index.repositoryRoot, candidate);
+        const rawItem = await createRawItem(file, index, candidate);
         if (fitsBudget(usage.raw, rawItem.estimatedTokens, budgetCaps.raw)) {
           items.push(rawItem);
           usage.raw += rawItem.estimatedTokens;
@@ -156,13 +156,19 @@ function estimateTextTokens(value: string): number {
 
 async function createRawItem(
   file: RepositoryIndex["files"][number],
-  repositoryRoot: string,
+  index: RepositoryIndex,
   candidate: ContextCandidate
 ): Promise<FileSummary> {
-  const fullContent = await readRawFile(repositoryRoot, file.path);
-  const content = candidate.startLine && candidate.endLine
-    ? fullContent.split(/\r?\n/).slice(candidate.startLine - 1, candidate.endLine).join("\n")
-    : fullContent;
+  const selectedChunks = new Set(candidate.chunkIds);
+  const packedChunks = index.chunks
+    .filter((chunk) => chunk.filePath === file.path && selectedChunks.has(chunk.id))
+    .sort((left, right) => left.startLine - right.startLine);
+  const fullContent = packedChunks.length === 0 ? await readRawFile(index.repositoryRoot, file.path) : "";
+  const content = packedChunks.length > 0
+    ? packedChunks.map((chunk) => chunk.text).join("\n\n")
+    : candidate.startLine && candidate.endLine
+      ? fullContent.split(/\r?\n/).slice(candidate.startLine - 1, candidate.endLine).join("\n")
+      : fullContent;
   const details = summarizeRawFile(file, candidate);
 
   return {

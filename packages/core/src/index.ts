@@ -8,5 +8,6 @@ export * from "./memory/session-memory";
 export * from "./native/native-client";
 export * from "./ranking/ranker";
 export * from "./retrieval/retriever";
+export * from "./retrieval/bm25-symbol-retriever";
 export * from "./storage/index-store";
 export * from "./types/contracts";

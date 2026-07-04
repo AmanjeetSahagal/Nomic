@@ -1,0 +1,13 @@
+{
+  "pairedTasks": 0,
+  "improves": 0,
+  "ties": 0,
+  "worsens": 0,
+  "successfulSameRank": 0,
+  "bothFailedTop10": 0,
+  "bothAbsentCandidatePools": 0,
+  "improvesFraction": 0,
+  "tiesFraction": 0,
+  "worsensFraction": 0,
+  "meanTokenSavingsFraction": 0
+}

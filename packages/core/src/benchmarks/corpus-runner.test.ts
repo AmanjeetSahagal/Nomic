@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compareModes, gradedMetrics, retrieveBm25, type CorpusTaskResult } from "./corpus-runner";
+import { compareModes, gradedMetrics, retrieveBm25, runTask, type CorpusTaskResult } from "./corpus-runner";
 import type { CorpusTask } from "./corpus-contracts";
 import type { RepositoryIndex } from "../types/contracts";
 
@@ -30,6 +30,21 @@ describe("corpus runner", () => {
     expect(metrics.reciprocalRank).toBe(.5);
     expect(metrics.ndcgAt10).toBeGreaterThan(.7);
     expect(metrics.firstRelevantRank).toBe(1);
+  });
+
+  it("keeps file ranking stable when packing is enabled", async () => {
+    const index: RepositoryIndex = { repositoryRoot: "/repo", fileCount: 2, files: [
+      { path: "src/target.ts", language: "typescript", size: 10_000, modifiedAtMs: 0, imports: [], isTest: false, symbols: [] },
+      { path: "src/other.ts", language: "typescript", size: 10_000, modifiedAtMs: 0, imports: [], isTest: false, symbols: [] }
+    ], symbols: [], chunks: [
+      { id: "target", filePath: "src/target.ts", kind: "code", startLine: 1, endLine: 20, tokenEstimate: 40, text: "numeric precision implementation" },
+      { id: "other", filePath: "src/other.ts", kind: "code", startLine: 1, endLine: 20, tokenEstimate: 50, text: "numeric helper" }
+    ], edges: [], generatedAt: "", metrics: { addedFiles: 2, changedFiles: 0, removedFiles: 0, reusedFiles: 0, reusedChunks: 0, reusedEdges: 0 } };
+    const task = { id: "task", repositoryId: "owner/repo", query: "numeric precision", split: "test", taskType: "bug-localization", relevance: { primaryFiles: ["src/target.ts"], supportingFiles: [], relevantUnchangedFiles: [], symbols: [] } } as unknown as CorpusTask;
+    const unpacked = await runTask(task, index, "bm25_body", 1, 0);
+    const packed = await runTask(task, index, "bm25_packed", 1, 0);
+    expect(packed.rankedPaths).toEqual(unpacked.rankedPaths);
+    expect(packed.selectedTokens).toBeLessThanOrEqual(unpacked.selectedTokens);
   });
 
   it("summarizes paired rank movement and token savings", () => {
