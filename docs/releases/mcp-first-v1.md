@@ -14,6 +14,7 @@ Release date: 2026-07-05
 - SQLite: native index creation and retrieval passing through `nomic doctor`.
 - Codex: live `nomic_get_task_context` call completed; Codex parsed confidence and source paths. Non-interactive runs require `default_tools_approval_mode = "approve"`.
 - Claude Code: configuration and missing-client fallback verified; live client verification remains pending because Claude Code was not installed.
+- Clean-checkout verification: a detached worktree at release commit `672e447` completed a fresh `npm ci`, all checks, MCP handshake, and sample retrieval with a clean Git status under Node.js 22.14.0.
 
 ## Tested environment
 
