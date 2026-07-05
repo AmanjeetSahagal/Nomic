@@ -14,6 +14,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@nomic/core": "0.1.0"
+    "@nomic/core": "0.1.0",
+    "@nomic/mcp-server": "0.1.0"
   }
 }

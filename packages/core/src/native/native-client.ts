@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { getNomicRepositoryCacheDirectory } from "../storage/index-store";
 import type {
   ContextCandidate,
   EmbeddingProvider,
@@ -64,6 +65,7 @@ export class NativeIndexClient {
   }
 
   async openRepository(repositoryRoot: string): Promise<NativeIndexStats> {
+    process.env.NOMIC_NATIVE_INDEX_DIR = getNomicRepositoryCacheDirectory(repositoryRoot);
     const stats = await this.addon.openRepository(repositoryRoot);
     this.openedRepositoryRoot = path.resolve(repositoryRoot);
     return stats;
@@ -102,7 +104,17 @@ export class NativeMirrorParserProvider implements ParserProvider {
   ) {}
 
   async indexRepository(request: IndexRepositoryRequest): Promise<RepositoryIndex> {
-    await this.client.openRepository(request.repositoryRoot);
+    if (request.changedPaths && request.existingIndex) {
+      await this.client.ensureRepository(request.repositoryRoot);
+      const existing = new Set(request.existingIndex.files.map((file) => file.path));
+      await this.client.updateFiles(request.changedPaths.map((changedPath) => {
+        const relativePath = path.isAbsolute(changedPath) ? path.relative(request.repositoryRoot, changedPath) : changedPath;
+        const normalizedPath = relativePath.split(path.sep).join("/");
+        return { path: normalizedPath, kind: existsSync(path.resolve(request.repositoryRoot, relativePath)) ? (existing.has(normalizedPath) ? "changed" : "created") : "deleted" };
+      }));
+    } else {
+      await this.client.openRepository(request.repositoryRoot);
+    }
     const index = await this.fallback.indexRepository(request);
     return { ...index, backend: "native" };
   }

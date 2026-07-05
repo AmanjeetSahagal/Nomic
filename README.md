@@ -9,7 +9,7 @@
   </tr>
 </table>
 
-Nomic is a local-first context orchestration layer for AI coding agents.
+Nomic is a local-first repository context server for AI coding agents.
 
 Instead of sending an entire repository to tools like Codex or Claude, Nomic indexes the codebase, retrieves the most relevant files and supporting artifacts for a task, compresses lower-priority context, and compiles a deterministic prompt for handoff.
 
@@ -17,8 +17,8 @@ Instead of sending an entire repository to tools like Codex or Claude, Nomic ind
 
 - Indexes repositories into files, symbols, chunks, and graph edges.
 - Extracts imports, references, callers/callees, and test relationships for TypeScript and JavaScript files through the TypeScript compiler API.
-- Runs hybrid retrieval:
-  structural graph expansion plus chunk-level semantic ranking and reranking.
+- Runs the benchmark-frozen default retrieval path:
+  BM25, exact-symbol boosting, and query-relevant chunk packing.
 - Compresses context with token budgeting:
   high-priority implementation files stay raw when possible, while dependencies and supporting files are summarized.
 - Compiles a stable prompt artifact with:
@@ -28,9 +28,36 @@ Instead of sending an entire repository to tools like Codex or Claude, Nomic ind
 
 ## Product Surfaces
 
+### MCP Server
+
+MCP is the primary integration. It is local, read-only, and exposes seven focused tools to Codex and Claude Code over stdio.
+
+```bash
+npm run build
+node apps/cli/dist/index.js serve-mcp /absolute/path/to/repository
+node apps/cli/dist/index.js setup codex --scope project
+node apps/cli/dist/index.js setup claude --scope project
+node apps/cli/dist/index.js doctor
+```
+
+Optional `AGENTS.md` or `CLAUDE.md` guidance (Nomic never edits these files automatically):
+
+```markdown
+Before broad repository exploration, call `nomic_get_task_context` with the complete task.
+Use Nomic's focused expansion, symbol, and range tools for follow-up context.
+After editing files, call `nomic_refresh_changed_files`.
+Nomic is read-only; use normal agent tools for edits, commands, and tests.
+```
+
+The server returns compact, token-budgeted code ranges. Graph expansion, semantic retrieval, path overrides, and the legacy heuristic are experimental and disabled by default.
+
+For non-interactive Codex runs, set `default_tools_approval_mode = "approve"` in the project-scoped Nomic MCP table. Nomic's seven tools are read-only; without this setting a headless Codex run may cancel the tool call because it cannot display an approval prompt.
+
+The MCP adapter pins `@modelcontextprotocol/sdk` 1.29.0 because the official SDK currently recommends the v1 line for production while v2 remains prerelease. It intentionally imports `server/mcp.js` and `server/stdio.js` subpaths rather than the package root; Dependabot tracks compatible fixes.
+
 ### VS Code Extension
 
-The VS Code extension is the primary developer workflow today.
+The VS Code extension remains an optional inspection and approval workflow.
 
 It currently supports:
 
@@ -64,6 +91,9 @@ This makes Nomic a review-and-approval layer between the codebase and the coding
 The CLI currently supports:
 
 - `nomic index [repository-root]`
+- `nomic serve-mcp [repository-root]`
+- `nomic setup codex [--scope project|user]`
+- `nomic setup claude [--scope local|project|user]`
 - `nomic ask "your task"`
 - `nomic explain-selection "your task"`
 - `nomic doctor`
@@ -91,28 +121,34 @@ See [the architecture document](docs/architecture.md) for the migration boundary
 ### Core Pipeline
 
 1. Repository indexing
-   scans files, extracts symbols and relationships, creates retrievable chunks, and persists an incremental index under `.nomic`
-2. Structural retrieval
-   scores likely entry files and expands through graph edges such as imports, references, callers/callees, and tests
-3. Semantic retrieval
-   ranks code and doc chunks with a local vector-style embedding scorer and lifts the best chunks into file candidates
-4. Reranking
-   combines structural score, semantic score, dependency distance, recency, importance, and token cost
-5. Compression
-   preserves raw code for the highest-priority context and summarizes lower-priority files into structured summaries
-6. Prompt compilation
+   scans files, extracts symbols and relationships, and creates retrievable chunks
+2. BM25 retrieval
+   ranks lexically relevant files
+3. Exact-symbol boosting
+   promotes files containing identifiers named in the task
+4. Query-relevant packing
+   selects bounded code ranges under the token budget
+5. Prompt compilation
    emits one deterministic prompt artifact that downstream adapters can format for the target agent
 
 ## Local-First Storage
 
-Nomic stores local artifacts inside `.nomic` in the target repository:
+New indexes are stored outside repositories under the platform cache directory, keyed by a hash of the canonical repository path:
+
+- macOS: `~/Library/Caches/Nomic/`
+- Linux: `${XDG_CACHE_HOME:-~/.cache}/nomic/`
+- Windows: `%LOCALAPPDATA%\Nomic\`
+
+Legacy `.nomic/index.json` files are imported for compatibility. MCP task sessions remain in bounded memory and do not persist raw task text or source content.
+
+Legacy artifacts may include:
 
 - `index.json`
   repository index with files, symbols, chunks, and graph edges
 - `session-memory.json`
   recent compiled prompts and selected-file memory
 
-No external database is required for the current implementation.
+No hosted service or external database is required.
 
 ## Development
 
@@ -168,7 +204,8 @@ Set `NOMIC_INDEX_BACKEND=native` after building the addon, or provide its locati
 The current implementation includes:
 
 - parser-backed indexing for TS/JS repositories
-- hybrid structural + semantic retrieval
+- BM25 + exact-symbol retrieval with query-relevant packing
+- local stdio MCP server with seven read-only tools
 - token-budgeted compression and deterministic prompt compilation
 - Codex and Claude adapters
 - session memory and engine diagnostics
@@ -196,3 +233,5 @@ These numbers come from the current local benchmark fixture and are intended as 
 
 Nomic treats prompts like build artifacts:
 analyzed, ranked, compressed, reviewed, and tailored before they reach the coding agent.
+- `packages/mcp-server`
+  thin official-SDK adapter exposing the shared engine through seven stdio tools

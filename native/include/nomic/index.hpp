@@ -54,6 +54,7 @@ class Index {
   };
 
   std::filesystem::path repository_root_;
+  std::filesystem::path index_directory_;
   std::vector<Document> documents_;
   std::unordered_map<std::string, std::size_t> document_frequencies_;
   double average_document_length_ = 0.0;

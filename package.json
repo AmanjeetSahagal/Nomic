@@ -7,9 +7,9 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace @nomic/core && npm run build --workspace @nomic/cli && npm run build --workspace @nomic/vscode-extension",
+    "build": "npm run build --workspace @nomic/core && npm run build --workspace @nomic/mcp-server && npm run build --workspace @nomic/cli && npm run build --workspace @nomic/vscode-extension",
     "benchmark": "npm run benchmark --workspace @nomic/core",
-    "typecheck": "npm run typecheck --workspace @nomic/core && npm run typecheck --workspace @nomic/cli && npm run typecheck --workspace @nomic/vscode-extension",
+    "typecheck": "npm run typecheck --workspace @nomic/core && npm run typecheck --workspace @nomic/mcp-server && npm run typecheck --workspace @nomic/cli && npm run typecheck --workspace @nomic/vscode-extension",
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run test && npm run typecheck && npm run build",

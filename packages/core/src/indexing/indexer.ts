@@ -1,4 +1,4 @@
-import { readFile, readdir, stat } from "node:fs/promises";
+import { open, readFile, readdir, stat } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { performance } from "node:perf_hooks";
 import path from "node:path";
@@ -36,6 +36,9 @@ export class FilesystemParserProvider implements ParserProvider {
   async indexRepository(request: IndexRepositoryRequest): Promise<RepositoryIndex> {
     const startedAt = performance.now();
     const repositoryRoot = path.resolve(request.repositoryRoot);
+    if (request.changedPaths && request.existingIndex) {
+      return updateChangedPaths(repositoryRoot, request.existingIndex, request.changedPaths, request, startedAt);
+    }
     request.onProgress?.({ phase: "scan", completed: 0 });
     const filePaths = await walkRepository(repositoryRoot, request);
     const scanMs = performance.now() - startedAt;
@@ -143,10 +146,98 @@ export class FilesystemParserProvider implements ParserProvider {
   }
 }
 
+async function updateChangedPaths(
+  repositoryRoot: string,
+  existingIndex: RepositoryIndex,
+  requestedPaths: string[],
+  request: IndexRepositoryRequest,
+  startedAt: number
+): Promise<RepositoryIndex> {
+  const normalizedPaths = [...new Set(requestedPaths.map((candidate) => {
+    const absolute = path.isAbsolute(candidate) ? path.resolve(candidate) : path.resolve(repositoryRoot, candidate);
+    const prefix = repositoryRoot.endsWith(path.sep) ? repositoryRoot : `${repositoryRoot}${path.sep}`;
+    if (!absolute.startsWith(prefix)) throw new Error(`Changed path escapes repository root: ${candidate}`);
+    return path.relative(repositoryRoot, absolute).split(path.sep).join("/");
+  }))];
+  const affected = new Set(normalizedPaths);
+  const existingFiles = new Map(existingIndex.files.map((file) => [file.path, file]));
+  const parsedEntries: Array<{ file: FileRecord; content: string; parsed: ParsedFileDetails }> = [];
+  let addedFiles = 0;
+  let changedFiles = 0;
+  let removedFiles = 0;
+
+  for (const relativePath of normalizedPaths) {
+    if (request.signal?.aborted) throw new Error("Repository indexing cancelled.");
+    const absolutePath = path.join(repositoryRoot, relativePath);
+    if (isSecretLikePath(relativePath)) {
+      if (existingFiles.delete(relativePath)) removedFiles += 1;
+      continue;
+    }
+    try {
+      const fileStats = await stat(absolutePath);
+      if (!fileStats.isFile() || fileStats.size > (request.maxFileSizeBytes ?? 1_000_000) || !shouldIndexFile(relativePath, request.extensions ? new Set(request.extensions) : TEXT_FILE_EXTENSIONS)) {
+        if (existingFiles.delete(relativePath)) removedFiles += 1;
+        continue;
+      }
+      const content = await readFile(absolutePath, "utf8");
+      if (content.includes("\0")) {
+        if (existingFiles.delete(relativePath)) removedFiles += 1;
+        continue;
+      }
+      const parsed = parseFile(relativePath, content);
+      const contentHash = createHash("sha256").update(content).digest("hex");
+      const previous = existingFiles.get(relativePath);
+      if (previous?.contentHash === contentHash) continue;
+      if (previous) changedFiles += 1; else addedFiles += 1;
+      const file = { ...buildFileRecord(relativePath, parsed, fileStats.mtimeMs, fileStats.size), contentHash };
+      existingFiles.set(relativePath, file);
+      parsedEntries.push({ file, content, parsed });
+    } catch (error: unknown) {
+      if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") {
+        if (existingFiles.delete(relativePath)) removedFiles += 1;
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  const files = [...existingFiles.values()].sort((left, right) => left.path.localeCompare(right.path));
+  const symbols = files.flatMap((file) => file.symbols);
+  const chunks = [
+    ...existingIndex.chunks.filter((chunk) => !affected.has(chunk.filePath)),
+    ...parsedEntries.flatMap((entry) => createChunks(entry.file, entry.content))
+  ].sort((left, right) => left.filePath.localeCompare(right.filePath) || left.startLine - right.startLine);
+  const fileMap = new Map(files.map((file) => [file.path, file]));
+  const symbolMap = new Map(symbols.filter((symbol) => symbol.kind !== "module" && symbol.kind !== "test").map((symbol) => [symbol.name, symbol]));
+  const edges = [
+    ...existingIndex.edges.filter((edge) => !affected.has(edge.from) && !affected.has(edge.to)),
+    ...buildEdges(files, parsedEntries, fileMap, symbolMap)
+  ].filter((edge, index, values) => values.findIndex((candidate) => candidate.from === edge.from && candidate.to === edge.to && candidate.kind === edge.kind) === index)
+    .sort((left, right) => left.kind.localeCompare(right.kind) || left.from.localeCompare(right.from) || left.to.localeCompare(right.to));
+  const metrics: IndexingMetrics = {
+    addedFiles,
+    changedFiles,
+    removedFiles,
+    reusedFiles: Math.max(0, files.length - parsedEntries.length),
+    reusedChunks: existingIndex.chunks.filter((chunk) => !affected.has(chunk.filePath)).length,
+    reusedEdges: existingIndex.edges.filter((edge) => !affected.has(edge.from) && !affected.has(edge.to)).length,
+    parsedFiles: parsedEntries.length,
+    failedFiles: 0,
+    schemaVersion: 1,
+    wallTimeMs: performance.now() - startedAt
+  };
+  request.onProgress?.({ phase: "persist", completed: normalizedPaths.length, total: normalizedPaths.length });
+  return { ...existingIndex, repositoryRoot, fileCount: files.length, files, symbols, chunks, edges, generatedAt: new Date().toISOString(), metrics };
+}
+
 const IGNORED_DIRECTORIES = new Set([
   ".git",
+  ".aws",
+  ".azure",
+  ".gcloud",
   ".next",
   ".nomic",
+  ".ssh",
   ".turbo",
   "build",
   "coverage",
@@ -199,6 +290,9 @@ async function walkRepository(repositoryRoot: string, request: IndexRepositoryRe
     for (const entry of entries) {
       const fullPath = path.join(currentDirectory, entry.name);
       const relativePath = path.relative(repositoryRoot, fullPath).split(path.sep).join("/");
+      if (isSecretLikePath(relativePath)) {
+        continue;
+      }
       if (matchesIgnoreRules(relativePath, entry.isDirectory(), ignoreRules)) {
         continue;
       }
@@ -215,13 +309,24 @@ async function walkRepository(repositoryRoot: string, request: IndexRepositoryRe
       }
 
       const fileStats = await stat(fullPath);
-      if (fileStats.size <= maximumFileSize && shouldIndexFile(entry.name, extensions)) {
+      if (fileStats.size <= maximumFileSize && shouldIndexFile(entry.name, extensions) && await isProbablyTextFile(fullPath)) {
         files.push(fullPath);
       }
     }
   }
 
   return files;
+}
+
+async function isProbablyTextFile(filePath: string): Promise<boolean> {
+  const handle = await open(filePath, "r");
+  try {
+    const buffer = Buffer.alloc(4096);
+    const { bytesRead } = await handle.read(buffer, 0, buffer.length, 0);
+    return !buffer.subarray(0, bytesRead).includes(0);
+  } finally {
+    await handle.close();
+  }
 }
 
 function shouldIndexFile(fileName: string, extensions: Set<string> = TEXT_FILE_EXTENSIONS): boolean {
@@ -231,6 +336,12 @@ function shouldIndexFile(fileName: string, extensions: Set<string> = TEXT_FILE_E
   }
 
   return fileName === "Dockerfile" || fileName.endsWith(".env.example");
+}
+
+function isSecretLikePath(relativePath: string): boolean {
+  const parts = relativePath.toLowerCase().split("/");
+  const name = parts.at(-1) ?? "";
+  return name === ".env" || name.startsWith(".env.") || /\.(pem|key|p12|pfx)$/.test(name) || parts.some((part) => [".ssh", ".aws", ".azure", ".gcloud"].includes(part)) || /(credential|credentials|secrets?)\.(json|ya?ml|toml|ini)$/.test(name);
 }
 
 interface IgnoreRule { negated: boolean; directoryOnly: boolean; matcher: RegExp }

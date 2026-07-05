@@ -21,7 +21,9 @@ describe("FileStorageBackend", () => {
     tempDirectories.push(repositoryRoot);
     await mkdir(repositoryRoot, { recursive: true });
 
-    const backend = new FileStorageBackend();
+    const cacheRoot = await mkdtemp(path.join(os.tmpdir(), "nomic-cache-"));
+    tempDirectories.push(cacheRoot);
+    const backend = new FileStorageBackend(cacheRoot);
     const index: RepositoryIndex = {
       repositoryRoot,
       fileCount: 1,
@@ -62,10 +64,11 @@ describe("FileStorageBackend", () => {
 
     await backend.writeIndex(index);
 
-    const raw = await readFile(path.join(repositoryRoot, ".nomic", "index.json"), "utf8");
+    const raw = await readFile(path.join(backend.getRepositoryCacheDirectory(repositoryRoot), "index.json"), "utf8");
     const restored = await backend.readIndex(repositoryRoot);
 
     expect(JSON.parse(raw)).toEqual(index);
     expect(restored).toEqual(index);
+    await expect(readFile(path.join(repositoryRoot, ".nomic", "index.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
   });
 });

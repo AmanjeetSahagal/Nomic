@@ -14,6 +14,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: MCP SDK subpath import smoke test
+        run: node -e "require('@modelcontextprotocol/sdk/server/mcp.js'); require('@modelcontextprotocol/sdk/server/stdio.js')"
       - run: npm run check
       - run: npm run benchmark
 

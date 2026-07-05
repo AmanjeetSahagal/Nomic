@@ -4,6 +4,7 @@ dist
 .DS_Store
 .vscode-test
 coverage
+native/build*/
 *.log
 ml/artifacts
 nomic-feedback-export.json

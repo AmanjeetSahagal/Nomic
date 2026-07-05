@@ -207,7 +207,8 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
   }
 
   private async flushWorkspaceChanges(workspaceRoot: string): Promise<void> {
-    const changedCount = this.pendingChangedPaths.size;
+    const changedPaths = [...this.pendingChangedPaths];
+    const changedCount = changedPaths.length;
     this.pendingChangedPaths.clear();
     this.updateTimer = undefined;
     if (changedCount === 0) {
@@ -216,7 +217,7 @@ class NomicPreviewProvider implements vscode.WebviewViewProvider {
     this.status = `Updating index for ${changedCount} changed file${changedCount === 1 ? "" : "s"}`;
     this.render();
     try {
-      const result = await this.engine.indexRepository({ repositoryRoot: workspaceRoot });
+      const result = await this.engine.refreshFiles({ repositoryRoot: workspaceRoot, paths: changedPaths });
       this.status = `Index updated: ${result.metrics.changedFiles} changed, ${result.metrics.addedFiles} added, ${result.metrics.removedFiles} removed`;
       if (this.taskText) {
         await this.compileCurrentTask();

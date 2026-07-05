@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cmath>
+#include <cstdlib>
 #include <fstream>
 #include <iterator>
 #include <memory>
@@ -74,6 +75,10 @@ IndexStats Index::open(const std::filesystem::path& repository_root,
                        const IndexOptions& options) {
   close();
   repository_root_ = std::filesystem::weakly_canonical(repository_root);
+  const auto* configured_index_directory = std::getenv("NOMIC_NATIVE_INDEX_DIR");
+  index_directory_ = configured_index_directory != nullptr && *configured_index_directory != '\0'
+      ? std::filesystem::path{configured_index_directory}
+      : repository_root_ / ".nomic";
   IndexStats stats;
 
   std::error_code error;
@@ -142,7 +147,7 @@ IndexStats Index::open(const std::filesystem::path& repository_root,
                                  ? 0.0
                                  : static_cast<double>(total_length) / static_cast<double>(documents_.size());
   persist();
-  const auto database_path = repository_root_ / ".nomic" / "index.sqlite";
+  const auto database_path = index_directory_ / "index.sqlite";
   stats.index_bytes = std::filesystem::file_size(database_path, error);
   return stats;
 }
@@ -187,6 +192,7 @@ std::vector<SearchResult> Index::search(std::string_view query, std::size_t limi
 
 void Index::close() {
   repository_root_.clear();
+  index_directory_.clear();
   documents_.clear();
   document_frequencies_.clear();
   average_document_length_ = 0.0;
@@ -195,7 +201,7 @@ void Index::close() {
 const std::filesystem::path& Index::repository_root() const noexcept { return repository_root_; }
 
 void Index::persist() const {
-  const auto directory = repository_root_ / ".nomic";
+  const auto directory = index_directory_.empty() ? repository_root_ / ".nomic" : index_directory_;
   std::filesystem::create_directories(directory);
   sqlite3* raw_database = nullptr;
   if (sqlite3_open((directory / "index.sqlite").string().c_str(), &raw_database) != SQLITE_OK) {

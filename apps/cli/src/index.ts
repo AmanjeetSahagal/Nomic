@@ -6,6 +6,13 @@ import {
   type AgentTarget,
   type UserTask
 } from "@nomic/core";
+import { probeNomicMcp, serveNomicMcp } from "@nomic/mcp-server";
+import { execFile } from "node:child_process";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { promisify } from "node:util";
+
+const execFileAsync = promisify(execFile);
 
 const [command, ...args] = process.argv.slice(2);
 const defaultRepositoryRoot = process.env.INIT_CWD ?? process.cwd();
@@ -14,6 +21,22 @@ async function main(): Promise<void> {
   const engine = createNomicEngine();
 
   switch (command) {
+    case "serve-mcp": {
+      await serveNomicMcp(args[0] ?? defaultRepositoryRoot);
+      return;
+    }
+    case "setup": {
+      const client = args[0];
+      const scopeIndex = args.indexOf("--scope");
+      const scope = scopeIndex >= 0 ? args[scopeIndex + 1] : "project";
+      if (client !== "codex" && client !== "claude") {
+        printUsage("Setup requires `codex` or `claude`.");
+        process.exitCode = 1;
+        return;
+      }
+      await setupClient(client, scope, defaultRepositoryRoot);
+      return;
+    }
     case "index": {
       const repositoryRoot = args[0] ?? defaultRepositoryRoot;
       const result = await engine.indexRepository({ repositoryRoot });
@@ -120,8 +143,8 @@ async function main(): Promise<void> {
       console.log(`Backend: ${diagnostics.backend}`);
       console.log(`Native addon: ${diagnostics.nativeAddonPath}`);
       console.log("Parser: filesystem parser with optional native BM25 mirror");
-      console.log(`Storage: .nomic/index.json${diagnostics.backend === "native" ? " + .nomic/index.sqlite" : ""}`);
-      console.log("Session memory: .nomic/session-memory.json");
+      console.log(`Storage: platform Nomic cache${diagnostics.backend === "native" ? " (JSON + SQLite)" : " (JSON)"}`);
+      console.log("Session memory: bounded in-process memory (not persisted)");
       console.log(`Index present: ${diagnostics.hasIndex ? "yes" : "no"}`);
       if (diagnostics.hasIndex) {
         console.log(`Index generated at: ${diagnostics.generatedAt}`);
@@ -129,6 +152,15 @@ async function main(): Promise<void> {
         console.log(`Indexed chunks: ${diagnostics.chunkCount}`);
         console.log(`Graph edges: ${diagnostics.edgeCount}`);
         console.log(`Reused files on last index: ${diagnostics.reusedFiles}`);
+      }
+      try {
+        const probe = await probeNomicMcp(process.execPath, [path.resolve(process.argv[1]), "serve-mcp", defaultRepositoryRoot], defaultRepositoryRoot);
+        console.log(`MCP handshake: passed (${probe.tools.length} tools)`);
+        console.log(`MCP sample retrieval: ${probe.sampleSucceeded ? "passed" : `failed (${probe.sampleError ?? "unknown error"})`}`);
+        if (!probe.sampleSucceeded || probe.tools.length !== 7) process.exitCode = 1;
+      } catch (error: unknown) {
+        console.log(`MCP handshake: failed (${error instanceof Error ? error.message : String(error)})`);
+        process.exitCode = 1;
       }
       return;
     }
@@ -195,11 +227,49 @@ function printUsage(error?: string): void {
 
   console.log("Usage:");
   console.log("  nomic index [repository-root]");
+  console.log("  nomic serve-mcp [repository-root]");
+  console.log("  nomic setup codex [--scope project|user]");
+  console.log("  nomic setup claude [--scope local|project|user]");
   console.log('  nomic ask "your task"');
   console.log('  nomic explain-selection "your task"');
   console.log("  nomic doctor");
   console.log("  nomic benchmark [repository-root]");
   console.log("  nomic feedback [status|export [path]|clear]");
+}
+
+async function setupClient(client: "codex" | "claude", scope: string, repositoryRoot: string): Promise<void> {
+  const executable = path.resolve(process.argv[1]);
+  if (client === "codex" && scope === "project") {
+    const configPath = path.join(repositoryRoot, ".codex", "config.toml");
+    const existing = await readFile(configPath, "utf8").catch((error: unknown) => {
+      if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") return "";
+      throw error;
+    });
+    if (/^\[mcp_servers\.nomic\]$/m.test(existing)) throw new Error(`Codex Nomic configuration already exists in ${configPath}; refusing to overwrite it.`);
+    const block = `[mcp_servers.nomic]\ncommand = ${JSON.stringify(process.execPath)}\nargs = [${JSON.stringify(executable)}, "serve-mcp", ${JSON.stringify(repositoryRoot)}]\ncwd = ${JSON.stringify(repositoryRoot)}\nstartup_timeout_sec = 20\ntool_timeout_sec = 30\ndefault_tools_approval_mode = "approve"\n`;
+    await mkdir(path.dirname(configPath), { recursive: true });
+    await writeFile(configPath, `${existing}${existing && !existing.endsWith("\n") ? "\n" : ""}\n${block}`, "utf8");
+    console.log(`Configured project-scoped Codex MCP in ${configPath}`);
+  } else {
+    const command = client;
+    const clientArgs = client === "codex"
+      ? ["mcp", "add", "nomic", "--", process.execPath, executable, "serve-mcp", repositoryRoot]
+      : ["mcp", "add", "nomic", "--scope", scope, "--", process.execPath, executable, "serve-mcp", repositoryRoot];
+    try {
+      await execFileAsync(command, clientArgs);
+      console.log(`Configured ${client} MCP at ${scope} scope.`);
+    } catch (error: unknown) {
+      if (typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT") {
+        console.log(`${client} is not installed. Manual configuration:`);
+        console.log(JSON.stringify({ mcpServers: { nomic: { command: process.execPath, args: [executable, "serve-mcp", repositoryRoot] } } }, null, 2));
+        return;
+      }
+      throw error;
+    }
+  }
+  const probe = await probeNomicMcp(process.execPath, [executable, "serve-mcp", repositoryRoot], repositoryRoot);
+  if (probe.tools.length !== 7 || !probe.sampleSucceeded) throw new Error("MCP setup verification failed.");
+  console.log("Verified MCP handshake, seven tools, and sample retrieval.");
 }
 
 function summarizeLanguages(files: Array<{ language: string }>): string {

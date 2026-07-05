@@ -317,6 +317,75 @@ export interface IndexRepositoryRequest {
   respectGitignore?: boolean;
   signal?: AbortSignal;
   onProgress?: (progress: IndexProgress) => void;
+  changedPaths?: string[];
+}
+
+export type ContextConfidence = "high" | "medium" | "low";
+
+export interface ContextRange {
+  id: string;
+  path: string;
+  symbol?: string;
+  startLine: number;
+  endLine: number;
+  relevanceScore: number;
+  reason: string;
+  content: string;
+}
+
+export interface EnsureIndexedInput { repositoryRoot: string; signal?: AbortSignal; }
+export interface IndexStatus { status: "ready" | "updated" | "rebuilt"; index: RepositoryIndex; }
+export interface RefreshFilesInput { repositoryRoot: string; paths?: string[]; signal?: AbortSignal; }
+export interface RefreshResult { index: RepositoryIndex; changedPaths: string[]; metrics: IndexingMetrics; }
+export interface TaskContextInput {
+  task: string;
+  repositoryRoot: string;
+  tokenBudget?: number;
+  maxFiles?: number;
+  includeTests?: boolean;
+  sessionId?: string;
+  debug?: boolean;
+  signal?: AbortSignal;
+}
+export interface TaskContextResult {
+  sessionId: string;
+  confidence: ContextConfidence;
+  packedTokens: number;
+  context: ContextRange[];
+  debug?: {
+    candidateCount: number;
+    retrievalLatencyMs: number;
+    exactSymbolMatches: number;
+    cacheHits: number;
+    fallbackUsed: boolean;
+    confidenceSignals: Record<string, number | boolean>;
+  };
+}
+export interface ExpandContextInput {
+  sessionId: string;
+  focus: string;
+  additionalTokenBudget?: number;
+  excludePaths?: string[];
+  includeTests?: boolean;
+  debug?: boolean;
+  signal?: AbortSignal;
+}
+export interface SymbolSearchInput { repositoryRoot: string; query: string; symbolTypes?: IndexedSymbol["kind"][]; limit?: number; signal?: AbortSignal; }
+export interface SymbolSearchResult { matches: Array<IndexedSymbol & { score: number }>; }
+export interface GetSymbolInput { repositoryRoot: string; path: string; symbol: string; surroundingLines?: number; signal?: AbortSignal; }
+export interface SymbolResult { symbol: IndexedSymbol; range: ContextRange; }
+export interface FileRangeInput { repositoryRoot: string; path: string; startLine: number; endLine: number; signal?: AbortSignal; }
+export interface FileRangeResult { path: string; startLine: number; endLine: number; content: string; truncated: boolean; }
+export interface MetricsInput { sessionId: string; }
+export interface RetrievalMetrics {
+  sessionId: string;
+  calls: number;
+  uniqueFiles: number;
+  packedTokens: number;
+  duplicateRangesAvoided: number;
+  cumulativeRetrievalLatencyMs: number;
+  confidence: ContextConfidence;
+  fallbackUsed: boolean;
 }
 
 export interface IndexProgress {

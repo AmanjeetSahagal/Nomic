@@ -105,7 +105,8 @@ describe("FilesystemParserProvider", () => {
 
     const secondIndex = await parser.indexRepository({
       repositoryRoot,
-      existingIndex: firstIndex
+      existingIndex: firstIndex,
+      changedPaths: [authPath]
     });
 
     const nextCryptoRecord = secondIndex.files.find((file) => file.path === "src/crypto.ts");
@@ -114,6 +115,7 @@ describe("FilesystemParserProvider", () => {
     expect(secondIndex.metrics.changedFiles).toBe(1);
     expect(secondIndex.metrics.reusedFiles).toBe(2);
     expect(secondIndex.metrics.reusedChunks).toBeGreaterThan(0);
+    expect(secondIndex.metrics.parsedFiles).toBe(1);
     expect(nextCryptoRecord).toEqual(originalCryptoRecord);
     expect(nextAuthRecord?.symbols.map((symbol) => symbol.name)).toContain("loginUser");
   });
@@ -126,6 +128,9 @@ describe("FilesystemParserProvider", () => {
     await writeFile(path.join(repositoryRoot, "src", "private.secret.ts"), "export const secret = true;", "utf8");
     await writeFile(path.join(repositoryRoot, "src", "large.ts"), "x".repeat(100), "utf8");
     await writeFile(path.join(repositoryRoot, "src", "kept.ts"), "export const kept = true;", "utf8");
+    await mkdir(path.join(repositoryRoot, ".aws"), { recursive: true });
+    await writeFile(path.join(repositoryRoot, ".aws", "credentials.json"), "{\"token\":\"secret\"}", "utf8");
+    await writeFile(path.join(repositoryRoot, "src", "binary.ts"), Buffer.from([0, 1, 2, 3]));
     const progress: string[] = [];
     const parser = new FilesystemParserProvider();
     const index = await parser.indexRepository({
