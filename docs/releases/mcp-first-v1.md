@@ -23,6 +23,7 @@ Release date: 2026-07-05
 | Operating system | macOS 26.5.1 (25F80), arm64 |
 | Node.js | 22.19.0 |
 | npm | 10.9.3 |
+| TypeScript | 5.9.3 |
 | Codex CLI | 0.142.5 |
 | Claude Code | Not installed; live verification pending |
 | CMake | 4.3.4 |

@@ -13,6 +13,23 @@ Nomic is a local-first repository context server for AI coding agents.
 
 Instead of sending an entire repository to tools like Codex or Claude, Nomic indexes the codebase, retrieves the most relevant files and supporting artifacts for a task, compresses lower-priority context, and compiles a deterministic prompt for handoff.
 
+## Release Status
+
+Current release: `mcp-first-v1`
+
+Verified:
+
+- Native C++ core and SQLite persistence
+- Node-API addon build and runtime loading
+- CTest, TypeScript tests, typecheck, and builds
+- Clean-checkout installation
+- Live Codex MCP workflow
+- `nomic doctor`
+
+Pending:
+
+- Live Claude Code MCP verification. Claude setup and fallback configuration are supported, but the live client was not installed in the verified release environment.
+
 ## What It Does Today
 
 - Indexes repositories into files, symbols, chunks, and graph edges.
