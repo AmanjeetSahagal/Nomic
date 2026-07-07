@@ -39,12 +39,42 @@ Users need Git, Node.js, npm, and normal native build tooling for the C++ addon 
 | SQLite | 3.51.0 |
 | MCP TypeScript SDK | 1.29.0, pinned |
 
-## Commands
+## Quick start
 
 ```bash
 git clone https://github.com/AmanjeetSahagal/Nomic.git
 cd Nomic
 npm ci
+npm run build
+node apps/cli/dist/index.js doctor
+```
+
+Then register Nomic from the target repository that Codex should work on. This command should be run inside the project you want Nomic to index, not inside the Nomic source checkout:
+
+```bash
+cd /path/to/your-project
+node /absolute/path/to/Nomic/apps/cli/dist/index.js setup codex --scope project
+codex
+```
+
+For Claude Code, the same rule applies: build Nomic first, then run project-scoped setup from the target repository:
+
+```bash
+cd /path/to/your-project
+node /absolute/path/to/Nomic/apps/cli/dist/index.js setup claude --scope project
+```
+
+A developer can currently clone and build Nomic, register it with Codex, launch the seven-tool MCP server, retrieve packed repository context, and use the verified native backend or TypeScript fallback.
+
+SSH clone remains available for contributors who have GitHub SSH keys configured:
+
+```bash
+git clone git@github.com:AmanjeetSahagal/Nomic.git
+```
+
+## Release verification commands
+
+```bash
 npm run check
 npm run native:configure
 npm run native:build
@@ -61,18 +91,6 @@ NOMIC_NATIVE_ADDON_PATH=/absolute/path/to/nomic_native.node \
 nomic doctor
 ```
 
-For project-scoped Codex or Claude Code setup, build Nomic first, then run setup from the repository Nomic should index:
-
-```bash
-cd /absolute/path/to/target-repository
-node /absolute/path/to/Nomic/apps/cli/dist/index.js setup codex --scope project
-node /absolute/path/to/Nomic/apps/cli/dist/index.js doctor
-```
-
-SSH clone remains available for contributors who have GitHub SSH keys configured:
-
-```bash
-git clone git@github.com:AmanjeetSahagal/Nomic.git
-```
+The remaining release limitations are packaging and platform coverage: source installation only, verified live on macOS arm64, Claude live verification pending, and no published npm package or prebuilt native binaries yet.
 
 The complete 18-task corpus rerun was attempted but stopped after an extended run without intermediate output. The existing frozen artifacts remain unchanged; a one-task, three-mode smoke completed successfully. A complete corpus rerun should be executed in release CI or on the declared benchmark machine.
