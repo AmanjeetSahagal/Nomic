@@ -16,6 +16,14 @@ Release date: 2026-07-05
 - Claude Code: configuration and missing-client fallback verified; live client verification remains pending because Claude Code was not installed.
 - Clean-checkout verification: a detached worktree at release commit `672e447` completed a fresh `npm ci`, all checks, MCP handshake, and sample retrieval with a clean Git status under Node.js 22.14.0.
 
+## Distribution and platform scope
+
+This release is distributed as source. Prebuilt native binaries and an npm package are planned for a later release.
+
+The verified release environment is macOS arm64 with Node.js 22.19.0. Other platforms may work through the native backend or TypeScript fallback, but Windows, Linux, Intel macOS, and older Node.js versions have not yet completed release verification.
+
+Users need Git, Node.js, npm, and normal native build tooling for the C++ addon path. If the native addon is unavailable, Nomic can fall back to the TypeScript backend unless strict-native mode is configured.
+
 ## Tested environment
 
 | Component | Version |
@@ -34,6 +42,9 @@ Release date: 2026-07-05
 ## Commands
 
 ```bash
+git clone https://github.com/AmanjeetSahagal/Nomic.git
+cd Nomic
+npm ci
 npm run check
 npm run native:configure
 npm run native:build
@@ -48,6 +59,20 @@ cmake --build native/build-addon --config Release
 NOMIC_INDEX_BACKEND=native \
 NOMIC_NATIVE_ADDON_PATH=/absolute/path/to/nomic_native.node \
 nomic doctor
+```
+
+For project-scoped Codex or Claude Code setup, build Nomic first, then run setup from the repository Nomic should index:
+
+```bash
+cd /absolute/path/to/target-repository
+node /absolute/path/to/Nomic/apps/cli/dist/index.js setup codex --scope project
+node /absolute/path/to/Nomic/apps/cli/dist/index.js doctor
+```
+
+SSH clone remains available for contributors who have GitHub SSH keys configured:
+
+```bash
+git clone git@github.com:AmanjeetSahagal/Nomic.git
 ```
 
 The complete 18-task corpus rerun was attempted but stopped after an extended run without intermediate output. The existing frozen artifacts remain unchanged; a one-task, three-mode smoke completed successfully. A complete corpus rerun should be executed in release CI or on the declared benchmark machine.

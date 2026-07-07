@@ -49,12 +49,37 @@ Pending:
 
 MCP is the primary integration. It is local, read-only, and exposes seven focused tools to Codex and Claude Code over stdio.
 
+This release is distributed as source. Prebuilt native binaries and an npm package are planned for a later release. The verified release environment is macOS arm64 with Node.js 22.19.0. Other platforms may work through the native backend or TypeScript fallback, but Windows, Linux, Intel macOS, and older Node.js versions have not yet completed release verification.
+
+First build Nomic once:
+
 ```bash
+git clone https://github.com/AmanjeetSahagal/Nomic.git
+cd Nomic
+npm ci
 npm run build
-node apps/cli/dist/index.js serve-mcp /absolute/path/to/repository
-node apps/cli/dist/index.js setup codex --scope project
-node apps/cli/dist/index.js setup claude --scope project
 node apps/cli/dist/index.js doctor
+```
+
+Then register Nomic from the repository you want Codex or Claude Code to index. Project-scoped setup writes configuration into that target repository, not into the Nomic source checkout:
+
+```bash
+cd /absolute/path/to/target-repository
+node /absolute/path/to/Nomic/apps/cli/dist/index.js setup codex --scope project
+node /absolute/path/to/Nomic/apps/cli/dist/index.js doctor
+```
+
+For Claude Code:
+
+```bash
+cd /absolute/path/to/target-repository
+node /absolute/path/to/Nomic/apps/cli/dist/index.js setup claude --scope project
+```
+
+SSH clone is also supported for contributors who have GitHub SSH keys configured:
+
+```bash
+git clone git@github.com:AmanjeetSahagal/Nomic.git
 ```
 
 Optional `AGENTS.md` or `CLAUDE.md` guidance (Nomic never edits these files automatically):
