@@ -1,6 +1,7 @@
 import { performance } from "node:perf_hooks";
 import { describe, expect, it, vi } from "vitest";
-import type { EmbeddingProvider, RepositoryIndex } from "../types/contracts";
+import type { CandidateRanker, EmbeddingProvider, RepositoryIndex } from "../types/contracts";
+import { ResilientCandidateRanker } from "../ranking/ranker";
 import { Bm25SymbolPackedRetriever } from "./bm25-symbol-retriever";
 
 describe("Bm25SymbolPackedRetriever", () => {
@@ -40,6 +41,16 @@ describe("Bm25SymbolPackedRetriever", () => {
     expect(result.stageTimingsMs?.graph).toBeGreaterThanOrEqual(0);
     expect(result.stageTimingsMs?.semantic).toBeGreaterThanOrEqual(0);
   });
+
+  it("returns the frozen baseline order when an experimental ranker fails", async () => {
+    const index = createIndex();
+    const task = { text: "DecimalField precision", target: "codex" as const, repositoryRoot: "/repo" };
+    const baseline = await new Bm25SymbolPackedRetriever().retrieve(task, index);
+    const failing: CandidateRanker = { name: "broken", featureVersion: "ranking-features-v1", rank: async () => { throw new Error("bad model"); } };
+    const experimental = await new Bm25SymbolPackedRetriever({ ranker: new ResilientCandidateRanker(failing) }).retrieve(task, index);
+    expect(experimental.candidates).toEqual(baseline.candidates);
+    expect(experimental.rankingFallbackReason).toBe("bad model");
+  });
 });
 
 function createIndex(): RepositoryIndex {
@@ -59,4 +70,3 @@ function createIndex(): RepositoryIndex {
     generatedAt: "", metrics: { addedFiles: files.length, changedFiles: 0, removedFiles: 0, reusedFiles: 0, reusedChunks: 0, reusedEdges: 0 }
   };
 }
-

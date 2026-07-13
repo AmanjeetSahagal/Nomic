@@ -14,15 +14,24 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
-const [command, ...args] = process.argv.slice(2);
+const [command, ...rawArgs] = process.argv.slice(2);
+const rankerIndex = rawArgs.indexOf("--ranker");
+const requestedRanker = rankerIndex >= 0 ? rawArgs[rankerIndex + 1] : undefined;
+const args = rankerIndex >= 0 ? rawArgs.filter((_value, index) => index !== rankerIndex && index !== rankerIndex + 1) : rawArgs;
 const defaultRepositoryRoot = process.env.INIT_CWD ?? process.cwd();
 
 async function main(): Promise<void> {
-  const engine = createNomicEngine();
+  if (requestedRanker && !["baseline", "logistic", "lightgbm", "neural"].includes(requestedRanker)) throw new Error(`Unknown ranker: ${requestedRanker}`);
+  const engine = createNomicEngine({ ranking: {
+    mode: (requestedRanker ?? process.env.NOMIC_RANKING_MODE ?? "baseline") as import("@nomic/core").RankingMode,
+    modelPath: process.env.NOMIC_RANKING_MODEL_PATH,
+    metadataPath: process.env.NOMIC_RANKING_METADATA_PATH,
+    timeoutMs: Number(process.env.NOMIC_RANKING_TIMEOUT_MS ?? 20), fallback: "baseline"
+  } });
 
   switch (command) {
     case "serve-mcp": {
-      await serveNomicMcp(args[0] ?? defaultRepositoryRoot);
+      await serveNomicMcp(args[0] ?? defaultRepositoryRoot, { rankingMode: (requestedRanker ?? "baseline") as import("@nomic/core").RankingMode, modelPath: process.env.NOMIC_RANKING_MODEL_PATH, metadataPath: process.env.NOMIC_RANKING_METADATA_PATH, rankingTimeoutMs: Number(process.env.NOMIC_RANKING_TIMEOUT_MS ?? 20) });
       return;
     }
     case "setup": {
@@ -107,6 +116,13 @@ async function main(): Promise<void> {
       console.log("");
       console.log("## User");
       console.log(payload.user);
+      return;
+    }
+    case "context": {
+      const taskText = args.join(" ").trim();
+      if (!taskText) { printUsage("Missing task text for `context`."); process.exitCode = 1; return; }
+      const result = await engine.getTaskContext({ task: taskText, repositoryRoot: defaultRepositoryRoot, debug: true });
+      console.log(JSON.stringify({ rankingMode: requestedRanker ?? "baseline", ...result }, null, 2));
       return;
     }
     case "explain-selection": {
@@ -231,6 +247,7 @@ function printUsage(error?: string): void {
   console.log("  nomic setup codex [--scope project|user]");
   console.log("  nomic setup claude [--scope local|project|user]");
   console.log('  nomic ask "your task"');
+  console.log('  nomic context "your task" [--ranker baseline|logistic|lightgbm|neural]');
   console.log('  nomic explain-selection "your task"');
   console.log("  nomic doctor");
   console.log("  nomic benchmark [repository-root]");

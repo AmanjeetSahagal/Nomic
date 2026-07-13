@@ -7,15 +7,17 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { createNomicEngine, type NomicEngine, type TaskContextResult } from "@nomic/core";
+import { createNomicEngine, type NomicEngine, type RankingMode, type TaskContextResult } from "@nomic/core";
 import { z } from "zod";
 
 const execFileAsync = promisify(execFile);
 const SERVER_INSTRUCTIONS = "Nomic is a local, read-only repository context engine. Call nomic_get_task_context before broad repository exploration. Use focused Nomic tools for follow-up context. After edits, call nomic_refresh_changed_files. Nomic never edits source files.";
 
 export interface NomicMcpServer { server: McpServer; root: string; close(): Promise<void>; }
+export interface NomicMcpConfiguration { rankingMode?: RankingMode; modelPath?: string; metadataPath?: string; rankingTimeoutMs?: number; }
 
-export async function createNomicMcpServer(repositoryRoot?: string, engine = createNomicEngine()): Promise<NomicMcpServer> {
+export async function createNomicMcpServer(repositoryRoot?: string, engine?: NomicEngine, configuration: NomicMcpConfiguration = {}): Promise<NomicMcpServer> {
+  engine ??= createNomicEngine({ ranking: { mode: configuration.rankingMode ?? "baseline", modelPath: configuration.modelPath, metadataPath: configuration.metadataPath, timeoutMs: configuration.rankingTimeoutMs, fallback: "baseline" } });
   const root = await resolveRepositoryRoot(repositoryRoot);
   const dirtyPaths = new Set<string>(await discoverGitChanges(root));
   let watcher: FSWatcher | undefined;
@@ -35,8 +37,8 @@ export async function createNomicMcpServer(repositoryRoot?: string, engine = cre
   return { server, root, async close() { watcher?.close(); await server.close(); } };
 }
 
-export async function serveNomicMcp(repositoryRoot?: string): Promise<void> {
-  const instance = await createNomicMcpServer(repositoryRoot);
+export async function serveNomicMcp(repositoryRoot?: string, configuration: NomicMcpConfiguration = {}): Promise<void> {
+  const instance = await createNomicMcpServer(repositoryRoot, undefined, configuration);
   const transport = new StdioServerTransport();
   const shutdown = () => void instance.close();
   process.once("SIGINT", shutdown);

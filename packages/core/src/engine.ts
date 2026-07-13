@@ -11,6 +11,7 @@ import { InMemorySessionMemory } from "./memory/session-memory";
 import { NativeIndexClient, NativeLexicalProvider, NativeMirrorParserProvider } from "./native/native-client";
 import { applyTaskOverrides, HybridRetriever } from "./retrieval/retriever";
 import { Bm25SymbolPackedRetriever } from "./retrieval/bm25-symbol-retriever";
+import { createExperimentalRanker } from "./ranking/ranker";
 import { FileStorageBackend } from "./storage/index-store";
 import {
   type AgentTarget,
@@ -66,7 +67,11 @@ export class NomicEngine {
         dependencies.retrievalOptions ?? {
           exactPathOverride: process.env.NOMIC_ENABLE_PATH_OVERRIDE === "1",
           graphExpansion: process.env.NOMIC_ENABLE_GRAPH_EXPANSION === "1",
-          semanticExpansion: process.env.NOMIC_ENABLE_SEMANTIC_EXPANSION === "1"
+          semanticExpansion: process.env.NOMIC_ENABLE_SEMANTIC_EXPANSION === "1",
+          ...(dependencies.ranking?.mode && dependencies.ranking.mode !== "baseline" ? { ranker: createExperimentalRanker({
+            mode: dependencies.ranking.mode, modelPath: dependencies.ranking.modelPath ?? "", metadataPath: dependencies.ranking.metadataPath,
+            timeoutMs: dependencies.ranking.timeoutMs, fallback: "baseline"
+          }) } : {})
         },
         dependencies.embeddings
       ));
@@ -123,7 +128,7 @@ export class NomicEngine {
     const taskLower = input.task.toLowerCase();
     const candidatePaths = new Set(candidates.map((candidate) => candidate.path));
     const exactSymbolMatches = index.symbols.filter((symbol) => candidatePaths.has(symbol.path) && taskLower.includes(symbol.name.toLowerCase())).length;
-    const fallbackUsed = process.env.NOMIC_INDEX_BACKEND === "native" && !NativeIndexClient.diagnostics().available;
+    const fallbackUsed = Boolean(retrieval.rankingFallbackReason) || (process.env.NOMIC_INDEX_BACKEND === "native" && !NativeIndexClient.diagnostics().available);
     const confidenceSignals = computeConfidenceSignals(candidates, index, input.task);
     const confidence = confidenceSignals.exactSymbolMatch || confidenceSignals.topMargin >= 0.35
       ? "high" : candidates.length > 0 && confidenceSignals.implementationCandidates > 0 ? "medium" : "low";
@@ -143,6 +148,7 @@ export class NomicEngine {
     session.metrics.uniqueFiles = new Set([...session.rangeIds].map((id) => id.split(":", 1)[0])).size;
     session.metrics.confidence = confidence;
     session.metrics.fallbackUsed ||= fallbackUsed;
+    if (retrieval.rankingFallbackReason) session.metrics.fallbackReason = retrieval.rankingFallbackReason;
     this.evictSessions();
     return {
       sessionId: session.id,
@@ -155,6 +161,7 @@ export class NomicEngine {
         exactSymbolMatches,
         cacheHits: cacheHit ? 1 : 0,
         fallbackUsed,
+        ...(retrieval.rankingFallbackReason ? { fallbackReason: retrieval.rankingFallbackReason } : {}),
         confidenceSignals
       } } : {})
     };
@@ -420,6 +427,13 @@ export function createNomicEngine(overrides: Partial<EngineDependencies> = {}): 
     ? new NativeMirrorParserProvider(nativeClient, new FilesystemParserProvider())
     : undefined);
   const embeddings = overrides.embeddings ?? (nativeClient ? new NativeLexicalProvider(nativeClient) : undefined);
+  const ranking = overrides.ranking ?? (process.env.NOMIC_RANKING_MODE && process.env.NOMIC_RANKING_MODE !== "baseline" ? {
+    mode: process.env.NOMIC_RANKING_MODE as import("./types/contracts").RankingMode,
+    modelPath: process.env.NOMIC_RANKING_MODEL_PATH,
+    metadataPath: process.env.NOMIC_RANKING_METADATA_PATH,
+    timeoutMs: Number(process.env.NOMIC_RANKING_TIMEOUT_MS ?? 20),
+    fallback: "baseline" as const
+  } : { mode: "baseline" as const });
   return new NomicEngine({
     storage: overrides.storage ?? new FileStorageBackend(),
     memory: overrides.memory ?? new InMemorySessionMemory(),
@@ -437,6 +451,7 @@ export function createNomicEngine(overrides: Partial<EngineDependencies> = {}): 
     ranker: overrides.ranker,
     retriever: overrides.retriever,
     retrievalOptions: overrides.retrievalOptions
+    ,ranking
   });
 }
 

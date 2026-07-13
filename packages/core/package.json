@@ -10,5 +10,8 @@
     "clean": "rm -rf dist",
     "test": "vitest run packages/core",
     "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "optionalDependencies": {
+    "onnxruntime-node": "1.21.0"
   }
 }

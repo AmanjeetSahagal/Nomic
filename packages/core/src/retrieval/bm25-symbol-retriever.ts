@@ -24,7 +24,7 @@ interface PreparedIndex {
   symbolPostings: Map<string, Set<number>>;
 }
 
-const DEFAULT_OPTIONS: Required<RetrievalOptions> = {
+const DEFAULT_OPTIONS: Required<Omit<RetrievalOptions, "ranker">> = {
   exactPathOverride: false,
   graphExpansion: false,
   semanticExpansion: false,
@@ -34,10 +34,13 @@ const DEFAULT_OPTIONS: Required<RetrievalOptions> = {
 
 export class Bm25SymbolPackedRetriever implements RetrievalProvider {
   private readonly cache = new WeakMap<RepositoryIndex, PreparedIndex>();
-  private readonly options: Required<RetrievalOptions>;
+  private readonly options: Required<Omit<RetrievalOptions, "ranker">>;
+  private readonly ranker?: import("../types/contracts").CandidateRanker;
 
   constructor(options: RetrievalOptions = {}, private readonly embeddings?: EmbeddingProvider) {
-    this.options = { ...DEFAULT_OPTIONS, ...options };
+    this.ranker = options.ranker;
+    const { ranker: _ranker, ...plainOptions } = options;
+    this.options = { ...DEFAULT_OPTIONS, ...plainOptions };
   }
 
   async retrieve(task: UserTask, index: RepositoryIndex): Promise<RetrievalResult> {
@@ -78,6 +81,7 @@ export class Bm25SymbolPackedRetriever implements RetrievalProvider {
       semanticMs = performance.now() - started;
     }
 
+    candidates = this.ranker ? await this.ranker.rank(task, candidates.slice(0, 50), index) : candidates;
     candidates = candidates.slice(0, this.options.maxCandidates);
     return {
       analysis: analyzeTask(task.text),
@@ -94,7 +98,8 @@ export class Bm25SymbolPackedRetriever implements RetrievalProvider {
         graph: graphMs,
         semantic: semanticMs,
         total: performance.now() - totalStarted
-      }
+      },
+      ...(this.ranker?.lastFallbackReason ? { rankingFallbackReason: this.ranker.lastFallbackReason } : {})
     };
   }
 }
