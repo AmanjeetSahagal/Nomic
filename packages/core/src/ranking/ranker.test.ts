@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { HeuristicCandidateRanker, ResilientCandidateRanker } from "./ranker";
+import { extractRankingFeatureBatch, featureVector, HeuristicCandidateRanker, ResilientCandidateRanker, validateModelMetadata } from "./ranker";
 import type { CandidateRanker, ContextCandidate, RepositoryIndex } from "../types/contracts";
 
 const index: RepositoryIndex = {
@@ -29,18 +29,28 @@ describe("candidate ranking", () => {
       [candidate("src/misc.ts"), candidate("src/auth.ts")], index
     );
     expect(ranked[0]?.path).toBe("src/auth.ts");
-    expect(ranked[0]?.featureVersion).toBe("nomic-ranking-v1");
+    expect(ranked[0]?.featureVersion).toBe("ranking-features-v1");
     expect(ranked[0]?.rankerScore).toBeTypeOf("number");
   });
 
   it("falls back when the primary ranker fails", async () => {
     const failing: CandidateRanker = {
-      name: "failing", featureVersion: "nomic-ranking-v1", modelVersion: "broken",
+      name: "failing", featureVersion: "ranking-features-v1", modelVersion: "broken",
       rank: async () => { throw new Error("invalid model"); }
     };
     const ranked = await new ResilientCandidateRanker(failing).rank(
       { text: "AuthService", target: "codex" }, [candidate("src/auth.ts")], index
     );
-    expect(ranked[0]?.modelVersion).toBe("heuristic-v1");
+    expect(ranked[0]?.modelVersion).toBeUndefined();
+    expect(ranked[0]?.score).toBe(1);
+  });
+
+  it("extracts the stable 28-feature schema and rejects incompatible metadata", () => {
+    const rows = extractRankingFeatureBatch({ text: "AuthService", target: "codex" }, [candidate("src/auth.ts")], index);
+    expect(featureVector(rows[0]!)).toHaveLength(28);
+    expect(() => validateModelMetadata({
+      model_version: "0.1.0", model_type: "pairwise-mlp", feature_schema_version: "old",
+      feature_count: 28, model_sha256: "abc", normalization: { mean: Array(28).fill(0), scale: Array(28).fill(1) }
+    })).toThrow("feature-schema-incompatible");
   });
 });

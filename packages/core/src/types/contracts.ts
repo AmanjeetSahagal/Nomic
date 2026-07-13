@@ -127,22 +127,23 @@ export interface ContextCandidate {
 }
 
 export interface RankingFeatures {
-  lexicalScore: number;
-  semanticScore: number;
-  symbolOverlap: number;
-  pathOverlap: number;
-  dependencyDistance: number;
-  inboundDependencies: number;
-  fileImportance: number;
-  recency: number;
-  tokenCost: number;
-  isTest: number;
+  bm25Score: number; normalizedBm25Score: number; bm25Rank: number; topScoreMargin: number;
+  exactSymbolMatch: number; prefixSymbolMatch: number; symbolTokenOverlap: number; matchingSymbolCount: number; symbolTypeId: number;
+  filenameOverlap: number; pathTokenOverlap: number; directoryDepth: number; fileExtensionId: number;
+  isImplementationFile: number; isTestFile: number; isDocumentationFile: number; isGeneratedFile: number;
+  queryTermCoverage: number; rareTermMatchCount: number; identifierOverlap: number; commentOverlap: number;
+  chunkTokenCount: number; symbolLineCount: number; codeToCommentRatio: number;
+  repositoryLanguageId: number; repositoryFileCountBucket: number; inboundDependencyCount: number; dependencyDistance: number;
 }
+
+export type RankingMode = "baseline" | "logistic" | "lightgbm" | "neural";
+export interface RankingConfiguration { mode: RankingMode; modelPath?: string; metadataPath?: string; timeoutMs?: number; fallback?: "baseline"; }
 
 export interface CandidateRanker {
   readonly name: string;
   readonly featureVersion: string;
   readonly modelVersion?: string;
+  readonly lastFallbackReason?: string;
   rank(task: UserTask, candidates: ContextCandidate[], index: RepositoryIndex): Promise<ContextCandidate[]>;
 }
 
@@ -177,6 +178,7 @@ export interface RetrievalResult {
   truncationReasons: string[];
   rerankWeights: Record<string, number>;
   stageTimingsMs?: Record<string, number>;
+  rankingFallbackReason?: string;
 }
 
 export interface RetrievalProvider {
@@ -189,6 +191,7 @@ export interface RetrievalOptions {
   semanticExpansion?: boolean;
   maxCandidates?: number;
   chunksPerFile?: number;
+  ranker?: CandidateRanker;
 }
 
 export interface CompiledPromptDiagnostics {
@@ -358,6 +361,7 @@ export interface TaskContextResult {
     exactSymbolMatches: number;
     cacheHits: number;
     fallbackUsed: boolean;
+    fallbackReason?: string;
     confidenceSignals: Record<string, number | boolean>;
   };
 }
@@ -386,6 +390,7 @@ export interface RetrievalMetrics {
   cumulativeRetrievalLatencyMs: number;
   confidence: ContextConfidence;
   fallbackUsed: boolean;
+  fallbackReason?: string;
 }
 
 export interface IndexProgress {
@@ -448,6 +453,7 @@ export interface EngineDependencies {
   ranker?: CandidateRanker;
   retriever?: RetrievalProvider;
   retrievalOptions?: RetrievalOptions;
+  ranking?: RankingConfiguration;
 }
 
 export const DEFAULT_TOKEN_BUDGET: TokenBudget = {

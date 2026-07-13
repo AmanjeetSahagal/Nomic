@@ -1,17 +1,16 @@
 {
-  "featureVersion": "nomic-ranking-v1",
+  "featureVersion": "ranking-features-v1",
+  "featureCount": 28,
   "features": [
-    "lexicalScore",
-    "semanticScore",
-    "symbolOverlap",
-    "pathOverlap",
-    "dependencyDistance",
-    "inboundDependencies",
-    "fileImportance",
-    "recency",
-    "tokenCost",
-    "isTest"
+    "bm25Score", "normalizedBm25Score", "bm25Rank", "topScoreMargin",
+    "exactSymbolMatch", "prefixSymbolMatch", "symbolTokenOverlap", "matchingSymbolCount", "symbolTypeId",
+    "filenameOverlap", "pathTokenOverlap", "directoryDepth", "fileExtensionId",
+    "isImplementationFile", "isTestFile", "isDocumentationFile", "isGeneratedFile",
+    "queryTermCoverage", "rareTermMatchCount", "identifierOverlap", "commentOverlap",
+    "chunkTokenCount", "symbolLineCount", "codeToCommentRatio",
+    "repositoryLanguageId", "repositoryFileCountBucket", "inboundDependencyCount", "dependencyDistance"
   ],
-  "label": "usefulness",
+  "missingValueDefault": 0,
+  "label": "gradedRelevance",
   "group": "taskId"
 }
