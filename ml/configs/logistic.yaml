@@ -1,0 +1,4 @@
+model: logistic
+seed: 42
+class_weight: balanced
+corpus_version: nomic-ranking-corpus-v1

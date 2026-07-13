@@ -1,0 +1,7 @@
+model: pairwise-mlp
+seed: 42
+objective: margin
+margin: 0.2
+dropout: 0.15
+epochs: 100
+early_stopping_patience: 12

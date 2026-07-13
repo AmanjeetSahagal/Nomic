@@ -1,0 +1,5 @@
+model: lightgbm
+seed: 42
+objective: lambdarank
+metric: [ndcg@5, ndcg@10]
+early_stopping_rounds: 30
