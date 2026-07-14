@@ -1,0 +1,74 @@
+[
+  {
+    "taskId": "django-django-issue-24920-pr-20445",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-33647-pr-20480",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36618-pr-20426",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36787-pr-20437",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36796-pr-20459",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36800-pr-20411",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36806-pr-20421",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36818-pr-20443",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36829-pr-20471",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-55843-pr-62873",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62462-pr-62661",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62675-pr-62676",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62720-pr-62722",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62782-pr-62783",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62841-pr-62844",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62912-pr-62914",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62920-pr-62923",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62921-pr-62928",
+    "size": 50
+  }
+]

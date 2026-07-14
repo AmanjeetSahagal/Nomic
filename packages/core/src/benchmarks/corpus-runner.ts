@@ -240,7 +240,7 @@ export function gradedMetrics(rankedPaths: string[], task: CorpusTask) {
   return { recallAt5: hits(5) / primary.size, recallAt10: hits(10) / primary.size, reciprocalRank: first < 0 ? 0 : 1 / (first + 1), ndcgAt10: ideal ? dcg / ideal : 0, contextPrecision: rankedPaths.length ? rankedPaths.filter((file) => grades.has(file)).length / rankedPaths.length : 0, firstRelevantRank: firstRelevant < 0 ? null : firstRelevant + 1 };
 }
 
-async function materializeRepository(repository: CorpusRepository, commit: string, cacheDirectory: string): Promise<string> {
+export async function materializeRepository(repository: CorpusRepository, commit: string, cacheDirectory: string): Promise<string> {
   const destination = path.join(cacheDirectory, repository.id.replace("/", "--"));
   try { await stat(path.join(destination, ".git")); } catch { await exec("git", ["clone", "--filter=blob:none", "--no-checkout", repository.url, destination], { maxBuffer: 10_000_000 }); }
   let hasCommit = true;

@@ -321,6 +321,7 @@ export interface IndexRepositoryRequest {
   signal?: AbortSignal;
   onProgress?: (progress: IndexProgress) => void;
   changedPaths?: string[];
+  excludedPaths?: string[];
 }
 
 export type ContextConfidence = "high" | "medium" | "low";

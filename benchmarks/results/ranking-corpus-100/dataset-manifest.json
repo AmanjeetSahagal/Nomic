@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "name": "nomic-ranking-corpus-100-draft",
+  "status": "review-required",
+  "featureSchemaVersion": "ranking-features-v1",
+  "candidatePolicy": "frozen BM25 plus exact-symbol evidence, top 50",
+  "tasks": 100,
+  "candidateRows": 5000,
+  "rowsPerTask": 50,
+  "repositories": {
+    "django/django": {
+      "tasks": 40,
+      "rows": 2000,
+      "tasksWithRetrievedPositive": 29,
+      "tasksWithoutRetrievedPositive": 11
+    },
+    "microsoft/TypeScript": {
+      "tasks": 40,
+      "rows": 2000,
+      "tasksWithRetrievedPositive": 8,
+      "tasksWithoutRetrievedPositive": 32
+    },
+    "microsoft/vscode": {
+      "tasks": 20,
+      "rows": 1000,
+      "tasksWithRetrievedPositive": 8,
+      "tasksWithoutRetrievedPositive": 12
+    }
+  },
+  "labels": {
+    "0": 4929,
+    "1": 11,
+    "2": 3,
+    "3": 57
+  },
+  "labelSources": {
+    "patch-primary": 57,
+    "patch-supporting": 3,
+    "patch-test": 11,
+    "retrieved-negative": 4929
+  },
+  "hardNegatives": {
+    "high-bm25": 949,
+    "same-package": 120,
+    "similar-symbol": 3690,
+    "random": 170
+  },
+  "shards": [
+    "frozen-18.jsonl",
+    "django.jsonl",
+    "typescript.jsonl",
+    "vscode.jsonl"
+  ],
+  "reviewGate": {
+    "complete": false,
+    "remaining": [
+      "adjudicate one primary implementation file per expansion task",
+      "review supporting and test grades",
+      "add symbol labels and line ranges",
+      "verify connector base SHA is the immediate pre-fix parent",
+      "accept exactly 31 Django, 31 TypeScript, and 20 VS Code expansion tasks",
+      "exclude all-negative groups from pairwise training while retaining them for candidate-generation evaluation"
+    ]
+  },
+  "auditConclusion": "The top-50 candidate layer misses every graded positive for 55 tasks. This is a candidate-generation limitation, not a reranking result. No model training or ML improvement claim is authorized from this draft."
+}

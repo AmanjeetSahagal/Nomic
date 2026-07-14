@@ -1,0 +1,2697 @@
+{
+  "schemaVersion": 1,
+  "name": "nomic-ranking-corpus-100-acquisition",
+  "createdAt": "2026-07-13T17:31:24.619Z",
+  "cutoff": "2025-12-31T23:59:59Z",
+  "reviewPolicy": {
+    "autoAccept": false,
+    "requirements": [
+      "pre-fix issue evidence",
+      "reconstructable patch parent",
+      "production source change",
+      "regression test or validation change",
+      "graded file labels",
+      "symbol review where applicable"
+    ]
+  },
+  "repositories": [
+    {
+      "repositoryId": "django/django",
+      "targetAccepted": 40,
+      "currentlyAccepted": 9,
+      "needed": 31,
+      "candidatePool": [
+        {
+          "pullRequest": 20427,
+          "pullRequestUrl": "https://github.com/django/django/pull/20427",
+          "linkedIssue": 36810,
+          "title": "Fixed #36810 -- Avoided __repr__ recursion in SimpleLazyObject.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20418,
+          "pullRequestUrl": "https://github.com/django/django/pull/20418",
+          "linkedIssue": 36807,
+          "title": "Fixed #36807 -- Fixed form field alignment under <fieldset> in the admin.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20387,
+          "pullRequestUrl": "https://github.com/django/django/pull/20387",
+          "linkedIssue": 36789,
+          "title": "fixes #36789 -- added missing .pdf version contribution_process.svg",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20379,
+          "pullRequestUrl": "https://github.com/django/django/pull/20379",
+          "linkedIssue": 36783,
+          "title": "Fixed #36783: Fixed querystring regression for multi-value QueryDict in 6.0",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20368,
+          "pullRequestUrl": "https://github.com/django/django/pull/20368",
+          "linkedIssue": 35581,
+          "title": "Refs #35581 -- Fixed email image inline attachment example.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20312,
+          "pullRequestUrl": "https://github.com/django/django/pull/20312",
+          "linkedIssue": 36112,
+          "title": "Fixed #36112 -- Added fallback in last_executed_query() on Oracle and PostgreSQL.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20098,
+          "pullRequestUrl": "https://github.com/django/django/pull/20098",
+          "linkedIssue": 36733,
+          "title": "Fixed #36733 -- Escaped attributes in Stylesheet.__str__.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20080,
+          "pullRequestUrl": "https://github.com/django/django/pull/20080",
+          "linkedIssue": 36724,
+          "title": "Fixed #36724 -- Removed broken 'for' attribute from the legend tag",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20065,
+          "pullRequestUrl": "https://github.com/django/django/pull/20065",
+          "linkedIssue": 36715,
+          "title": "Fixed #36715 -- Made intcomma filter handle non-finite Decimals.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20060,
+          "pullRequestUrl": "https://github.com/django/django/pull/20060",
+          "linkedIssue": 36710,
+          "title": "Fixed #36710 -- Fixed a regression in urlize for multi-part domain names.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20045,
+          "pullRequestUrl": "https://github.com/django/django/pull/20045",
+          "linkedIssue": 36705,
+          "title": "Fixes #36705 -- Optimized string concatenation in utils.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20021,
+          "pullRequestUrl": "https://github.com/django/django/pull/20021",
+          "linkedIssue": 36321,
+          "title": "Fixed #36321 -- Added argparse suggest_on_error support for Python 3.14+",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 20001,
+          "pullRequestUrl": "https://github.com/django/django/pull/20001",
+          "linkedIssue": 36686,
+          "title": "Fixed #36686 -- Clarified Meta.ordering is ignored in GROUP BY queries.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19958,
+          "pullRequestUrl": "https://github.com/django/django/pull/19958",
+          "linkedIssue": 36659,
+          "title": "Fixed #36659 -- Fixed incorrect selector in admin forms.css",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19943,
+          "pullRequestUrl": "https://github.com/django/django/pull/19943",
+          "linkedIssue": 36656,
+          "title": "Fixed #36656 -- Avoided truncating async streaming responses in GZipMiddleware.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19899,
+          "pullRequestUrl": "https://github.com/django/django/pull/19899",
+          "linkedIssue": 36619,
+          "title": "Fixed #36619 -- Vendored eslint configuration dependencies.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19884,
+          "pullRequestUrl": "https://github.com/django/django/pull/19884",
+          "linkedIssue": 36611,
+          "title": "Fixed #36611, Refs #36580 -- Added system check for multicolumn ForeignObjects in Meta.indexes/constraints/unique_together.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19845,
+          "pullRequestUrl": "https://github.com/django/django/pull/19845",
+          "linkedIssue": 36480,
+          "title": "Fixed #36480 -- Made values() resolving error mention unselected aliases.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19840,
+          "pullRequestUrl": "https://github.com/django/django/pull/19840",
+          "linkedIssue": 36590,
+          "title": "Fixes #36590 - subclasses of BaseCache should use specialized implementation of methods for async version",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19833,
+          "pullRequestUrl": "https://github.com/django/django/pull/19833",
+          "linkedIssue": 36488,
+          "title": "Fixed #36488 -- Fixed merging of query strings in RedirectView.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19777,
+          "pullRequestUrl": "https://github.com/django/django/pull/19777",
+          "linkedIssue": 36620,
+          "title": "Fixed #36620 -- Added coverage workflow to comment coverage summary.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19693,
+          "pullRequestUrl": "https://github.com/django/django/pull/19693",
+          "linkedIssue": 36535,
+          "title": "Fixed #36535 -- Ensured compatibility with docutils 0.19 through 0.22.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19643,
+          "pullRequestUrl": "https://github.com/django/django/pull/19643",
+          "linkedIssue": 36410,
+          "title": "Fixed #36410 -- Added named template partials to DTL",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19555,
+          "pullRequestUrl": "https://github.com/django/django/pull/19555",
+          "linkedIssue": 36453,
+          "title": "Fixed #36453 -- Made When.condition resolve with for_save=False.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19537,
+          "pullRequestUrl": "https://github.com/django/django/pull/19537",
+          "linkedIssue": 36448,
+          "title": "Fixed #36448 -- Fixed GeoDjango spelling in test_commands.py docstrings.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19519,
+          "pullRequestUrl": "https://github.com/django/django/pull/19519",
+          "linkedIssue": 26434,
+          "title": "Fixed #26434 -- Removed faulty clearing of ordering field when missing from explicit grouping.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19507,
+          "pullRequestUrl": "https://github.com/django/django/pull/19507",
+          "linkedIssue": 36411,
+          "title": "Fixed #36411 -- Made HttpRequest.get_preferred_type() consider media type parameters.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19494,
+          "pullRequestUrl": "https://github.com/django/django/pull/19494",
+          "linkedIssue": 36404,
+          "title": "Fixed #36404 -- Fixed Aggregate.filter using OuterRef.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19472,
+          "pullRequestUrl": "https://github.com/django/django/pull/19472",
+          "linkedIssue": 36388,
+          "title": "Fixed #36388 -- Made QuerySet.union() return self when called with no arguments.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19459,
+          "pullRequestUrl": "https://github.com/django/django/pull/19459",
+          "linkedIssue": 36210,
+          "title": "Fixed #36210 -- Allowed Subquery usage in further lookups against composite pks.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19423,
+          "pullRequestUrl": "https://github.com/django/django/pull/19423",
+          "linkedIssue": 33174,
+          "title": "Fixed #33174 -- Fixed migrations crash for model inheriting from Generic[T].",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19408,
+          "pullRequestUrl": "https://github.com/django/django/pull/19408",
+          "linkedIssue": 36348,
+          "title": "Fixed #36348 -- Fixed handling multiple nested url()s in ManifestStaticFilesStorage.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19405,
+          "pullRequestUrl": "https://github.com/django/django/pull/19405",
+          "linkedIssue": 27489,
+          "title": "Fixed #27489 -- Renamed permissions upon model renaming.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19404,
+          "pullRequestUrl": "https://github.com/django/django/pull/19404",
+          "linkedIssue": 36341,
+          "title": "Fixed #36341 -- Fixed utils.text.wrap not preserving empty lines.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19361,
+          "pullRequestUrl": "https://github.com/django/django/pull/19361",
+          "linkedIssue": 35595,
+          "title": "Fixed #35595, #35962 -- Removed indexes and constraints before fields in migrations.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19328,
+          "pullRequestUrl": "https://github.com/django/django/pull/19328",
+          "linkedIssue": 36284,
+          "title": "Fixed #36284, Refs #31170 -- Ensured related lookup popups are closed properly.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19325,
+          "pullRequestUrl": "https://github.com/django/django/pull/19325",
+          "linkedIssue": 36215,
+          "title": "Fixes #36215, Refs #28909 -- Included unpacking generalization notes in coding style guide (PEP-448).",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19264,
+          "pullRequestUrl": "https://github.com/django/django/pull/19264",
+          "linkedIssue": 36252,
+          "title": "Fixed #36252 -- Fixed Duplicate Display of Imports in Django Shell",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19236,
+          "pullRequestUrl": "https://github.com/django/django/pull/19236",
+          "linkedIssue": 36222,
+          "title": "Fixed #36222 -- Fixed ExclusionConstraint validation crash on excluded fields in condition.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19199,
+          "pullRequestUrl": "https://github.com/django/django/pull/19199",
+          "linkedIssue": 35839,
+          "title": "Fixed #35839 -- Fixed crash when adding GeneratedField with db_comment on MySQL.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19078,
+          "pullRequestUrl": "https://github.com/django/django/pull/19078",
+          "linkedIssue": 36114,
+          "title": "Fixed #36114 -- Fixed link visibility when list_display_links field contains only whitespace.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19070,
+          "pullRequestUrl": "https://github.com/django/django/pull/19070",
+          "linkedIssue": 36083,
+          "title": "Fixed #36083 -- Ran system checks in ParallelTestSuite workers",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19067,
+          "pullRequestUrl": "https://github.com/django/django/pull/19067",
+          "linkedIssue": 36005,
+          "title": "Fixed #36005 -- Dropped support for Python 3.10 and 3.11.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19057,
+          "pullRequestUrl": "https://github.com/django/django/pull/19057",
+          "linkedIssue": 35972,
+          "title": "Fixed #35972 -- Fixed lookup crashes after subquery annotations.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19042,
+          "pullRequestUrl": "https://github.com/django/django/pull/19042",
+          "linkedIssue": 35677,
+          "title": "Fixed #35677 -- Avoided non-sticky filtering of prefetched many-to-many.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 19040,
+          "pullRequestUrl": "https://github.com/django/django/pull/19040",
+          "linkedIssue": 36093,
+          "title": "Fixed #36093 -- Addressed regression due to switching to pk_fields.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18966,
+          "pullRequestUrl": "https://github.com/django/django/pull/18966",
+          "linkedIssue": 35581,
+          "title": "Fixed #35581 -- Updated django.core.mail to Python's modern email API.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18964,
+          "pullRequestUrl": "https://github.com/django/django/pull/18964",
+          "linkedIssue": 36025,
+          "title": "Fixed #36025 -- Fixed re-aliasing of iterable (in/range) lookups rhs.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18917,
+          "pullRequestUrl": "https://github.com/django/django/pull/18917",
+          "linkedIssue": 35996,
+          "title": "Fixed #35996 -- Fixed exception related to missing chunk_size when serializing a many-to-many field that had a prefetch.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18860,
+          "pullRequestUrl": "https://github.com/django/django/pull/18860",
+          "linkedIssue": 35950,
+          "title": "Fixed #35950 -- Restored refreshing of relations when fields deferred.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18845,
+          "pullRequestUrl": "https://github.com/django/django/pull/18845",
+          "linkedIssue": 35842,
+          "title": "Refs #35842 -- Fixed handling of quotes in JSONField key lookups on Oracle.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18831,
+          "pullRequestUrl": "https://github.com/django/django/pull/18831",
+          "linkedIssue": 35921,
+          "title": "Fixed #35921 -- Fixed failure when running tests in parallel on postgres.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18747,
+          "pullRequestUrl": "https://github.com/django/django/pull/18747",
+          "linkedIssue": 35867,
+          "title": "Fixed #35867 -- Allowed links in admindocs view details summary.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18685,
+          "pullRequestUrl": "https://github.com/django/django/pull/18685",
+          "linkedIssue": 35844,
+          "title": "Refs #35844 -- Fixed tests for test --parallel option on Python 3.14+.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18684,
+          "pullRequestUrl": "https://github.com/django/django/pull/18684",
+          "linkedIssue": 35845,
+          "title": "Fixed #35845 -- Updated DomainNameValidator to require entire string to be a valid domain name.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18680,
+          "pullRequestUrl": "https://github.com/django/django/pull/18680",
+          "linkedIssue": 35844,
+          "title": "Refs #35844 -- Used asgiref.sync.iscoroutinefunction() instead of deprecated asyncio.iscoroutinefunction().",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18634,
+          "pullRequestUrl": "https://github.com/django/django/pull/18634",
+          "linkedIssue": 35799,
+          "title": "Fixed #35799 -- Fixed positioning of icon in RTL",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18593,
+          "pullRequestUrl": "https://github.com/django/django/pull/18593",
+          "linkedIssue": 35180,
+          "title": "Fixed #35180 -- Recreated PostgreSQL _like indexes when changing between TextField and CharField field types.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18577,
+          "pullRequestUrl": "https://github.com/django/django/pull/18577",
+          "linkedIssue": 35754,
+          "title": "Fixed #35754 -- Mapped full-width characters in latex to half-width.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18572,
+          "pullRequestUrl": "https://github.com/django/django/pull/18572",
+          "linkedIssue": 373,
+          "title": "Refs #373 -- Added support for using tuple lookups in filters.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18552,
+          "pullRequestUrl": "https://github.com/django/django/pull/18552",
+          "linkedIssue": 35742,
+          "title": "Fixed #35742 -- Removed hardcoded \"username\" references in admin templates.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18505,
+          "pullRequestUrl": "https://github.com/django/django/pull/18505",
+          "linkedIssue": 35703,
+          "title": "Fixed #35703 -- Returned default url conf when running under prefix.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18464,
+          "pullRequestUrl": "https://github.com/django/django/pull/18464",
+          "linkedIssue": 35666,
+          "title": "Fixed #35666 -- Documented stacklevel testing and adjusted test suite accordingly.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18463,
+          "pullRequestUrl": "https://github.com/django/django/pull/18463",
+          "linkedIssue": 34609,
+          "title": "Refs #34609 -- Fixed stack level of format_html() warning.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18440,
+          "pullRequestUrl": "https://github.com/django/django/pull/18440",
+          "linkedIssue": 35655,
+          "title": "Fixed #35655 -- Reverted \"Fixed #35295 -- Used INSERT with multiple rows on Oracle 23c.\"",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18424,
+          "pullRequestUrl": "https://github.com/django/django/pull/18424",
+          "linkedIssue": 35440,
+          "title": "Fixed #35440 -- Simplified parse_header_parameters by leveraging stdlid's Message.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18403,
+          "pullRequestUrl": "https://github.com/django/django/pull/18403",
+          "linkedIssue": 35627,
+          "title": "Fixed #35627 -- Raised a LookupError rather than an unhandled ValueError in get_supported_language_variant().",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18399,
+          "pullRequestUrl": "https://github.com/django/django/pull/18399",
+          "linkedIssue": 35622,
+          "title": "Fixed #35622 -- Made unittest ignore Django asserts in tracebacks.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18356,
+          "pullRequestUrl": "https://github.com/django/django/pull/18356",
+          "linkedIssue": 35575,
+          "title": "Fixed #35575 -- Added support for constraint validation on GeneratedFields",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 18344,
+          "pullRequestUrl": "https://github.com/django/django/pull/18344",
+          "linkedIssue": 35489,
+          "title": "Fixed #35489 -- Fixed vertical alignment of raw_id_fields widget.",
+          "status": "unreviewed"
+        }
+      ]
+    },
+    {
+      "repositoryId": "microsoft/TypeScript",
+      "targetAccepted": 40,
+      "currentlyAccepted": 9,
+      "needed": 31,
+      "candidatePool": [
+        {
+          "pullRequest": 62876,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62876",
+          "linkedIssue": 62211,
+          "title": "Deprecate `module` syntax",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62751,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62751",
+          "linkedIssue": 55588,
+          "title": "Move unreachable checks to checker",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62669,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62669",
+          "linkedIssue": 62199,
+          "title": "Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62659,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62659",
+          "linkedIssue": 62657,
+          "title": "Fixed a crash when parsing invalid decorator on await expression",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62656,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62656",
+          "linkedIssue": 61223,
+          "title": "Fix TS2783 false positive for union types in object spread expressions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62620,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62620",
+          "linkedIssue": 62609,
+          "title": "Handle more child types when generating navigation tree items for `export default`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62604,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62604",
+          "linkedIssue": 62606,
+          "title": "Propagate variance reliability",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62593,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62593",
+          "linkedIssue": 62590,
+          "title": "Allow line break before import attributes `with` keyword",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62557,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62557",
+          "linkedIssue": 60397,
+          "title": "Update error for allowImportingTsExtensions to mention rewriteRelativeImportExtensions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62516,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62516",
+          "linkedIssue": 62512,
+          "title": "Fix: Make discriminant property selection order-independent in unions (#62512)",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62509,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62509",
+          "linkedIssue": 62207,
+          "title": "Deprecate baseUrl",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62483,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62483",
+          "linkedIssue": 62439,
+          "title": "Disable conditional exports fallbacks on `null` values",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62477,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62477",
+          "linkedIssue": 62197,
+          "title": "Add --ignoreConfig and dont allow specifying files on commandline without it if there is config file present",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62465,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62465",
+          "linkedIssue": 62464,
+          "title": "fix(error message): fixes issue in  error message TS1355",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62443,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62443",
+          "linkedIssue": 62421,
+          "title": "Enable `noUncheckedSideEffectImports` by default",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62438,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62438",
+          "linkedIssue": 62434,
+          "title": "Fix incorrectly ignored dts file from project reference for resolution",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62435,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62435",
+          "linkedIssue": 62209,
+          "title": "Remove no-default-lib",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62391,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62391",
+          "linkedIssue": 62214,
+          "title": "Switch `libReplacement` to `false` by default and fix condition logic",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62351,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62351",
+          "linkedIssue": 62343,
+          "title": "Add missing Float16Array constructors",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62338,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62338",
+          "linkedIssue": 62200,
+          "title": "Deprecate `--moduleResolution node10`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62311,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62311",
+          "linkedIssue": 62307,
+          "title": "Fix parenthesizer rules for manually constructed binary expressions with `??` and `||`/`&&` mix",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62243,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62243",
+          "linkedIssue": 62204,
+          "title": "Improve inference by not considering thisless functions to be context-sensitive",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62170,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62170",
+          "linkedIssue": 61751,
+          "title": "Enhance type argument completions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62155,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62155",
+          "linkedIssue": 62153,
+          "title": "Fix private identifier fields generating errors in class expression declarations",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62111,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62111",
+          "linkedIssue": 60959,
+          "title": "Move Iterable/AsyncIterable into main DOM/WebWorker libs",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62091,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62091",
+          "linkedIssue": 62032,
+          "title": "Don't use `noErrorTruncation` when printing types with `maximumLength` set",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 62086,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/62086",
+          "linkedIssue": 62083,
+          "title": "Restore AbortSignal.abort",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61973,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61973",
+          "linkedIssue": 61965,
+          "title": "Fixed crash on `ConstructSignature` when computing interactive inlay hints",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61945,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61945",
+          "linkedIssue": 28364,
+          "title": "Fix Symbol completion priority and cursor positioning",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61935,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61935",
+          "linkedIssue": 60438,
+          "title": "Fix BigInt literal error in ambient contexts when targeting < ES2020",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61927,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61927",
+          "linkedIssue": 61181,
+          "title": "Allow `accessor` properties in ambient contexts when targeting ES5",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61920,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61920",
+          "linkedIssue": 61916,
+          "title": "Allow trailing commas after import attributes in `ImportType`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61900,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61900",
+          "linkedIssue": 61899,
+          "title": "Create fourslash syntax, compiler testcase, and build instructions summary",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61857,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61857",
+          "linkedIssue": 61845,
+          "title": "Fixed crash on `ComputedPropertyName` when computing interactive inlay hints",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61843,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61843",
+          "linkedIssue": 61844,
+          "title": "fix link to \"Help Wanted\" issues",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61825,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61825",
+          "linkedIssue": 61820,
+          "title": "Fixed JSDoc display on `JsxNamespacedName` attributes",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61824,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61824",
+          "linkedIssue": 61734,
+          "title": "Issue \"'{0}' declarations can only be declared inside a block.\" for block-scoped variables in presence of parse errors",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61822,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61822",
+          "linkedIssue": 61821,
+          "title": "optimization, reduce memory usage",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61813,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61813",
+          "linkedIssue": 58420,
+          "title": "tsc --init update",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61788,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61788",
+          "linkedIssue": 61784,
+          "title": "Fixed control flow Analysis of aliased discriminants with parenthesized initializers",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61777,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61777",
+          "linkedIssue": 61772,
+          "title": "fix(checker): report error when using bigint as enum key",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61764,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61764",
+          "linkedIssue": 61747,
+          "title": "fix(61747): for (using of = is incorrectly parsed",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61696,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61696",
+          "linkedIssue": 61695,
+          "title": "Add type definitions for `Uint8Array` to/from base64 methods",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61683,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61683",
+          "linkedIssue": 61547,
+          "title": "Don't compare \"missing\" to `undefined` in `compareProperties` under `exactOptionalPropertyTypes`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61668,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61668",
+          "linkedIssue": 59937,
+          "title": "Fix type variable leaks and cache inconsistencies",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61662,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61662",
+          "linkedIssue": 35601,
+          "title": "Add configurable maximum hover length",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61655,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61655",
+          "linkedIssue": 61654,
+          "title": "Fix unwanted constant comparisons potentially causing bugs",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61647,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61647",
+          "linkedIssue": 61480,
+          "title": "DOM Update 2025-05-02",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61586,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61586",
+          "linkedIssue": 61585,
+          "title": "Deemphasize old JSX transform",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61582,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61582",
+          "linkedIssue": 58195,
+          "title": "Fix crash when serializing default export in error",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61562,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61562",
+          "linkedIssue": 61517,
+          "title": "Add the `.getNonPrimitiveType()` method to the `TypeChecker`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61492,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61492",
+          "linkedIssue": 59029,
+          "title": "Expandable hover",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61481,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61481",
+          "linkedIssue": 61466,
+          "title": "Fix `lib.includes('dom')` check in `containerSeemsToBeEmptyDomElement`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61392,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61392",
+          "linkedIssue": 61338,
+          "title": "Fix serialization of accessor types in declaration files.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61383,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61383",
+          "linkedIssue": 61382,
+          "title": "Improve references search and quick info on properties with type errors within nullable contextual types",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61372,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61372",
+          "linkedIssue": 61369,
+          "title": "Fixed nullish coalesce operator's precedence",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61352,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61352",
+          "linkedIssue": 61351,
+          "title": "Fixed crash in `hasVisibleDeclarations` related to binding elements",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61342,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61342",
+          "linkedIssue": 61334,
+          "title": "Rename type parameters when they are shadowed.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61317,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61317",
+          "linkedIssue": 61318,
+          "title": "Handle `silentNeverType` in iteration-related functions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61263,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61263",
+          "linkedIssue": 61258,
+          "title": "fix(61258): Renaming namespace with const enum doesn't update enum references",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 61261,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/61261",
+          "linkedIssue": 61239,
+          "title": "Fixed accidentally reused comments between files in the emitter",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 47356,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/47356",
+          "linkedIssue": 7411,
+          "title": "feat(7411): JSX namespaced attribute syntax not supported",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 47924,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/47924",
+          "linkedIssue": 39170,
+          "title": "Emit source positions for open/close braces",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 48030,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/48030",
+          "linkedIssue": 32848,
+          "title": "Use related spans for \"implement abstract class\" errors",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 49049,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/49049",
+          "linkedIssue": 49048,
+          "title": "Fixed an issue with quickInfo crashing on a function property returned from generic function",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 49226,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/49226",
+          "linkedIssue": 48524,
+          "title": "Fixed issues with inference from nested tuple types of the same shape",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 49627,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/49627",
+          "linkedIssue": 48783,
+          "title": "Ensure parameters are in scope when converting parameter/return types to type nodes",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 49636,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/49636",
+          "linkedIssue": 48829,
+          "title": "Add Array.prototype.findLast() and Array.prototype.findLastIndex()",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 49827,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/49827",
+          "linkedIssue": 45479,
+          "title": "More did-you-mean errors on classes in plain JS",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 49848,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/49848",
+          "linkedIssue": 25758,
+          "title": "feat(25758): Computed properties no throws if there is a duplicate",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50092,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50092",
+          "linkedIssue": 19577,
+          "title": "fix(19577): fix regression with fully inferred types and non-null assertions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50097,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50097",
+          "linkedIssue": 49784,
+          "title": "🐛 Fix not emitting comments between sibling fields of object literals ",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50431,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50431",
+          "linkedIssue": 48292,
+          "title": "Fix compound assignments for properties with different getter & setter types",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50487,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50487",
+          "linkedIssue": 49944,
+          "title": "Avoid bogus circularity error on context sensitive expando assingment",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50756,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50756",
+          "linkedIssue": 37598,
+          "title": "Improve uncalled function check related to parenthesized and binary expressions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50816,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50816",
+          "linkedIssue": 50791,
+          "title": "Fixed false positive errors in empty optional binding patterns in declaration signatures",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50820,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50820",
+          "linkedIssue": 48885,
+          "title": "Implement the Stage 3 Decorators Proposal",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50903,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50903",
+          "linkedIssue": 50687,
+          "title": "Make function properties context-sensitive based on their return statements",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 50942,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/50942",
+          "linkedIssue": 48702,
+          "title": "feat(48702): Emit for dynamic import (import()) when target >= ES2020 and module == None",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51126,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51126",
+          "linkedIssue": 51115,
+          "title": "Fixed false positive circular errors for await expressions with simple non-generic calls in CFA loops",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51136,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51136",
+          "linkedIssue": 51099,
+          "title": "Ensure moduleType is structured during cloneTypeAsModuleType",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51157,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51157",
+          "linkedIssue": 51138,
+          "title": "Infer fixed-size tuples from infer type parameters with extends clauses at variadic positions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51196,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51196",
+          "linkedIssue": 51187,
+          "title": "Filter possible contextual return types from unions for async functions and generators",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51214,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51214",
+          "linkedIssue": 51202,
+          "title": "fix(51202): Circular instantiation expression crashing IDEs",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51216,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51216",
+          "linkedIssue": 51198,
+          "title": "fix(51198): The 'this' context of type 'T' is not assignable to method's 'this' of type 'this'",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51228,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51228",
+          "linkedIssue": 51069,
+          "title": "Better compatibility error for indexed access type",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51236,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51236",
+          "linkedIssue": 51225,
+          "title": "fix(51225): Go-to-definition on case or default should jump to the containing switch statement if available.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51319,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51319",
+          "linkedIssue": 51221,
+          "title": "Handle jsx runtime implicit synthetic import in find all references",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51367,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51367",
+          "linkedIssue": 50333,
+          "title": "feat(lib/esnext): add change array by copy types",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51430,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51430",
+          "linkedIssue": 50644,
+          "title": "convert JSDoc typedef to type, issue 50644",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51457,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51457",
+          "linkedIssue": 51429,
+          "title": "More explicit error message for function signature length mismatches",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51524,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51524",
+          "linkedIssue": 51521,
+          "title": "fix(51521): Using a of property declared after an initializing constructor triggers an assertion failure in JS",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51580,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51580",
+          "linkedIssue": 51577,
+          "title": "Fixed an issue with spreading a spreadable generic expression into generic JSX",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51715,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51715",
+          "linkedIssue": 37708,
+          "title": "Updates to type reference directive resolution and module resolution when failed",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51721,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51721",
+          "linkedIssue": 51548,
+          "title": "When caching type references cache the tracked symbols so they can be emitted in the d.ts file",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51753,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51753",
+          "linkedIssue": 51086,
+          "title": "feat(51086): satisfies support in JSDoc",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51771,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51771",
+          "linkedIssue": 51698,
+          "title": "Fix inferences between alias type arguments and defaulted alias type arguments",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51837,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51837",
+          "linkedIssue": 12700,
+          "title": "fix(396): (Dis)allow Octal and Bad Escape Sequences in String and (Tagged) Template Literals",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51855,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51855",
+          "linkedIssue": 51845,
+          "title": "Basic JSX attribute snippet fixes",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51884,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51884",
+          "linkedIssue": 51873,
+          "title": "Consider all union types matching discriminator for excess property checks",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51914,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51914",
+          "linkedIssue": 48313,
+          "title": "Call `getTypeOfSymbol` in `getNarrowedTypeOfSymbol` to avoid running into circularities when computing types",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51915,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51915",
+          "linkedIssue": 51906,
+          "title": "Resolve contextual computed properties with non-bindable names",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 51981,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/51981",
+          "linkedIssue": 51828,
+          "title": "Fix(51828): `extends` field in `tsconfig.json` does nothing with empty string",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52006,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52006",
+          "linkedIssue": 51963,
+          "title": "fix(51963): Invalid property read for find-all-references when exporting non-existent binding",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52016,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52016",
+          "linkedIssue": 51953,
+          "title": "Replace `missingType` with `undefinedType` in the `IndexedAccessTypeNode`'s type",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52031,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52031",
+          "linkedIssue": 51980,
+          "title": "Don't widen when type parameter occurs at top level in type predicate",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52032,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52032",
+          "linkedIssue": 50939,
+          "title": "Fixed crash when reporting infer extends on invalid name with declaration",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52048,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52048",
+          "linkedIssue": 52036,
+          "title": "Improve comparison operators type checking to disallow unions containing numbers as an operand",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52059,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52059",
+          "linkedIssue": 51941,
+          "title": "Narrow references within optional chains in for-in loops",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52085,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52085",
+          "linkedIssue": 44227,
+          "title": "Add RegExp indices and hasIndices",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52089,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52089",
+          "linkedIssue": 51622,
+          "title": "Reuse existing module specifiers in js declaration emit",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52090,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52090",
+          "linkedIssue": 51617,
+          "title": "Use eslint-plugin-simple-import-sort",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52091,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52091",
+          "linkedIssue": 52068,
+          "title": "Defer conditional types with multi-element tuple types in `extends` clause",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52095,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52095",
+          "linkedIssue": 48812,
+          "title": "Fixed an issue with contextual type for intersection properties (take 2)",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52103,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52103",
+          "linkedIssue": 52043,
+          "title": "Add the OpenSSF Scorecard GitHub Action",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52105,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52105",
+          "linkedIssue": 48796,
+          "title": "Improve JSX invalid children type error",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52106,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52106",
+          "linkedIssue": 52096,
+          "title": "Mark indexed access object type comparisons as unreliable",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52109,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52109",
+          "linkedIssue": 51321,
+          "title": "Issue error on export= in esm mode declaration file",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52123,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52123",
+          "linkedIssue": 52111,
+          "title": "Improve logic that chooses co- vs. contra-variant inferences",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52129,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52129",
+          "linkedIssue": 52007,
+          "title": "Propagate constness of type parameters in variadic tuples",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52132,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52132",
+          "linkedIssue": 51887,
+          "title": "Fix private name generation and missing emit for auto-accessors",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52135,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52135",
+          "linkedIssue": 52097,
+          "title": "feat(52097): \"Add missing properties\" quick fix for calculated string values ...",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52136,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52136",
+          "linkedIssue": 52118,
+          "title": "fix narrowTypeByDiscriminant for non null expression access",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52138,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52138",
+          "linkedIssue": 52061,
+          "title": "fix(52061): Constructor parameters exported as type included in emitted metadata",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52140,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52140",
+          "linkedIssue": 41897,
+          "title": "Fixed type lookup on non-exported value symbol when it has an export symbol",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52146,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52146",
+          "linkedIssue": 44879,
+          "title": "Fixed an issue with an incorrect resolved signature being cached/returned sometimes for signatures depending on the contextual type/outer inference",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52176,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52176",
+          "linkedIssue": 52174,
+          "title": "Add linkcode and linkplain to jsdoc tags",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52180,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52180",
+          "linkedIssue": 52179,
+          "title": "Tweak co/contra inference logic from #52123 ",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52184,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52184",
+          "linkedIssue": 52177,
+          "title": "fix(52177): Wrong space in type assertions when using array",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52189,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52189",
+          "linkedIssue": 52182,
+          "title": "Suppress resolvedUsingTsExtension during loadModuleFromDirectory",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52196,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52196",
+          "linkedIssue": 51808,
+          "title": "fix property completion in unions of object types and template literal types",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52203,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52203",
+          "linkedIssue": 51479,
+          "title": "Add `verbatimModuleSyntax`, deprecate `importsNotUsedAsValues` and `preserveValueImports`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52209,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52209",
+          "linkedIssue": 52197,
+          "title": "fix type checking of variables named \"exports\"",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52213,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52213",
+          "linkedIssue": 52212,
+          "title": "fix(52212): No member completions, and irrelevant value completions, when class property initializer has no semicolon",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52215,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52215",
+          "linkedIssue": 52152,
+          "title": "Instantiate rest type as needed in `getNarrowedTypeOfSymbol`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52217,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52217",
+          "linkedIssue": 37238,
+          "title": "Support `export type *`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52224,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52224",
+          "linkedIssue": 52198,
+          "title": "Only used cached `undefined` contextual type for requests with no flags",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52231,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52231",
+          "linkedIssue": 52211,
+          "title": "Fix `replacementSpan` for class member snippet completion entries",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52240,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52240",
+          "linkedIssue": 47383,
+          "title": "Make catch clause checking consistent with variable declarations",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52242,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52242",
+          "linkedIssue": 52220,
+          "title": "Add 2023 array methods to target features",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52246,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52246",
+          "linkedIssue": 52233,
+          "title": "fix(52233): Ambient modules declared with patterns are offered in path completions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52276,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52276",
+          "linkedIssue": 52274,
+          "title": "fix(52274): Suggestion code action adds another JSDoc",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52278,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52278",
+          "linkedIssue": 52277,
+          "title": "fix(52277): switch/case completions fail when has a negative literal type",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52282,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52282",
+          "linkedIssue": 50916,
+          "title": "Improvements to `strictSubtypeRelation` and `getNarrowedType`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52287,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52287",
+          "linkedIssue": 52270,
+          "title": "fix(52270): update optionalReplacementSpan in continuePreviousIncompleteResponse",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52318,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52318",
+          "linkedIssue": 52302,
+          "title": "Fixed binding element types coming from the out of tuple bounds under `noUncheckedIndexedAccess`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 52328,
+          "pullRequestUrl": "https://github.com/microsoft/TypeScript/pull/52328",
+          "linkedIssue": 51361,
+          "title": "Update DOM and baselines",
+          "status": "unreviewed"
+        }
+      ]
+    },
+    {
+      "repositoryId": "microsoft/vscode",
+      "targetAccepted": 20,
+      "currentlyAccepted": 0,
+      "needed": 20,
+      "candidatePool": [
+        {
+          "pullRequest": 285516,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285516",
+          "linkedIssue": 285505,
+          "title": "Use remote agent service to pull user home",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285416,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285416",
+          "linkedIssue": 280080,
+          "title": "Enable `togglePeekWidgetFocus` command for quick diff pick view",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285351,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285351",
+          "linkedIssue": 272056,
+          "title": "fix #272056",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285312,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285312",
+          "linkedIssue": 285138,
+          "title": "xterm@6.1.0-beta.56 ",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285289,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285289",
+          "linkedIssue": 278700,
+          "title": "Have ENTER fire accept in QuickTree",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285288,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285288",
+          "linkedIssue": 280793,
+          "title": "Make inactive styling the same as active in quicktree",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285214,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285214",
+          "linkedIssue": 285213,
+          "title": "Enable \"secondary\" buttons in all QuickInput locations except Input",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285099,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285099",
+          "linkedIssue": 281766,
+          "title": "Fix context handling in ChatWidget while re-editing",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285039,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285039",
+          "linkedIssue": 285031,
+          "title": "Fix performance problems with terminal tabs",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285035,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285035",
+          "linkedIssue": 285032,
+          "title": "Remove forced layout from terminal command guide",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 285033,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285033",
+          "linkedIssue": 284592,
+          "title": "xterm@6.1.0-beta.22",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284993,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284993",
+          "linkedIssue": 284905,
+          "title": "Add completions for npm why|explain",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284961,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284961",
+          "linkedIssue": 284848,
+          "title": "making sure the then on triggerPaste is not evaluated twice",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284927,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284927",
+          "linkedIssue": 284917,
+          "title": "Support `# pragma` folding markers in C",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284889,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284889",
+          "linkedIssue": 265748,
+          "title": "Enable skip confirmation on permanent file deletion",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284748,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284748",
+          "linkedIssue": 284759,
+          "title": "SCM - fix issue with repository selection",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284711,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284711",
+          "linkedIssue": 118932,
+          "title": "Add indentation rules for Visual Basic",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284673,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284673",
+          "linkedIssue": 43928,
+          "title": "Dismiss selected file match highlight on cursor movement",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284668,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284668",
+          "linkedIssue": 280540,
+          "title": "Treat column number in Go To Line as visible column",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284597,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284597",
+          "linkedIssue": 284593,
+          "title": "Add --package-lock-only to npm i flags",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284554,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284554",
+          "linkedIssue": 284524,
+          "title": "Fix Notebook Cell Editor height calc when pasting and scrolling",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284505,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284505",
+          "linkedIssue": 282937,
+          "title": "don't suggest IW as context",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284445,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284445",
+          "linkedIssue": 284336,
+          "title": "Restrict terminal.integrated.windowsUseConptyDll",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284438,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284438",
+          "linkedIssue": 278618,
+          "title": "Allow redirects to trusted domains",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284434,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284434",
+          "linkedIssue": 15247,
+          "title": "Fix notebook background colors",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284371,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284371",
+          "linkedIssue": 249040,
+          "title": "Adjust heuristic for preferring 2 over 4 for indentation size",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284341,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284341",
+          "linkedIssue": 282676,
+          "title": "Fix Notebook cell layout issue when navigating cells",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284311,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284311",
+          "linkedIssue": 284308,
+          "title": "update accessible view content as response streams in, rm redundant whitespace",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284286,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284286",
+          "linkedIssue": 190761,
+          "title": "fix #190761",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284283,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284283",
+          "linkedIssue": 284198,
+          "title": "fix terminal disposable leak",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284282,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284282",
+          "linkedIssue": 166627,
+          "title": "fix #166627",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284260,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284260",
+          "linkedIssue": 268281,
+          "title": "Git - add option to ignore whitespace for the blame information",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284253,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284253",
+          "linkedIssue": 284000,
+          "title": "Fix Nobteoook cell selectiong + scroll",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284248,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284248",
+          "linkedIssue": 282209,
+          "title": "Add default auto approve rule for sed",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284244,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284244",
+          "linkedIssue": 284046,
+          "title": "Terminal: show dimensions overlay while resizing",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284226,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284226",
+          "linkedIssue": 251321,
+          "title": "Git - expose `createStash()` in the git extension API",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284224,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284224",
+          "linkedIssue": 284223,
+          "title": "Git - add worktrees node to the Repositories view",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284149,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284149",
+          "linkedIssue": 258694,
+          "title": "relayout suggest widget on resize of terminal",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284147,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284147",
+          "linkedIssue": 241989,
+          "title": "ensure terminal suggest works after moving the terminal to a new view",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284134,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284134",
+          "linkedIssue": 275562,
+          "title": "make `focusTerminal` async for consistency",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284132,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284132",
+          "linkedIssue": 275345,
+          "title": "fix bug with inserting code block into terminal",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284127,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284127",
+          "linkedIssue": 283902,
+          "title": "consider server commands finished vs requesting user input when appropriate",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284078,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284078",
+          "linkedIssue": 283296,
+          "title": "Fix error in releasenotes editor",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284037,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284037",
+          "linkedIssue": 151052,
+          "title": "Git - update branch protection dialog message",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 284031,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284031",
+          "linkedIssue": 85775,
+          "title": "Add editorBracketMatch-foreground color setting",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283989,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283989",
+          "linkedIssue": 283988,
+          "title": "Chat - fix hovering on the working set item when there are no actions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283942,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283942",
+          "linkedIssue": 281595,
+          "title": "cancel progress sound for backgrounded sessions",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283936,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283936",
+          "linkedIssue": 273661,
+          "title": "debug: fix webview debugging breaking with >256KB messages",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283934,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283934",
+          "linkedIssue": 284110,
+          "title": "Agent Skills cleanup",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283925,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283925",
+          "linkedIssue": 254921,
+          "title": "mcp: fix flakes in McpStdioStateHandler tests",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283922,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283922",
+          "linkedIssue": 247610,
+          "title": "remote: fix connection listener leak",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283919,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283919",
+          "linkedIssue": 283760,
+          "title": "Git - remove the remaining instances of `config.multiDiffEditor.experimental.enabled`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283917,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283917",
+          "linkedIssue": 240376,
+          "title": "debug: fix layout shift when hovering",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283916,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283916",
+          "linkedIssue": 259879,
+          "title": "Add some padding to align checkboxes when tree items have no children",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283906,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283906",
+          "linkedIssue": 281012,
+          "title": "refactor, consolidate terminal command mirrors",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283897,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283897",
+          "linkedIssue": 280723,
+          "title": "For post confirm actions do not include url query strings.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283896,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283896",
+          "linkedIssue": 281555,
+          "title": "don't play `Clear` signal when a new chat is created",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283889,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283889",
+          "linkedIssue": 281598,
+          "title": "exclude mcp output from accessible view",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283885,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283885",
+          "linkedIssue": 264202,
+          "title": "Update msCompile matcher to handle more cases",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283877,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283877",
+          "linkedIssue": 59826,
+          "title": "Finalize quickPickItemResource API proposal",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283874,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283874",
+          "linkedIssue": 78335,
+          "title": "Finalize quickPickPrompt API",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283872,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283872",
+          "linkedIssue": 274750,
+          "title": "fix task disposable leak",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283868,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283868",
+          "linkedIssue": 283287,
+          "title": "wait for xterm element vs assuming it's defined",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283847,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283847",
+          "linkedIssue": 207014,
+          "title": "fixes https://github.com/microsoft/vscode/issues/207014",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283835,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283835",
+          "linkedIssue": 282709,
+          "title": "Fixes https://github.com/microsoft/vscode/issues/282709",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283827,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283827",
+          "linkedIssue": 281878,
+          "title": "Automatic instructions only included if file has frontmatter",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283819,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283819",
+          "linkedIssue": 273827,
+          "title": "Screencheese issue in empty chat welcome view (fix #273827)",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283818,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283818",
+          "linkedIssue": 283547,
+          "title": "fix #283547",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283780,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283780",
+          "linkedIssue": 283700,
+          "title": "Git - fix create worktree regression",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283757,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283757",
+          "linkedIssue": 171951,
+          "title": "Handle edge case when scrolling is complete",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 283750,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283750",
+          "linkedIssue": 282310,
+          "title": "fix(runSubagent): collect computed attachments",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 65264,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/65264",
+          "linkedIssue": 44237,
+          "title": "Fixes #44237: Add column number in tasks",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 127320,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/127320",
+          "linkedIssue": 116690,
+          "title": "ci: switch to core20 for snap",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 136633,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/136633",
+          "linkedIssue": 187365,
+          "title": "Middle-click paste in terminal",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 143054,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/143054",
+          "linkedIssue": 142135,
+          "title": "Run DebugConfigurationProviders for the result type of another DebugConfigurationProvider",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 145788,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/145788",
+          "linkedIssue": 145458,
+          "title": "145458 List: Support scroll by page",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 149952,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/149952",
+          "linkedIssue": 149951,
+          "title": "Add ability to reverse the sort order in explorer",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 157318,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/157318",
+          "linkedIssue": 157312,
+          "title": "Add support for a border between sidebar and panel titles and views",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 160270,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/160270",
+          "linkedIssue": 49,
+          "title": "Add Remove Brackets Command",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 166318,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/166318",
+          "linkedIssue": 82415,
+          "title": "Escape special glob chars when using \"Find in Folder\"",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 167568,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/167568",
+          "linkedIssue": 54731,
+          "title": "Add a setting to configure centered layout fixed width",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 167662,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/167662",
+          "linkedIssue": 164050,
+          "title": "Fix arrow nav on dropdown action buttons focusing hidden dropdown",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 167827,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/167827",
+          "linkedIssue": 167545,
+          "title": "🖊 Include branch name in commit button popup",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 168375,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/168375",
+          "linkedIssue": 167055,
+          "title": "Include server-main.js in main TS project",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 168921,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/168921",
+          "linkedIssue": 159684,
+          "title": "debug: allow setting breakpoints in plain .js files",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 169221,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/169221",
+          "linkedIssue": 169220,
+          "title": "Fixes `standaloneTheme.defines` Always return false. ",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 169885,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/169885",
+          "linkedIssue": 169422,
+          "title": "`FindTextInFiles` doesn't support comma-separated globs with {}",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170015,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170015",
+          "linkedIssue": 170014,
+          "title": "cli: enable code-tunnel systemd service to start when the machine booted",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170241,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170241",
+          "linkedIssue": 125387,
+          "title": "Support cmder profile detection",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170250,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170250",
+          "linkedIssue": 170242,
+          "title": "Add unit tests for preparePathForShell",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170305,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170305",
+          "linkedIssue": 6543,
+          "title": "server: fix cpu loop on SIGPIPE",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170339,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170339",
+          "linkedIssue": 166642,
+          "title": "Fix #166642: Make Run Tests and Debug Tests default profile in sync ",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170403,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170403",
+          "linkedIssue": 59952,
+          "title": "move watermark shortcuts closer to letterpress",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170562,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170562",
+          "linkedIssue": 169690,
+          "title": "more specific CSS rules for `codicon-symbol`",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170564,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170564",
+          "linkedIssue": 169271,
+          "title": "Resolve path before parsing URI",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170567,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170567",
+          "linkedIssue": 170559,
+          "title": "fixes #170559",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170574,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170574",
+          "linkedIssue": 170533,
+          "title": "fixes #170533",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170680,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170680",
+          "linkedIssue": 170478,
+          "title": "Try to fix tree error",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170689,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170689",
+          "linkedIssue": 148572,
+          "title": "Fix local terminal launching when back and frontend OS differs",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170691,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170691",
+          "linkedIssue": 142639,
+          "title": "Fix IME input in terminal find widget",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170696,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170696",
+          "linkedIssue": 170643,
+          "title": "Ctrl/cmd+shift+o to open detected link in the terminal",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170697,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170697",
+          "linkedIssue": 170463,
+          "title": "Return instead of throwing when the markers can't be found",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170698,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170698",
+          "linkedIssue": 4002,
+          "title": "Handle tree data provider error in getChildren",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170707,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170707",
+          "linkedIssue": 170581,
+          "title": "Fix terminal profile when falling back to default profile",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170718,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170718",
+          "linkedIssue": 170563,
+          "title": "Fix variable resolver on safe profile paths",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170720,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170720",
+          "linkedIssue": 169694,
+          "title": "Wait for shell type to be ready before preparing path for shell",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170722,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170722",
+          "linkedIssue": 170715,
+          "title": "Create a new terminal when running active in task terminals",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170730,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170730",
+          "linkedIssue": 168804,
+          "title": "Fix cwd unicode encoding in fish, bash and zsh si scripts",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170867,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170867",
+          "linkedIssue": 170723,
+          "title": "An extension has contributed more than the allowable number of actions to a comments menu",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170875,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170875",
+          "linkedIssue": 170076,
+          "title": "Fix error (telemetry) in searchview",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170887,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170887",
+          "linkedIssue": 170484,
+          "title": "Support pwsh preview error feedback providers",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170909,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170909",
+          "linkedIssue": 163513,
+          "title": "Kernel preloads are always loaded as ES modules",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170914,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170914",
+          "linkedIssue": 170913,
+          "title": "testing: fix wrapped line decoration not being clickable",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170944,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170944",
+          "linkedIssue": 6445,
+          "title": "Fix forwarded ports on all interfaces for workspace setting",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170978,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170978",
+          "linkedIssue": 170976,
+          "title": "Add default keybindings for shell integration",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 170983,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170983",
+          "linkedIssue": 170982,
+          "title": "Fix capitalization of two Auto Update commands (#170982)",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171008,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171008",
+          "linkedIssue": 170620,
+          "title": "Fix casing in description",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171009,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171009",
+          "linkedIssue": 109064,
+          "title": "Update the setting immediately if reset",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171014,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171014",
+          "linkedIssue": 168955,
+          "title": "Make action list scrollable",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171058,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171058",
+          "linkedIssue": 171015,
+          "title": "Git - Fix ref sorting regression",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171066,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171066",
+          "linkedIssue": 99878,
+          "title": "Apply env var collection path prefixes in shell integration scripts when mac+login shell",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171068,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171068",
+          "linkedIssue": 127473,
+          "title": "Finalize comment resolved/unresolved API",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171084,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171084",
+          "linkedIssue": 171083,
+          "title": "Support running vscode-userdata schema",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171090,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171090",
+          "linkedIssue": 171085,
+          "title": "fix slow command palette",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171098,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171098",
+          "linkedIssue": 171091,
+          "title": "Remove `typescript.suggest.includeCompletionsWithSnippetText` setting",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171118,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171118",
+          "linkedIssue": 169853,
+          "title": "add accessibility buffer",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171125,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171125",
+          "linkedIssue": 77,
+          "title": "Join with empty string to mirror what l10n-dev does",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171129,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171129",
+          "linkedIssue": 167528,
+          "title": "Persist log level on reload for extension logs",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171151,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171151",
+          "linkedIssue": 170422,
+          "title": "Git - Another attempt to fix an edge case for adding a safe directory",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171186,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171186",
+          "linkedIssue": 3412,
+          "title": "Add EMU to session telemetry",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171212,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171212",
+          "linkedIssue": 171200,
+          "title": "support reading the line content and audio cues in diff review mode",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171224,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171224",
+          "linkedIssue": 94817,
+          "title": "Add vscode.getEditorLayout command",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171237,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171237",
+          "linkedIssue": 171114,
+          "title": "Update SQL grammar",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171251,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171251",
+          "linkedIssue": 140708,
+          "title": "Fixes #140708 by introducing Ctrl+Right/Left keybindings to accept/undo parts of inline completions.",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171258,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171258",
+          "linkedIssue": 170580,
+          "title": "💬 Add PID and executable/arguments to terminal tab hover",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171278,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171278",
+          "linkedIssue": 571,
+          "title": "Confusion tweaks for the standalone CLI",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171293,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171293",
+          "linkedIssue": 169091,
+          "title": "Initial cut of seeded command palette",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171297,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171297",
+          "linkedIssue": 170984,
+          "title": "Lint redundant package.json activation events",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171449,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171449",
+          "linkedIssue": 169582,
+          "title": "Add watch without selection",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171489,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171489",
+          "linkedIssue": 170935,
+          "title": "retry terrapin 5 times",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171499,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171499",
+          "linkedIssue": 163418,
+          "title": "Fix policy value",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171500,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171500",
+          "linkedIssue": 171498,
+          "title": "Show env var info in single tab",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171540,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171540",
+          "linkedIssue": 169913,
+          "title": "fix url routing with windowId",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171555,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171555",
+          "linkedIssue": 12558,
+          "title": "div outputs scrollable, register scroll setting",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171636,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171636",
+          "linkedIssue": 171428,
+          "title": "Don't iterate over whole output when matching",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171637,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171637",
+          "linkedIssue": 167927,
+          "title": "Fixes #167927",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171639,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171639",
+          "linkedIssue": 171635,
+          "title": "Store exit code as first command in prompt",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171651,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171651",
+          "linkedIssue": 3426,
+          "title": "dep: bump the bumpalo 🦬",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171680,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171680",
+          "linkedIssue": 171674,
+          "title": "Wrong codicon rendered for codicon-bracket",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171685,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171685",
+          "linkedIssue": 167470,
+          "title": "Add keybindings to Settings editor indicators",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171718,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171718",
+          "linkedIssue": 171230,
+          "title": "Don't remove VSCODE_PORTABLE from process env",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171719,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171719",
+          "linkedIssue": 171652,
+          "title": "Support quote link formats when quotes aren't present",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171723,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171723",
+          "linkedIssue": 171722,
+          "title": "quick pick: missing background color for focused and selected items",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171736,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171736",
+          "linkedIssue": 171711,
+          "title": "Bug: Folded comments disappear after moving to a different tab",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171749,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171749",
+          "linkedIssue": 167338,
+          "title": "Git - fix edge case when the repository is at the root of a mapped drive",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171766,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171766",
+          "linkedIssue": 170440,
+          "title": "Set title on webviews",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171773,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171773",
+          "linkedIssue": 169914,
+          "title": "Don't delete a password if we can't decrypt it",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171797,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171797",
+          "linkedIssue": 171754,
+          "title": "updateOptions should only update overrideStyles when set",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171807,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171807",
+          "linkedIssue": 168858,
+          "title": "support Event.debounce with MicrotaskDelay, extract MicrotaskDelay into (new) symbols.ts, update bulk edit preview models only once per task",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171809,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171809",
+          "linkedIssue": 171754,
+          "title": "Settings should not show indent guides. Simple fix",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171815,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171815",
+          "linkedIssue": 99533,
+          "title": "handle failures when talking to update service",
+          "status": "unreviewed"
+        },
+        {
+          "pullRequest": 171825,
+          "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171825",
+          "linkedIssue": 171804,
+          "title": "Select dropdown has transparent background",
+          "status": "unreviewed"
+        }
+      ]
+    }
+  ]
+}
+

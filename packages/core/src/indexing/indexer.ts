@@ -293,6 +293,9 @@ async function walkRepository(repositoryRoot: string, request: IndexRepositoryRe
       if (isSecretLikePath(relativePath)) {
         continue;
       }
+      if (matchesExcludedPath(relativePath, request.excludedPaths ?? [])) {
+        continue;
+      }
       if (matchesIgnoreRules(relativePath, entry.isDirectory(), ignoreRules)) {
         continue;
       }
@@ -316,6 +319,15 @@ async function walkRepository(repositoryRoot: string, request: IndexRepositoryRe
   }
 
   return files;
+}
+
+function matchesExcludedPath(relativePath: string, patterns: string[]): boolean {
+  return patterns.some((pattern) => {
+    const normalized = pattern.replace(/^\//, "");
+    if (normalized.endsWith("/") && relativePath.startsWith(normalized)) return true;
+    const escaped = normalized.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^/]*");
+    return new RegExp(`^${escaped}(?:$|/)`).test(relativePath);
+  });
 }
 
 async function isProbablyTextFile(filePath: string): Promise<boolean> {

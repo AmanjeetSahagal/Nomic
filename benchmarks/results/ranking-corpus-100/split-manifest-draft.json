@@ -1,0 +1,24 @@
+{
+  "strategy": "repository-held-out-plus-temporal",
+  "status": "not-ready-for-model-training",
+  "train": {
+    "repositories": ["django/django"],
+    "taskCount": 40,
+    "tasksWithRetrievedPositive": 29
+  },
+  "validation": {
+    "repositories": ["microsoft/TypeScript"],
+    "rule": "oldest 10 tasks by pullRequest.mergedAt",
+    "dateRange": ["2023-01-13T23:35:51Z", "2025-06-05T23:37:41Z"],
+    "taskCount": 10,
+    "tasksWithRetrievedPositive": 2
+  },
+  "test": {
+    "repositories": ["microsoft/TypeScript", "microsoft/vscode"],
+    "rule": "remaining newer TypeScript tasks plus all VS Code tasks",
+    "taskCount": 50,
+    "tasksWithRetrievedPositive": 14
+  },
+  "rowLevelRandomization": false,
+  "trainingGate": "blocked until manual label review and candidate-generation coverage improve; validation has only two pair-generating tasks"
+}

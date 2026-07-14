@@ -1,0 +1,1957 @@
+{
+  "schemaVersion": 1,
+  "repository": {
+    "id": "microsoft/vscode",
+    "url": "https://github.com/microsoft/vscode",
+    "languages": [
+      "typescript"
+    ],
+    "stage": 2,
+    "difficulty": "very-high",
+    "role": "Large product architecture and cross-package retrieval",
+    "excludedPaths": [
+      "extensions/*/package.nls.json",
+      "package-lock.json",
+      "ThirdPartyNotices.txt"
+    ]
+  },
+  "collectedAt": "2026-07-13T17:44:12.211Z",
+  "tasks": [
+    {
+      "id": "microsoft-vscode-issue-285213-pr-285214",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "1debf21160174ecaf114e8e043146da08ba25d4a",
+      "patchCommit": "d878ca94f9ab6499dd5b11bbba72aa258f3ae4db",
+      "pullRequest": {
+        "number": 285214,
+        "url": "https://github.com/microsoft/vscode/pull/285214",
+        "mergedAt": "2025-12-28T03:02:57Z"
+      },
+      "issue": {
+        "number": 285213,
+        "url": "https://github.com/microsoft/vscode/issues/285213",
+        "title": "Allow overflow buttons in quick input",
+        "body": "<img width=\"747\" height=\"193\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/41e2edc9-37a1-48cc-bdd4-e1b671f5b6f6\" />\n\nLike this... where a button can be marked as secondary and then go in an overflow menu.",
+        "createdAt": "2025-12-28T02:40:24Z"
+      },
+      "query": "Allow overflow buttons in quick input\n\n<img width=\"747\" height=\"193\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/41e2edc9-37a1-48cc-bdd4-e1b671f5b6f6\" /> Like this... where a button can be marked as secondary and then go in an overflow menu.",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/platform/quickinput/browser/quickInput.ts",
+          "src/vs/platform/quickinput/browser/quickInputController.ts",
+          "src/vs/platform/quickinput/browser/quickInputList.ts",
+          "src/vs/platform/quickinput/browser/quickInputUtils.ts",
+          "src/vs/platform/quickinput/browser/tree/quickInputTreeRenderer.ts",
+          "src/vs/platform/quickinput/common/quickInput.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/platform/quickinput/browser/media/quickInput.css",
+          "src/vs/platform/quickinput/test/browser/quickInputUtils.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/platform/quickinput/browser/media/quickInput.css",
+        "src/vs/platform/quickinput/browser/quickInput.ts",
+        "src/vs/platform/quickinput/browser/quickInputController.ts",
+        "src/vs/platform/quickinput/browser/quickInputList.ts",
+        "src/vs/platform/quickinput/browser/quickInputUtils.ts",
+        "src/vs/platform/quickinput/browser/tree/quickInputTreeRenderer.ts",
+        "src/vs/platform/quickinput/common/quickInput.ts",
+        "src/vs/platform/quickinput/test/browser/quickInputUtils.test.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "verification-needed",
+        "quick-pick",
+        "insiders-released"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:34:58.685Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-280540-pr-284668",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "c561232a0a8f96c73b7bd9dc2039b00804284a44",
+      "patchCommit": "d5b11474dad1c5348eac5af388523106dd7b8898",
+      "pullRequest": {
+        "number": 284668,
+        "url": "https://github.com/microsoft/vscode/pull/284668",
+        "mergedAt": "2025-12-26T00:44:46Z"
+      },
+      "issue": {
+        "number": 280540,
+        "url": "https://github.com/microsoft/vscode/issues/280540",
+        "title": "Go To Offset - position in the quick input does not match editor position",
+        "body": "Testing https://github.com/microsoft/vscode/issues/280415\n\n* Open the VS Code repo\n* Open `src/vs/workbench/contrib/scm/browser/scmViewPane.ts`\n* Invoke the \"Go to Offset...\" command and type 100000. Notice the position says line 2508, column 5\n    <img width=\"513\" height=\"65\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c716e2f8-d03d-4dcc-a431-74a48bf5d9c3\" />\n* Press Enter. The cursor is placed on line 2508, column 17\n    <img width=\"1462\" height=\"633\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c2b93c59-85f3-4d5d-bf69-57d2d0050b27\" />",
+        "createdAt": "2025-12-02T10:11:45Z"
+      },
+      "query": "Go To Offset - position in the quick input does not match editor position\n\nTesting https://github.com/microsoft/vscode/issues/280415 * Open the VS Code repo * Open `src/vs/workbench/contrib/scm/browser/scmViewPane.ts` * Invoke the \"Go to Offset...\" command and type 100000. Notice the position says line 2508, column 5 <img width=\"513\" height=\"65\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c716e2f8-d03d-4dcc-a431-74a48bf5d9c3\" /> * Press Enter. The cursor is placed on line 2508, column 17 <img width=\"1462\" height=\"633\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c2b93c59-85f3-4d5d-bf69-57d2d0050b27\" />",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/editor/contrib/quickAccess/browser/gotoLineQuickAccess.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/editor/contrib/quickAccess/test/browser/gotoLineQuickAccess.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/editor/contrib/quickAccess/browser/gotoLineQuickAccess.ts",
+        "src/vs/editor/contrib/quickAccess/test/browser/gotoLineQuickAccess.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "verified",
+        "insiders-released",
+        "quick-open"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:35:33.110Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-284524-pr-284554",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "d5df40d2403a9edf5981cd29acc2e0363990fbff",
+      "patchCommit": "d87d06f0e66419d71d9cfc1e46f2f8f18e4c1909",
+      "pullRequest": {
+        "number": 284554,
+        "url": "https://github.com/microsoft/vscode/pull/284554",
+        "mergedAt": "2025-12-20T03:56:30Z"
+      },
+      "issue": {
+        "number": 284524,
+        "url": "https://github.com/microsoft/vscode/issues/284524",
+        "title": "cell not resizing to fit pasted text",
+        "body": "\nSteps to Reproduce:\n\n1. open a new notebook\n2. paste multiple lines into an empty cell\n\n🐛 cell does not resize\n\nhttps://github.com/user-attachments/assets/8c5f907f-b050-4a66-8d41-ba5b62386a34",
+        "createdAt": "2025-12-19T21:33:27Z"
+      },
+      "query": "cell not resizing to fit pasted text\n\nSteps to Reproduce: 1. open a new notebook 2. paste multiple lines into an empty cell 🐛 cell does not resize https://github.com/user-attachments/assets/8c5f907f-b050-4a66-8d41-ba5b62386a34",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/notebook/browser/view/cellParts/codeCell.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/notebook/test/browser/view/cellPart.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/notebook/browser/view/cellParts/codeCell.ts",
+        "src/vs/workbench/contrib/notebook/test/browser/view/cellPart.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "verified",
+        "insiders-released",
+        "notebook-layout",
+        "notebook-cell-editor"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:36:07.927Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-278618-pr-284438",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "c561232a0a8f96c73b7bd9dc2039b00804284a44",
+      "patchCommit": "e5d4511919df107f48ecc1d6e47d8eba6dec652a",
+      "pullRequest": {
+        "number": 284438,
+        "url": "https://github.com/microsoft/vscode/pull/284438",
+        "mergedAt": "2025-12-26T01:16:39Z"
+      },
+      "issue": {
+        "number": 278618,
+        "url": "https://github.com/microsoft/vscode/issues/278618",
+        "title": "GitHub Copilot fails when fetching redirects, even to direct links to raw files, even on GitHub.",
+        "body": "GitHub Copilot can't even seem to fetch redirected data from GitHub itself, and it fails silently.\n\nI asked the LLM in Agent mode (I redacted my short intro paragraph here and below):\n\n> #fetch https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\n\nThe debug window shows that the agent response was:\n\n```\n🛠️ fetch_webpage (call_…) {\n  \"query\": \"Datimprint CLI and PathChecker classes\",\n  \"urls\": [\n    \"https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java\",\n    \"https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java\",\n    \"https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\"\n  ]\n```\n\nThe `fetch_webpage` tool then responded with this (from the debug view):\n\n```\nHere is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java:\nThe webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java\". Use the vscode_fetchWebPage_internal again to get its contents.\nHere is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java:\nThe webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java\". Use the vscode_fetchWebPage_internal again to get its contents.\nHere is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java:\nThe webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\". Use the vscode_fetchWebPage_internal again to get its contents.\n```\n\nThen it looks like GitHub Copilot resubmitted the request to the LLM with the URLs updated:\n\n```\nThese attachments may have useful context for the user's query. The user may refer to these attachments directly using a term that starts with #.\n<attachment tool=\"#fetch\">\nHere is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java:\nThe webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java\". Use the vscode_fetchWebPage_internal again to get its contents.\nHere is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java:\nThe webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java\". Use the vscode_fetchWebPage_internal again to get its contents.\nHere is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java:\nThe webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\". Use the vscode_fetchWebPage_internal again to get its contents.\n</attachment>\n<prompt>\n…\n\n#fetch https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\n</prompt>\n```\n\nUnfortunately the assistant just responded:\n\n```\nI'll fetch those files to see your examples of directory traversal and checksum generation.\n\n<fetch_web_page>\n<url>https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java</url>\n</fetch_web_page>\n\n<fetch_web_page>\n<url>https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java</url>\n</fetch_web_page>\n\n<fetch_web_page>\n<url>https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java</url>\n</fetch_web_page>\n```\n\nAnd all I see in the chat is that it fetched 3 resources (apparently the first three actual requests, because it never asked for my verification of the content), and then this:\n\n> I'll fetch those files to see your examples of directory traversal and checksum generation.\n\nThus redirection of fetch seems broken. This is essential functionality. Being unable to fetch files really breaks my workflow. This is a larger problem; see #274925, #248453, and even microsoft/vscode#283164 (opened months ago!).\n\nNote also the irony that I went to the trouble of providing the \"raw\" file content URLs because GitHub Copilot couldn't even find the file content on the normal user-facing page in GitHub, as noted in other tickets. One would think that providing the \"raw\" link link would have worked around the problem of waiting for the content to load or for the content to be lost within the page layout, but I didn't factor in that GitHub Copilot might not be able to handle an HTTP redirect. 😕\n\nPlease raise the priority of this. If you don't have enough resources, let me know where I can send my resume to join your team and help get this done. I'm serious on all points.\n\n",
+        "createdAt": "2025-11-20T17:05:06Z"
+      },
+      "query": "GitHub Copilot fails when fetching redirects, even to direct links to raw files, even on GitHub.\n\nGitHub Copilot can't even seem to fetch redirected data from GitHub itself, and it fails silently. I asked the LLM in Agent mode (I redacted my short intro paragraph here and below): > #fetch https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java The debug window shows that the agent response was: ``` 🛠️ fetch_webpage (call_…) { \"query\": \"Datimprint CLI and PathChecker classes\", \"urls\": [ \"https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java\", \"https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java\", \"https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\" ] ``` The `fetch_webpage` tool then responded with this (from the debug view): ``` Here is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java: The webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java\". Use the vscode_fetchWebPage_internal again to get its contents. Here is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java: The webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java\". Use the vscode_fetchWebPage_internal again to get its contents. Here is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java: The webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\". Use the vscode_fetchWebPage_internal again to get its contents. ``` Then it looks like GitHub Copilot resubmitted the request to the LLM with the URLs updated: ``` These attachments may have useful context for the user's query. The user may refer to these attachments directly using a term that starts with #. <attachment tool=\"#fetch\"> Here is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java: The webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java\". Use the vscode_fetchWebPage_internal again to get its contents. Here is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java: The webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java\". Use the vscode_fetchWebPage_internal again to get its contents. Here is some relevant context from the web page https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java: The webpage has redirected to \"https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java\". Use the vscode_fetchWebPage_internal again to get its contents. </attachment> <prompt> … #fetch https://github.com/jordial/datimprint/raw/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java and https://github.com/jordial/datimprint/raw/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java </prompt> ``` Unfortunately the assistant just responded: ``` I'll fetch those files to see your examples of directory traversal and checksum generation. <fetch_web_page> <url>https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/cli/src/main/java/com/jordial/datimprint/cli/DatimprintCli.java</url> </fetch_web_page> <fetch_web_page> <url>https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathChecker.java</url> </fetch_web_page> <fetch_web_page> <url>https://raw.githubusercontent.com/jordial/datimprint/refs/heads/main/file/src/main/java/com/jordial/datimprint/file/PathImprintGenerator.java</url> </fetch_web_page> ``` And all I see in the chat is that it fetched 3 resources (apparently the first three actual requests, because it never asked for my verification of the content), and then this: > I'll fetch those files to see your examples of directory traversal and checksum generation. Thus redirection of fetch seems broken. This is essential functionality. Being unable to fetch files really breaks my workflow. This is a larger problem; see #274925, #248453, and even microsoft/vscode#283164 (opened months ago!). Note also the irony that I went to the trouble of providing the \"raw\" file content URLs because GitHub Copilot couldn't even find the file content on the normal user-facing page in GitHub, as noted in other tickets. One would think that providing the \"raw\" link link would have worked around the problem of waiting for the content to load or for the content to be lost within the page layout, but I didn't factor in that GitHub Copilot might not be able to handle an HTTP redirect. 😕 Please raise the priority of this. If you don't have enough resources, let me know where I can send my resume to join your team and help get this done. I'm serious on all points.",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/platform/url/common/trustedDomains.ts",
+          "src/vs/platform/url/common/urlGlob.ts",
+          "src/vs/platform/webContentExtractor/common/webContentExtractor.ts",
+          "src/vs/platform/webContentExtractor/electron-main/webContentExtractorService.ts",
+          "src/vs/platform/webContentExtractor/electron-main/webPageLoader.ts",
+          "src/vs/workbench/contrib/chat/common/chatUrlFetchingPatterns.ts",
+          "src/vs/workbench/contrib/chat/electron-browser/tools/fetchPageTool.ts",
+          "src/vs/workbench/contrib/externalUriOpener/common/externalUriOpenerService.ts",
+          "src/vs/workbench/contrib/url/browser/trustedDomainService.ts",
+          "src/vs/workbench/contrib/url/browser/trustedDomainsValidator.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/platform/url/test/common/trustedDomains.test.ts",
+          "src/vs/platform/url/test/common/urlGlob.test.ts",
+          "src/vs/platform/webContentExtractor/test/electron-main/webPageLoader.test.ts",
+          "src/vs/workbench/contrib/url/test/browser/mockTrustedDomainService.ts",
+          "src/vs/workbench/contrib/url/test/browser/trustedDomains.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/platform/url/common/trustedDomains.ts",
+        "src/vs/platform/url/common/urlGlob.ts",
+        "src/vs/platform/url/test/common/trustedDomains.test.ts",
+        "src/vs/platform/url/test/common/urlGlob.test.ts",
+        "src/vs/platform/webContentExtractor/common/webContentExtractor.ts",
+        "src/vs/platform/webContentExtractor/electron-main/webContentExtractorService.ts",
+        "src/vs/platform/webContentExtractor/electron-main/webPageLoader.ts",
+        "src/vs/platform/webContentExtractor/test/electron-main/webPageLoader.test.ts",
+        "src/vs/workbench/contrib/chat/common/chatUrlFetchingPatterns.ts",
+        "src/vs/workbench/contrib/chat/electron-browser/tools/fetchPageTool.ts",
+        "src/vs/workbench/contrib/externalUriOpener/common/externalUriOpenerService.ts",
+        "src/vs/workbench/contrib/url/browser/trustedDomainService.ts",
+        "src/vs/workbench/contrib/url/browser/trustedDomainsValidator.ts",
+        "src/vs/workbench/contrib/url/test/browser/mockTrustedDomainService.ts",
+        "src/vs/workbench/contrib/url/test/browser/trustedDomains.test.ts"
+      ],
+      "labels": [],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:36:07.928Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-249040-pr-284371",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "e5d4511919df107f48ecc1d6e47d8eba6dec652a",
+      "patchCommit": "7f4d1c3321a7d60336b06dbb8141117bb4231cb8",
+      "pullRequest": {
+        "number": 284371,
+        "url": "https://github.com/microsoft/vscode/pull/284371",
+        "mergedAt": "2025-12-26T12:51:36Z"
+      },
+      "issue": {
+        "number": 249040,
+        "url": "https://github.com/microsoft/vscode/issues/249040",
+        "title": "Unexpected 2-spaces indent detection despite of predominant 4-spaces usage",
+        "body": "<!-- ⚠️⚠️ Do Not Delete This! bug_report_template ⚠️⚠️ -->\n<!-- Please read our Rules of Conduct: https://opensource.microsoft.com/codeofconduct/ -->\n<!-- 🕮 Read our guide about submitting issues: https://github.com/microsoft/vscode/wiki/Submitting-Bugs-and-Suggestions -->\n<!-- 🔎 Search existing issues to avoid creating duplicates. -->\n<!-- 🧪 Test using the latest Insiders build to see if your issue has already been fixed: https://code.visualstudio.com/insiders/ -->\n<!-- 💡 Instead of creating your report here, use 'Report Issue' from the 'Help' menu in VS Code to pre-fill useful information. -->\n<!-- 🔧 Launch with `code --disable-extensions` to check. -->\n\n<!-- 🪓 If you answered No above, use 'Help: Start Extension Bisect' from Command Palette to try to identify the cause. -->\n<!-- 📣 Issues caused by an extension need to be reported directly to the extension publisher. The 'Help > Report Issue' dialog can assist with this. -->\n- VS Code Version: 1.95\n- OS Version: Linux x64 5.15.0-139-generic\n\nWhen _Editor: Detect Indentation_ is enabled and there are some areas indented using 2 spaces, VSCode detects a 2-space indentation even when the file is mostly indented with 4 spaces.\n\n\n![Image](https://github.com/user-attachments/assets/95db4482-c9d4-44c2-896e-1e05014a12f5)\n\nThis doesn't happen for other pairs of values such as {3, 6} or {4,8}.\nIs there any reason for choosing 2 spaces over 4? Why does this happen only for the {2, 4} pair?\n\n",
+        "createdAt": "2025-05-15T17:27:54Z"
+      },
+      "query": "Unexpected 2-spaces indent detection despite of predominant 4-spaces usage\n\n- VS Code Version: 1.95 - OS Version: Linux x64 5.15.0-139-generic When _Editor: Detect Indentation_ is enabled and there are some areas indented using 2 spaces, VSCode detects a 2-space indentation even when the file is mostly indented with 4 spaces. ![Image](https://github.com/user-attachments/assets/95db4482-c9d4-44c2-896e-1e05014a12f5) This doesn't happen for other pairs of values such as {3, 6} or {4,8}. Is there any reason for choosing 2 spaces over 4? Why does this happen only for the {2, 4} pair?",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/editor/common/model/indentationGuesser.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/editor/test/common/model/textModel.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/editor/common/model/indentationGuesser.ts",
+        "src/vs/editor/test/common/model/textModel.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "help wanted",
+        "verified",
+        "editor-autoindent",
+        "insiders-released"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:36:07.928Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-282676-pr-284341",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "beecac5671327f00cd08c718496a2f05202111cf",
+      "patchCommit": "5ad0c7c6219df9b1d96df55a59cc80dfb7bf9948",
+      "pullRequest": {
+        "number": 284341,
+        "url": "https://github.com/microsoft/vscode/pull/284341",
+        "mergedAt": "2025-12-19T11:35:29Z"
+      },
+      "issue": {
+        "number": 282676,
+        "url": "https://github.com/microsoft/vscode/issues/282676",
+        "title": "Overlapping Jupyter Notebook cells",
+        "body": "\nType: <b>Bug</b>\n\nWhile using jupyter notebook and scrolling the document, cells overlap and i need to either maximize/minimize one random cell to restore layout so that it's readable or scroll up and down until it fixes by itself.\n\nVS Code version: Code 1.107.0 (Universal) (618725e67565b290ba4da6fe2d29f8fa1d4e3622, 2025-12-10T07:43:47.883Z)\nOS version: Darwin arm64 25.1.0\nModes:\n\n<details>\n<summary>System Info</summary>\n\n|Item|Value|\n|---|---|\n|CPUs|Apple M3 Pro (12 x 2400)|\n|GPU Status|2d_canvas: enabled<br>direct_rendering_display_compositor: disabled_off_ok<br>gpu_compositing: enabled<br>multiple_raster_threads: enabled_on<br>opengl: enabled_on<br>rasterization: enabled<br>raw_draw: disabled_off_ok<br>skia_graphite: enabled_on<br>trees_in_viz: disabled_off<br>video_decode: enabled<br>video_encode: enabled<br>webgl: enabled<br>webgl2: enabled<br>webgpu: enabled<br>webnn: disabled_off|\n|Load (avg)|2, 2, 2|\n|Memory (System)|36.00GB (2.34GB free)|\n|Process Argv|--crash-reporter-id 4ca4e58a-715b-4add-8558-a446d197d00d|\n|Screen Reader|no|\n|VM|0%|\n</details><details><summary>Extensions (30)</summary>\n\nExtension|Author (truncated)|Version\n---|---|---\nmarkdown-preview-github-styles|bie|2.2.0\nxml|Dot|2.5.1\ncopilot-chat|Git|0.35.0\nrainbow-csv|mec|3.23.0\nazure-dev|ms-|0.10.0\nvscode-azure-github-copilot|ms-|1.0.153\nvscode-azure-mcp-server|ms-|1.0.1\nvscode-azureappservice|ms-|0.26.4\nvscode-azurecontainerapps|ms-|0.10.0\nvscode-azurefunctions|ms-|1.20.2\nvscode-azureresourcegroups|ms-|0.11.7\nvscode-azurestaticwebapps|ms-|0.13.2\nvscode-azurestorage|ms-|0.17.1\nvscode-azurevirtualmachines|ms-|0.6.10\nvscode-cosmosdb|ms-|0.30.1\nvscode-pgsql|ms-|1.12.1\ndebugpy|ms-|2025.16.0\npython|ms-|2025.20.0\nvscode-pylance|ms-|2025.10.4\nvscode-python-envs|ms-|1.12.0\ndatawrangler|ms-|1.24.0\njupyter|ms-|2025.9.1\njupyter-keymap|ms-|1.1.2\njupyter-renderers|ms-|1.3.0\nvscode-jupyter-cell-tags|ms-|0.1.9\nvscode-jupyter-slideshow|ms-|0.1.6\nvscode-node-azure-pack|ms-|1.8.0\nwindows-ai-studio|ms-|0.26.4\neven-better-toml|tam|0.21.2\nvscode-ai-foundry|Tea|0.12.4\n\n\n</details><details>\n<summary>A/B Experiments</summary>\n\n```\nvsliv368:30146709\nbinariesv615:30325510\nnativeloc1:31344060\ndwcopilot:31170013\ndwoutputs:31242946\ncopilot_t_ci:31333650\ne5gg6876:31282496\npythonrdcb7:31342333\naj953862:31281341\nnes-set-on:31351930\n6abeh943:31336334\nenvsdeactivate2:31353495\ncloudbuttont:31379625\ntodos-1:31405332\n3efgi100_wstrepl:31403338\ntrigger-command-fix:31379601\nauto_model_enabled:31396818\nuse-responses-api:31390855\nje187915:31401257\n3i15c187:31428712\nec5jj548:31422691\nterminalsuggestenabled:31431119\ncmp-ext-treat:31426748\ncp_cls_c_966_ss:31426491\ndefaultvisibility:31426295\nexpandedtokens:31427242\ncopilot6169-t2000-control:31431385\nc0683394:31419495\n478ah919:31426797\nge8j1254_inline_auto_hint_haiku:31431912\na5gib710:31426879\n5j92g670_sonnet:31426790\n7a04d226_do_not_restore_last_panel_session:31432770\nanthropic_thinking_t:31432745\ncp_cls_c_1081:31433293\ncopilot-nes-oct-trt:31432596\n\n```\n\n</details>\n\n<!-- generated by issue reporter -->",
+        "createdAt": "2025-12-11T09:59:54Z"
+      },
+      "query": "Overlapping Jupyter Notebook cells\n\nType: <b>Bug</b> While using jupyter notebook and scrolling the document, cells overlap and i need to either maximize/minimize one random cell to restore layout so that it's readable or scroll up and down until it fixes by itself. VS Code version: Code 1.107.0 (Universal) (618725e67565b290ba4da6fe2d29f8fa1d4e3622, 2025-12-10T07:43:47.883Z) OS version: Darwin arm64 25.1.0 Modes: <details> <summary>System Info</summary> |Item|Value| |---|---| |CPUs|Apple M3 Pro (12 x 2400)| |GPU Status|2d_canvas: enabled<br>direct_rendering_display_compositor: disabled_off_ok<br>gpu_compositing: enabled<br>multiple_raster_threads: enabled_on<br>opengl: enabled_on<br>rasterization: enabled<br>raw_draw: disabled_off_ok<br>skia_graphite: enabled_on<br>trees_in_viz: disabled_off<br>video_decode: enabled<br>video_encode: enabled<br>webgl: enabled<br>webgl2: enabled<br>webgpu: enabled<br>webnn: disabled_off| |Load (avg)|2, 2, 2| |Memory (System)|36.00GB (2.34GB free)| |Process Argv|--crash-reporter-id 4ca4e58a-715b-4add-8558-a446d197d00d| |Screen Reader|no| |VM|0%| </details><details><summary>Extensions (30)</summary> Extension|Author (truncated)|Version ---|---|--- markdown-preview-github-styles|bie|2.2.0 xml|Dot|2.5.1 copilot-chat|Git|0.35.0 rainbow-csv|mec|3.23.0 azure-dev|ms-|0.10.0 vscode-azure-github-copilot|ms-|1.0.153 vscode-azure-mcp-server|ms-|1.0.1 vscode-azureappservice|ms-|0.26.4 vscode-azurecontainerapps|ms-|0.10.0 vscode-azurefunctions|ms-|1.20.2 vscode-azureresourcegroups|ms-|0.11.7 vscode-azurestaticwebapps|ms-|0.13.2 vscode-azurestorage|ms-|0.17.1 vscode-azurevirtualmachines|ms-|0.6.10 vscode-cosmosdb|ms-|0.30.1 vscode-pgsql|ms-|1.12.1 debugpy|ms-|2025.16.0 python|ms-|2025.20.0 vscode-pylance|ms-|2025.10.4 vscode-python-envs|ms-|1.12.0 datawrangler|ms-|1.24.0 jupyter|ms-|2025.9.1 jupyter-keymap|ms-|1.1.2 jupyter-renderers|ms-|1.3.0 vscode-jupyter-cell-tags|ms-|0.1.9 vscode-jupyter-slideshow|ms-|0.1.6 vscode-node-azure-pack|ms-|1.8.0 windows-ai-studio|ms-|0.26.4 even-better-toml|tam|0.21.2 vscode-ai-foundry|Tea|0.12.4 </details><details> <summary>A/B Experiments</summary> ``` vsliv368:30146709 binariesv615:30325510 nativeloc1:31344060 dwcopilot:31170013 dwoutputs:31242946 copilot_t_ci:31333650 e5gg6876:31282496 pythonrdcb7:31342333 aj953862:31281341 nes-set-on:31351930 6abeh943:31336334 envsdeactivate2:31353495 cloudbuttont:31379625 todos-1:31405332 3efgi100_wstrepl:31403338 trigger-command-fix:31379601 auto_model_enabled:31396818 use-responses-api:31390855 je187915:31401257 3i15c187:31428712 ec5jj548:31422691 terminalsuggestenabled:31431119 cmp-ext-treat:31426748 cp_cls_c_966_ss:31426491 defaultvisibility:31426295 expandedtokens:31427242 copilot6169-t2000-control:31431385 c0683394:31419495 478ah919:31426797 ge8j1254_inline_auto_hint_haiku:31431912 a5gib710:31426879 5j92g670_sonnet:31426790 7a04d226_do_not_restore_last_panel_session:31432770 anthropic_thinking_t:31432745 cp_cls_c_1081:31433293 copilot-nes-oct-trt:31432596 ``` </details>",
+      "taskType": "bug-localization",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/notebook/browser/view/cellParts/codeCell.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/notebook/test/browser/view/cellPart.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/notebook/browser/view/cellParts/codeCell.ts",
+        "src/vs/workbench/contrib/notebook/test/browser/view/cellPart.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "*duplicate",
+        "notebook-layout"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:36:07.928Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-282209-pr-284248",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "abd691b025353c2842772dde3033a20e802d6d6d",
+      "patchCommit": "f6686c63441950f9e0d930bfaa57218ceb2ae8ea",
+      "pullRequest": {
+        "number": 284248,
+        "url": "https://github.com/microsoft/vscode/pull/284248",
+        "mergedAt": "2025-12-20T23:20:32Z"
+      },
+      "issue": {
+        "number": 282209,
+        "url": "https://github.com/microsoft/vscode/issues/282209",
+        "title": "Auto-approve GitHub Copilot non-destructive `sed` usage.",
+        "body": "As I understand it (I'm not a `sed` expert), only the `sed -i` command is destructive. All other usages are read-only.\n\nThe LLM often needs to use `sed` to search files. I shouldn't be bothered for file searches. But I do want to know if the LLM is using `sed` to edit a file.\n\nFor example the LLM needed to look up the source code of my own GlobalMentor library in order to refactor the code to use one of its utilities. The source code is in another directory tree. I provided instructions on how to find it. So the LLM issued this benign command (part of path redacted):\n\n```bash\nsed -n '140,160p' /…/globalmentor-base/core/src/main/java/com/globalmentor/java/Objects.java\n```\n\nThat's fine. I shouldn't be bothered with that. Unfortunately the auto-approve setting for `sed` is not granular enough: it says \"Always Allow Command: sed\".\n\n**Please add a way to specify \"Always allow `sed` except when used with the `-i` option.\".**\n\nThe implementation may require normalization of the CLI command line, as laid out in #281779.\n\nThis is related to #276212.",
+        "createdAt": "2025-12-09T13:46:20Z"
+      },
+      "query": "Auto-approve GitHub Copilot non-destructive `sed` usage.\n\nAs I understand it (I'm not a `sed` expert), only the `sed -i` command is destructive. All other usages are read-only. The LLM often needs to use `sed` to search files. I shouldn't be bothered for file searches. But I do want to know if the LLM is using `sed` to edit a file. For example the LLM needed to look up the source code of my own GlobalMentor library in order to refactor the code to use one of its utilities. The source code is in another directory tree. I provided instructions on how to find it. So the LLM issued this benign command (part of path redacted): ```bash sed -n '140,160p' /…/globalmentor-base/core/src/main/java/com/globalmentor/java/Objects.java ``` That's fine. I shouldn't be bothered with that. Unfortunately the auto-approve setting for `sed` is not granular enough: it says \"Always Allow Command: sed\". **Please add a way to specify \"Always allow `sed` except when used with the `-i` option.\".** The implementation may require normalization of the CLI command line, as laid out in #281779. This is related to #276212.",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/terminalContrib/chatAgentTools/common/terminalChatAgentToolsConfiguration.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/terminalContrib/chatAgentTools/test/electron-browser/runInTerminalTool.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/common/terminalChatAgentToolsConfiguration.ts",
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/test/electron-browser/runInTerminalTool.test.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "on-testplan",
+        "on-release-notes",
+        "insiders-released",
+        "chat-terminal"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:36:48.171Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-275562-pr-284134",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "abc747bff46a27ec55048396df192419a830dfd1",
+      "patchCommit": "844fd4c5f116fdcc13fd1e9c42b2b9914096a894",
+      "pullRequest": {
+        "number": 284134,
+        "url": "https://github.com/microsoft/vscode/pull/284134",
+        "mergedAt": "2025-12-18T20:46:13Z"
+      },
+      "issue": {
+        "number": 275562,
+        "url": "https://github.com/microsoft/vscode/issues/275562",
+        "title": "Revisit ITerminalService.revealTerminal and related methods",
+        "body": "There has been some confusion in October about how you're meant to show a terminal, for example https://github.com/microsoft/vscode/pull/275369, https://github.com/microsoft/vscode/issues/273437\n\nThe idea behind the current ones if I remember right was to have each one have very specific task, but that means it's not ergonomic at all doing the common thing.\n\nRelated helper:\n\nhttps://github.com/microsoft/vscode/blob/34096fd36a95893177bcee7a6f8fbc5fc4d7493d/src/vs/workbench/contrib/terminal/browser/terminalActions.ts#L1714-L1722\n\nWe should look at all related methods and see if we can make it harder to cause bugs like these.\n\ncc @meganrogge ",
+        "createdAt": "2025-11-05T13:12:15Z"
+      },
+      "query": "Revisit ITerminalService.revealTerminal and related methods\n\nThere has been some confusion in October about how you're meant to show a terminal, for example https://github.com/microsoft/vscode/pull/275369, https://github.com/microsoft/vscode/issues/273437 The idea behind the current ones if I remember right was to have each one have very specific task, but that means it's not ergonomic at all doing the common thing. Related helper: https://github.com/microsoft/vscode/blob/34096fd36a95893177bcee7a6f8fbc5fc4d7493d/src/vs/workbench/contrib/terminal/browser/terminalActions.ts#L1714-L1722 We should look at all related methods and see if we can make it harder to cause bugs like these. cc @meganrogge",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/chat/browser/actions/chatCodeblockActions.ts",
+          "src/vs/workbench/contrib/tasks/browser/terminalTaskSystem.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminal.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalActions.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalEditorService.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalGroupService.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalService.ts",
+          "src/vs/workbench/contrib/terminalContrib/chat/browser/terminalChatActions.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/test/browser/workbenchTestServices.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/chat/browser/actions/chatCodeblockActions.ts",
+        "src/vs/workbench/contrib/tasks/browser/terminalTaskSystem.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminal.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalActions.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalEditorService.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalGroupService.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalService.ts",
+        "src/vs/workbench/contrib/terminalContrib/chat/browser/terminalChatActions.ts",
+        "src/vs/workbench/test/browser/workbenchTestServices.ts"
+      ],
+      "labels": [
+        "debt",
+        "terminal",
+        "insiders-released"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:36:48.172Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-283902-pr-284127",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "a8f871a3af2ceff97c87d82f8f2b0193c91640fa",
+      "patchCommit": "8e9aaafc92a37f5f7832accb1b4f2f7165159572",
+      "pullRequest": {
+        "number": 284127,
+        "url": "https://github.com/microsoft/vscode/pull/284127",
+        "mergedAt": "2025-12-17T21:09:48Z"
+      },
+      "issue": {
+        "number": 283902,
+        "url": "https://github.com/microsoft/vscode/issues/283902",
+        "title": "using new workspace flow, terminal can hang",
+        "body": "In the output monitor, we should detect if `press h + enter to show help` is present, and if so, consider the command finished/abort so the agent doesn't hang. \n \n<img width=\"1590\" height=\"666\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/cb3c46ae-458e-4b07-91f3-5d4e0882cc97\" />",
+        "createdAt": "2025-12-16T20:38:09Z"
+      },
+      "query": "using new workspace flow, terminal can hang\n\nIn the output monitor, we should detect if `press h + enter to show help` is present, and if so, consider the command finished/abort so the agent doesn't hang. <img width=\"1590\" height=\"666\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/cb3c46ae-458e-4b07-91f3-5d4e0882cc97\" />",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/tools/monitoring/outputMonitor.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/terminalContrib/chatAgentTools/test/browser/outputMonitor.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/tools/monitoring/outputMonitor.ts",
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/test/browser/outputMonitor.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "verified",
+        "insiders-released",
+        "chat-terminal-output-monitor"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:37:21.269Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-281595-pr-283942",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "ee735412792a94a8fdee8bb4e78a0edd72503303",
+      "patchCommit": "8202cbb14c1dc04421e66d188be43025f1dd91f5",
+      "pullRequest": {
+        "number": 283942,
+        "url": "https://github.com/microsoft/vscode/pull/283942",
+        "mergedAt": "2025-12-17T18:36:14Z"
+      },
+      "issue": {
+        "number": 281595,
+        "url": "https://github.com/microsoft/vscode/issues/281595",
+        "title": "Stop playing chat progress sound when new chat session is created",
+        "body": "1. Start a chat session\n2. While it's running, create a new one `CtrlCmd+N`\n3. 🐛 progress sound still playing\n\nIt's already clear from the notification we show that the session is continuing in the bg. Continuing to play the sound is annoying.\n\n",
+        "createdAt": "2025-12-05T20:16:44Z"
+      },
+      "query": "Stop playing chat progress sound when new chat session is created\n\n1. Start a chat session 2. While it's running, create a new one `CtrlCmd+N` 3. 🐛 progress sound still playing It's already clear from the notification we show that the session is continuing in the bg. Continuing to play the sound is annoying.",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/chat/browser/chat.ts",
+          "src/vs/workbench/contrib/chat/browser/chatAccessibilityService.ts",
+          "src/vs/workbench/contrib/chat/browser/chatWidget.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/inlineChat/test/browser/inlineChatController.test.ts",
+          "src/vs/workbench/contrib/inlineChat/test/browser/inlineChatSession.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/chat/browser/chat.ts",
+        "src/vs/workbench/contrib/chat/browser/chatAccessibilityService.ts",
+        "src/vs/workbench/contrib/chat/browser/chatWidget.ts",
+        "src/vs/workbench/contrib/inlineChat/test/browser/inlineChatController.test.ts",
+        "src/vs/workbench/contrib/inlineChat/test/browser/inlineChatSession.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "verified",
+        "accessibility",
+        "chat"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:37:21.269Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-284110-pr-283934",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "a32f7d1ff0af815dc136b849baae966f35caeaad",
+      "patchCommit": "82fb5e1465308ed078f0d17c2738b22d869b164f",
+      "pullRequest": {
+        "number": 283934,
+        "url": "https://github.com/microsoft/vscode/pull/283934",
+        "mergedAt": "2025-12-17T21:56:51Z"
+      },
+      "issue": {
+        "number": 284110,
+        "url": "https://github.com/microsoft/vscode/issues/284110",
+        "title": "Agent Skills alignment",
+        "body": "<!-- ⚠️⚠️ Do Not Delete This! feature_request_template ⚠️⚠️ -->\n<!-- Please read our Rules of Conduct: https://opensource.microsoft.com/codeofconduct/ -->\n<!-- Please search existing issues to avoid creating duplicates. -->\n\n<!-- Describe the feature you'd like. -->\nAlignment on agent skills, which involves internal branding changes and new settings/read paths.",
+        "createdAt": "2025-12-17T17:56:07Z"
+      },
+      "query": "Agent Skills alignment\n\nAlignment on agent skills, which involves internal branding changes and new settings/read paths.",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/chat/browser/chat.contribution.ts",
+          "src/vs/workbench/contrib/chat/common/promptSyntax/computeAutomaticInstructions.ts",
+          "src/vs/workbench/contrib/chat/common/promptSyntax/config/config.ts",
+          "src/vs/workbench/contrib/chat/common/promptSyntax/config/promptFileLocations.ts",
+          "src/vs/workbench/contrib/chat/common/promptSyntax/service/promptsService.ts",
+          "src/vs/workbench/contrib/chat/common/promptSyntax/service/promptsServiceImpl.ts",
+          "src/vs/workbench/contrib/chat/common/promptSyntax/utils/promptFilesLocator.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/chat/test/common/mockPromptsService.ts",
+          "src/vs/workbench/contrib/chat/test/common/promptSyntax/service/promptsService.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/chat/browser/chat.contribution.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/computeAutomaticInstructions.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/config/config.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/config/promptFileLocations.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/service/promptsService.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/service/promptsServiceImpl.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/utils/promptFilesLocator.ts",
+        "src/vs/workbench/contrib/chat/test/common/mockPromptsService.ts",
+        "src/vs/workbench/contrib/chat/test/common/promptSyntax/service/promptsService.test.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "verified",
+        "verification-needed",
+        "insiders-released"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:37:21.269Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-264202-pr-283885",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "aeb743289ba8f2bf50b1cc7e9ac14254422a96ea",
+      "patchCommit": "f9c4d40c2fbc488f77fb6ca8570675254c651358",
+      "pullRequest": {
+        "number": 283885,
+        "url": "https://github.com/microsoft/vscode/pull/283885",
+        "mergedAt": "2025-12-16T19:41:49Z"
+      },
+      "issue": {
+        "number": 264202,
+        "url": "https://github.com/microsoft/vscode/issues/264202",
+        "title": "$msCompile fails to match indented dotnet output",
+        "body": "\nType: <b>Bug</b>\n\nTL;DR: `dotnet` (sometimes?) indents error messages with a few leading spaces and this breaks the `$msCompiler` matcher.\n\nThe `$msCompile` matcher doesn't work on the output from the following task:\n```json\n{\n  \"label\": \"build\",\n  \"type\": \"process\",\n  \"command\": \"dotnet\",\n  \"linux\": {\n    \"args\": [\n      \"build\",\n      \"--no-restore\",\n      \"-p:TargetRuntimeIdentifier=linux-x64\"\n    ]\n  },\n  \"windows\": {\n    \"args\": [\n      \"build\",\n      \"--no-restore\",\n      \"-p:TargetRuntimeIdentifier=win-x64\"\n    ],\n  },\n  \"options\": {\n    \"cwd\": \"${workspaceFolder:SiteGen}\"\n  },\n  \"echoCommand\": true,\n  \"problemMatcher\": \"$msCompile\",\n  \"presentation\": {\n    \"reveal\": \"never\",\n    \"panel\": \"dedicated\",\n    \"clear\": true,\n    \"revealProblems\": \"onProblem\",\n  },\n  \"group\": {\n    \"kind\": \"build\",\n    \"isDefault\": true\n  }\n},\n```\n\nHowever, swapping out the `problemMatcher` with the following _does_ work (on both Windows and Linux):\n```json\n\"problemMatcher\": {\n  \"base\": \"$msCompile\",\n  \"pattern\":[\n    {\n      \"regexp\": \"^\\\\s*(?:\\\\s*\\\\d+>)?(\\\\S.*)\\\\((\\\\d+|\\\\d+,\\\\d+|\\\\d+,\\\\d+,\\\\d+,\\\\d+)\\\\)\\\\s*:\\\\s+((?:fatal +)?error|warning|info)\\\\s+(\\\\w+\\\\d+)\\\\s*:\\\\s*(.*)$\",\n      \"kind\": \"location\",\n      \"file\": 1,\n      \"location\": 2,\n      \"severity\": 3,\n      \"code\": 4,\n      \"message\": 5\n    }\n  ]\n},\n```\n\nThe `regexp` is taken verbatim from [your own source here](https://github.com/microsoft/vscode/blob/614287f64de39de2b2b2b9b185867187a150d0bb/src/vs/workbench/contrib/tasks/common/problemMatcher.ts#L1500), except I've added a `\\s*` at the beginning.\n\nVS Code version: Code 1.85.2 (8b3775030ed1a69b13e4f4c628c612102e30a681, 2024-01-18T06:40:10.514Z)\nOS version: Windows_NT x64 10.0.19045\nOS version: Arch as of a couple days ago\nModes:\n\n<details>\n<summary>System Info</summary>\n\n|Item|Value|\n|---|---|\n|CPUs|AMD Ryzen 9 7900X 12-Core Processor             (24 x 4700)|\n|GPU Status|2d_canvas: enabled<br>canvas_oop_rasterization: enabled_on<br>direct_rendering_display_compositor: disabled_off_ok<br>gpu_compositing: enabled<br>multiple_raster_threads: enabled_on<br>opengl: enabled_on<br>rasterization: enabled<br>raw_draw: disabled_off_ok<br>video_decode: enabled<br>video_encode: enabled<br>vulkan: disabled_off<br>webgl: enabled<br>webgl2: enabled<br>webgpu: enabled|\n|Load (avg)|undefined|\n|Memory (System)|63.68GB (41.15GB free)|\n|Process Argv||\n|Screen Reader|no|\n|VM|0%|\n</details><details><summary>Extensions (27)</summary>\n\nExtension|Author (truncated)|Version\n---|---|---\nvscode-avalonia|Ava|0.0.32\ndart-code|Dar|3.116.0\nflutter|Dar|3.116.0\ngithistory|don|0.6.20\nvscode-esp8266fs|kas|1.1.0\nvscode-catch2-test-adapter|mat|4.12.2\nvscode-boost-jam|mlo|0.0.2\nvscode-azurefunctions|ms-|1.16.2\nvscode-azureresourcegroups|ms-|0.9.9\ncsharp|ms-|2.50.27\ndotnet-interactive-vscode|ms-|1.0.5164010\nvscode-dotnet-runtime|ms-|2.3.1\ndebugpy|ms-|2024.0.0\npython|ms-|2024.2.1\nvscode-pylance|ms-|2024.3.2\njupyter|ms-|2023.11.1100101639\njupyter-keymap|ms-|1.1.2\njupyter-renderers|ms-|1.0.19\nvscode-jupyter-cell-tags|ms-|0.1.8\nvscode-jupyter-slideshow|ms-|0.1.5\ncmake-tools|ms-|1.19.52\ncpptools|ms-|1.26.3\nvscode-serial-monitor|ms-|0.13.1\nslang-language-extension|sha|2.0.1\nshader|sle|1.1.5\ncmake|twx|0.0.17\nvscode-arduino|vsc|0.7.1\n\n\n</details>\n<!-- generated by issue reporter -->",
+        "createdAt": "2025-08-31T06:52:39Z"
+      },
+      "query": "$msCompile fails to match indented dotnet output\n\nType: <b>Bug</b> TL;DR: `dotnet` (sometimes?) indents error messages with a few leading spaces and this breaks the `$msCompiler` matcher. The `$msCompile` matcher doesn't work on the output from the following task: ```json { \"label\": \"build\", \"type\": \"process\", \"command\": \"dotnet\", \"linux\": { \"args\": [ \"build\", \"--no-restore\", \"-p:TargetRuntimeIdentifier=linux-x64\" ] }, \"windows\": { \"args\": [ \"build\", \"--no-restore\", \"-p:TargetRuntimeIdentifier=win-x64\" ], }, \"options\": { \"cwd\": \"${workspaceFolder:SiteGen}\" }, \"echoCommand\": true, \"problemMatcher\": \"$msCompile\", \"presentation\": { \"reveal\": \"never\", \"panel\": \"dedicated\", \"clear\": true, \"revealProblems\": \"onProblem\", }, \"group\": { \"kind\": \"build\", \"isDefault\": true } }, ``` However, swapping out the `problemMatcher` with the following _does_ work (on both Windows and Linux): ```json \"problemMatcher\": { \"base\": \"$msCompile\", \"pattern\":[ { \"regexp\": \"^\\\\s*(?:\\\\s*\\\\d+>)?(\\\\S.*)\\\\((\\\\d+|\\\\d+,\\\\d+|\\\\d+,\\\\d+,\\\\d+,\\\\d+)\\\\)\\\\s*:\\\\s+((?:fatal +)?error|warning|info)\\\\s+(\\\\w+\\\\d+)\\\\s*:\\\\s*(.*)$\", \"kind\": \"location\", \"file\": 1, \"location\": 2, \"severity\": 3, \"code\": 4, \"message\": 5 } ] }, ``` The `regexp` is taken verbatim from [your own source here](https://github.com/microsoft/vscode/blob/614287f64de39de2b2b2b9b185867187a150d0bb/src/vs/workbench/contrib/tasks/common/problemMatcher.ts#L1500), except I've added a `\\s*` at the beginning. VS Code version: Code 1.85.2 (8b3775030ed1a69b13e4f4c628c612102e30a681, 2024-01-18T06:40:10.514Z) OS version: Windows_NT x64 10.0.19045 OS version: Arch as of a couple days ago Modes: <details> <summary>System Info</summary> |Item|Value| |---|---| |CPUs|AMD Ryzen 9 7900X 12-Core Processor (24 x 4700)| |GPU Status|2d_canvas: enabled<br>canvas_oop_rasterization: enabled_on<br>direct_rendering_display_compositor: disabled_off_ok<br>gpu_compositing: enabled<br>multiple_raster_threads: enabled_on<br>opengl: enabled_on<br>rasterization: enabled<br>raw_draw: disabled_off_ok<br>video_decode: enabled<br>video_encode: enabled<br>vulkan: disabled_off<br>webgl: enabled<br>webgl2: enabled<br>webgpu: enabled| |Load (avg)|undefined| |Memory (System)|63.68GB (41.15GB free)| |Process Argv|| |Screen Reader|no| |VM|0%| </details><details><summary>Extensions (27)</summary> Extension|Author (truncated)|Version ---|---|--- vscode-avalonia|Ava|0.0.32 dart-code|Dar|3.116.0 flutter|Dar|3.116.0 githistory|don|0.6.20 vscode-esp8266fs|kas|1.1.0 vscode-catch2-test-adapter|mat|4.12.2 vscode-boost-jam|mlo|0.0.2 vscode-azurefunctions|ms-|1.16.2 vscode-azureresourcegroups|ms-|0.9.9 csharp|ms-|2.50.27 dotnet-interactive-vscode|ms-|1.0.5164010 vscode-dotnet-runtime|ms-|2.3.1 debugpy|ms-|2024.0.0 python|ms-|2024.2.1 vscode-pylance|ms-|2024.3.2 jupyter|ms-|2023.11.1100101639 jupyter-keymap|ms-|1.1.2 jupyter-renderers|ms-|1.0.19 vscode-jupyter-cell-tags|ms-|0.1.8 vscode-jupyter-slideshow|ms-|0.1.5 cmake-tools|ms-|1.19.52 cpptools|ms-|1.26.3 vscode-serial-monitor|ms-|0.13.1 slang-language-extension|sha|2.0.1 shader|sle|1.1.5 cmake|twx|0.0.17 vscode-arduino|vsc|0.7.1 </details>",
+      "taskType": "bug-localization",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/tasks/browser/abstractTaskService.ts",
+          "src/vs/workbench/contrib/tasks/common/problemMatcher.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/tasks/test/common/problemMatcher.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/tasks/browser/abstractTaskService.ts",
+        "src/vs/workbench/contrib/tasks/common/problemMatcher.ts",
+        "src/vs/workbench/contrib/tasks/test/common/problemMatcher.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "help wanted",
+        "tasks",
+        "confirmation-pending",
+        "author-verification-requested"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:39:06.400Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-142135-pr-143054",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "b96204a2406f895e04f466da7a3107090afa6715",
+      "patchCommit": "990a496681948ec274da5503b35cd49a7d06c0a2",
+      "pullRequest": {
+        "number": 143054,
+        "url": "https://github.com/microsoft/vscode/pull/143054",
+        "mergedAt": "2023-01-06T06:14:59Z"
+      },
+      "issue": {
+        "number": 142135,
+        "url": "https://github.com/microsoft/vscode/issues/142135",
+        "title": "Support calling additional `resolveDebugConfiguration` callbacks if one callback changes the debug configuration `type`",
+        "body": "<!-- ⚠️⚠️ Do Not Delete This! feature_request_template ⚠️⚠️ -->\r\n<!-- Please read our Rules of Conduct: https://opensource.microsoft.com/codeofconduct/ -->\r\n<!-- Please search existing issues to avoid creating duplicates. -->\r\n\r\n<!-- Describe the feature you'd like. -->\r\n\r\nToday, VSCode's debug configuration provider API provides partial support for extensions that change the `type` property on a debug configuration returned by the `resolveDebugConfiguration` on a provider. The support today includes activating debuggers for the new debug configuration `type`. This support was added in https://github.com/microsoft/vscode/commit/4150347750b762a3f537ef660e96617083260066 to fix https://github.com/microsoft/vscode/issues/135090.\r\n\r\nHowever, this support does not include running the `resolveDebugConfiguration` callback for configuration providers keyed off the new `type`. This would be desireable for extensions that run highly customized debug configurations whose resolved configuration's `type` may differ depending on other installed extensions, target platform, or on user input.\r\n\r\nI would be willing to contribute an implementation of this feature if the idea is amenable.",
+        "createdAt": "2022-02-03T23:57:42Z"
+      },
+      "query": "Support calling additional `resolveDebugConfiguration` callbacks if one callback changes the debug configuration `type`\n\nToday, VSCode's debug configuration provider API provides partial support for extensions that change the `type` property on a debug configuration returned by the `resolveDebugConfiguration` on a provider. The support today includes activating debuggers for the new debug configuration `type`. This support was added in https://github.com/microsoft/vscode/commit/4150347750b762a3f537ef660e96617083260066 to fix https://github.com/microsoft/vscode/issues/135090. However, this support does not include running the `resolveDebugConfiguration` callback for configuration providers keyed off the new `type`. This would be desireable for extensions that run highly customized debug configurations whose resolved configuration's `type` may differ depending on other installed extensions, target platform, or on user input. I would be willing to contribute an implementation of this feature if the idea is amenable.",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/debug/browser/debugConfigurationManager.ts",
+          "src/vs/workbench/contrib/debug/common/debug.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/debug/test/browser/debugConfigurationManager.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/debug/browser/debugConfigurationManager.ts",
+        "src/vs/workbench/contrib/debug/common/debug.ts",
+        "src/vs/workbench/contrib/debug/test/browser/debugConfigurationManager.test.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "debug",
+        "*duplicate"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:40:47.291Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-82415-pr-166318",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "45db0a2940c5681dcc717bd973b918751c2b7ad5",
+      "patchCommit": "9f6c013b9bb2788d4484371e993da7651a1ebb2b",
+      "pullRequest": {
+        "number": 166318,
+        "url": "https://github.com/microsoft/vscode/pull/166318",
+        "mergedAt": "2023-01-31T16:38:57Z"
+      },
+      "issue": {
+        "number": 82415,
+        "url": "https://github.com/microsoft/vscode/issues/82415",
+        "title": "\"files to include\" doesn't work with folder names containing glob characters",
+        "body": "\r\nIssue Type: <b>Bug</b>\r\n\r\n1. Create a workspace add the following folder, plus couple of other folders\r\n\r\n```\r\n//...\r\n    {\r\n      \"path\": \"C:\\\\Users\\\\...\\\\folder1\",\r\n    },\r\n    {\r\n      \"path\": \"C:\\\\Users\\\\...\\\\folderNamed\",\r\n      \"name\": \"folderNamed (Special Folder)\"\r\n    },\r\n    {\r\n      \"path\": \"C:\\\\Users\\\\...\\\\folder2\",\r\n    }\r\n//...\r\n```\r\n2. go to explorer view tab\r\n3. create same file with `lorem-ipsum` text in all the folders\r\n4. right click on the `folderNamed (Special Folder)`\r\n5. click on `File in Folder...`\r\n6. ensure that **files to include** set as `./folderNamed (Special Folder)`\r\n7. type `lorem` in the folder into the **Search** box\r\n8. you will see that it retrieves from **folder1** and **folder2** too\r\n\r\nwhere it should only retrieve from `folderNamed (Special Folder)`.\r\nbehaviour works fine on `folder1` and `folder2` since they are not named.\r\n\r\nVS Code version: Code 1.39.1 (88f15d17dca836346e787762685a40bb5cce75a8, 2019-10-10T23:31:28.683Z)\r\nOS version: Windows_NT x64 10.0.18362\r\n\r\n<details>\r\n<summary>System Info</summary>\r\n\r\n|Item|Value|\r\n|---|---|\r\n|CPUs|Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz (16 x 3600)|\r\n|GPU Status|2d_canvas: enabled<br>flash_3d: enabled<br>flash_stage3d: enabled<br>flash_stage3d_baseline: enabled<br>gpu_compositing: enabled<br>multiple_raster_threads: enabled_on<br>native_gpu_memory_buffers: disabled_software<br>oop_rasterization: disabled_off<br>protected_video_decode: unavailable_off<br>rasterization: enabled<br>skia_deferred_display_list: disabled_off<br>skia_renderer: disabled_off<br>surface_synchronization: enabled_on<br>video_decode: enabled<br>viz_display_compositor: disabled_off<br>webgl: enabled<br>webgl2: enabled|\r\n|Load (avg)|undefined|\r\n|Memory (System)|63.81GB (39.06GB free)|\r\n|Process Argv||\r\n|Screen Reader|no|\r\n|VM|0%|\r\n</details><details><summary>Extensions (86)</summary>\r\n\r\nExtension|Author (truncated)|Version\r\n---|---|---\r\nbetter-comments|aar|2.0.5\r\nmarkdown-imsize|amo|0.0.2\r\nazds|azu|1.0.120191007\r\nemojisense|bie|0.5.3\r\nmarkdown-mermaid|bie|1.3.0\r\npath-intellisense|chr|1.4.2\r\nvscode-markdownlint|Dav|0.31.0\r\nvscode-eslint|dba|1.9.1\r\ngithistory|don|0.4.6\r\nxml|Dot|2.5.0\r\ngitlens|eam|10.1.1\r\nEditorConfig|Edi|0.14.1\r\nprettier-vscode|esb|2.3.0\r\nauto-close-tag|for|0.5.6\r\nauto-rename-tag|for|0.1.0\r\ndotnet-test-explorer|for|0.7.1\r\nvscode-pull-request-github|Git|0.12.0\r\nmdmath|goe|2.4.0\r\ncloudcode|goo|0.0.12\r\nasciidecorator|hel|0.2.0\r\nrest-client|hum|0.22.2\r\nftp-simple|hum|0.7.4\r\nreg|ion|1.0.1\r\nmarkdown-extended|jeb|1.0.13\r\nmarkdown-extension-pack|jeb|0.0.3\r\nplantuml|jeb|2.12.1\r\nsuper-replace|jeb|0.3.1\r\nsharppad|jma|1.1.0\r\nvscode-peacock|joh|3.1.5\r\nvscodeilviewer|jos|0.0.1\r\njq-syntax-highlighting|jq-|0.0.2\r\ndocomment|k--|0.1.8\r\nwordcounter|kir|1.9.3\r\nrainbow-csv|mec|1.3.1\r\nazure-pipelines|ms-|1.157.4\r\nvscode-apimanagement|ms-|0.1.1\r\nvscode-azureappservice|ms-|0.16.0\r\nvscode-azureeventgrid|ms-|0.1.1\r\nvscode-azurefunctions|ms-|0.18.1\r\nvscode-azurestorage|ms-|0.7.2\r\nvscode-cosmosdb|ms-|0.11.0\r\nvscode-docker|ms-|0.8.1\r\nvscode-logicapps|ms-|0.2.18\r\nvscode-kubernetes-tools|ms-|1.0.4\r\nmssql|ms-|1.6.0\r\nsqlops-debug|ms-|1.3.0\r\nvscode-postgresql|ms-|0.2.0\r\nremote-containers|ms-|0.81.0\r\nremote-ssh|ms-|0.47.1\r\nremote-ssh-edit|ms-|0.47.1\r\nremote-ssh-explorer|ms-|0.47.1\r\nremote-wsl|ms-|0.39.9\r\nvscode-remote-extensionpack|ms-|0.17.0\r\nautorest|ms-|2.0.1\r\nazure-account|ms-|0.8.6\r\nazurecli|ms-|0.4.6\r\ncsharp|ms-|1.21.4\r\ngithub-issues-prs|ms-|0.9.1\r\nGo|ms-|0.11.7\r\nmono-debug|ms-|0.15.8\r\npowershell|ms-|2019.9.0\r\nvscode-node-azure-pack|ms-|0.0.9\r\nvscode-typescript-tslint-plugin|ms-|1.2.2\r\nvsliveshare|ms-|1.0.950\r\nvsliveshare-audio|ms-|0.1.66\r\nteam|ms-|1.149.2\r\nazurerm-vscode-tools|msa|0.7.0\r\ndebugger-for-chrome|msj|4.12.0\r\ncolor-highlight|nau|2.3.0\r\nvscode-versionlens|pfl|0.24.0\r\nmaterial-icon-theme|PKi|3.9.1\r\nquicktype|qui|12.0.46\r\nvscode-yaml|red|0.5.3\r\nelastic|ria|0.13.3\r\nvscode-odata|sta|0.1.0\r\nvscode-markdown-paste-image|tel|0.12.3\r\nusql-vscode-ext|usq|0.2.15\r\nvscodeintellicode|Vis|1.1.9\r\napplication-insights|Vis|0.4.2\r\nvscode-redis|vit|1.2.0\r\nazure-iot-edge|vsc|1.17.0\r\nazure-iot-toolkit|vsc|2.10.0\r\nvscode-ansible|vsc|0.5.2\r\nWebTemplateStudio-dev-nightly|WAS|0.0.1925201\r\nvscode-todo-highlight|way|1.0.4\r\nt4-support|zbe|0.4.3\r\n\r\n\r\n</details>\r\n<!-- generated by issue reporter -->",
+        "createdAt": "2019-10-12T06:40:05Z"
+      },
+      "query": "\"files to include\" doesn't work with folder names containing glob characters\n\nIssue Type: <b>Bug</b> 1. Create a workspace add the following folder, plus couple of other folders ``` //... { \"path\": \"C:\\\\Users\\\\...\\\\folder1\", }, { \"path\": \"C:\\\\Users\\\\...\\\\folderNamed\", \"name\": \"folderNamed (Special Folder)\" }, { \"path\": \"C:\\\\Users\\\\...\\\\folder2\", } //... ``` 2. go to explorer view tab 3. create same file with `lorem-ipsum` text in all the folders 4. right click on the `folderNamed (Special Folder)` 5. click on `File in Folder...` 6. ensure that **files to include** set as `./folderNamed (Special Folder)` 7. type `lorem` in the folder into the **Search** box 8. you will see that it retrieves from **folder1** and **folder2** too where it should only retrieve from `folderNamed (Special Folder)`. behaviour works fine on `folder1` and `folder2` since they are not named. VS Code version: Code 1.39.1 (88f15d17dca836346e787762685a40bb5cce75a8, 2019-10-10T23:31:28.683Z) OS version: Windows_NT x64 10.0.18362 <details> <summary>System Info</summary> |Item|Value| |---|---| |CPUs|Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz (16 x 3600)| |GPU Status|2d_canvas: enabled<br>flash_3d: enabled<br>flash_stage3d: enabled<br>flash_stage3d_baseline: enabled<br>gpu_compositing: enabled<br>multiple_raster_threads: enabled_on<br>native_gpu_memory_buffers: disabled_software<br>oop_rasterization: disabled_off<br>protected_video_decode: unavailable_off<br>rasterization: enabled<br>skia_deferred_display_list: disabled_off<br>skia_renderer: disabled_off<br>surface_synchronization: enabled_on<br>video_decode: enabled<br>viz_display_compositor: disabled_off<br>webgl: enabled<br>webgl2: enabled| |Load (avg)|undefined| |Memory (System)|63.81GB (39.06GB free)| |Process Argv|| |Screen Reader|no| |VM|0%| </details><details><summary>Extensions (86)</summary> Extension|Author (truncated)|Version ---|---|--- better-comments|aar|2.0.5 markdown-imsize|amo|0.0.2 azds|azu|1.0.120191007 emojisense|bie|0.5.3 markdown-mermaid|bie|1.3.0 path-intellisense|chr|1.4.2 vscode-markdownlint|Dav|0.31.0 vscode-eslint|dba|1.9.1 githistory|don|0.4.6 xml|Dot|2.5.0 gitlens|eam|10.1.1 EditorConfig|Edi|0.14.1 prettier-vscode|esb|2.3.0 auto-close-tag|for|0.5.6 auto-rename-tag|for|0.1.0 dotnet-test-explorer|for|0.7.1 vscode-pull-request-github|Git|0.12.0 mdmath|goe|2.4.0 cloudcode|goo|0.0.12 asciidecorator|hel|0.2.0 rest-client|hum|0.22.2 ftp-simple|hum|0.7.4 reg|ion|1.0.1 markdown-extended|jeb|1.0.13 markdown-extension-pack|jeb|0.0.3 plantuml|jeb|2.12.1 super-replace|jeb|0.3.1 sharppad|jma|1.1.0 vscode-peacock|joh|3.1.5 vscodeilviewer|jos|0.0.1 jq-syntax-highlighting|jq-|0.0.2 docomment|k--|0.1.8 wordcounter|kir|1.9.3 rainbow-csv|mec|1.3.1 azure-pipelines|ms-|1.157.4 vscode-apimanagement|ms-|0.1.1 vscode-azureappservice|ms-|0.16.0 vscode-azureeventgrid|ms-|0.1.1 vscode-azurefunctions|ms-|0.18.1 vscode-azurestorage|ms-|0.7.2 vscode-cosmosdb|ms-|0.11.0 vscode-docker|ms-|0.8.1 vscode-logicapps|ms-|0.2.18 vscode-kubernetes-tools|ms-|1.0.4 mssql|ms-|1.6.0 sqlops-debug|ms-|1.3.0 vscode-postgresql|ms-|0.2.0 remote-containers|ms-|0.81.0 remote-ssh|ms-|0.47.1 remote-ssh-edit|ms-|0.47.1 remote-ssh-explorer|ms-|0.47.1 remote-wsl|ms-|0.39.9 vscode-remote-extensionpack|ms-|0.17.0 autorest|ms-|2.0.1 azure-account|ms-|0.8.6 azurecli|ms-|0.4.6 csharp|ms-|1.21.4 github-issues-prs|ms-|0.9.1 Go|ms-|0.11.7 mono-debug|ms-|0.15.8 powershell|ms-|2019.9.0 vscode-node-azure-pack|ms-|0.0.9 vscode-typescript-tslint-plugin|ms-|1.2.2 vsliveshare|ms-|1.0.950 vsliveshare-audio|ms-|0.1.66 team|ms-|1.149.2 azurerm-vscode-tools|msa|0.7.0 debugger-for-chrome|msj|4.12.0 color-highlight|nau|2.3.0 vscode-versionlens|pfl|0.24.0 material-icon-theme|PKi|3.9.1 quicktype|qui|12.0.46 vscode-yaml|red|0.5.3 elastic|ria|0.13.3 vscode-odata|sta|0.1.0 vscode-markdown-paste-image|tel|0.12.3 usql-vscode-ext|usq|0.2.15 vscodeintellicode|Vis|1.1.9 application-insights|Vis|0.4.2 vscode-redis|vit|1.2.0 azure-iot-edge|vsc|1.17.0 azure-iot-toolkit|vsc|2.10.0 vscode-ansible|vsc|0.5.2 WebTemplateStudio-dev-nightly|WAS|0.0.1925201 vscode-todo-highlight|way|1.0.4 t4-support|zbe|0.4.3 </details>",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/services/search/common/queryBuilder.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/services/search/test/common/queryBuilder.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/services/search/common/queryBuilder.ts",
+        "src/vs/workbench/services/search/test/common/queryBuilder.test.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "verified",
+        "search",
+        "verification-needed",
+        "insiders-released"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:41:17.490Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-169422-pr-169885",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "55d4e4844ff41c4773797ceec86a1504fcb97ba1",
+      "patchCommit": "16e26b4d0ce77d6d517571b72deabf3cb11f27e9",
+      "pullRequest": {
+        "number": 169885,
+        "url": "https://github.com/microsoft/vscode/pull/169885",
+        "mergedAt": "2023-02-07T20:06:26Z"
+      },
+      "issue": {
+        "number": 169422,
+        "url": "https://github.com/microsoft/vscode/issues/169422",
+        "title": "`FindTextInFiles` doesn't support comma-separated globs with {}",
+        "body": "Try extension with:\r\n```typescript\r\nconst disposable = vscode.commands.registerCommand('extension.helloWorld', async () => {\r\n\tconst results: string[] = [];\r\n\tconst glob = await vscode.window.showInputBox({ prompt: 'Glob pattern' });\r\n\tawait vscode.workspace.findTextInFiles({ pattern: 'foo' }, {\r\n\t\tinclude: new vscode.RelativePattern(vscode.workspace.workspaceFolders![0], glob!),\r\n\t}, r => results.push(r.uri.toString()));\r\n\tvscode.window.showInformationMessage(JSON.stringify(results));\r\n});\r\n```\r\n...and a workspace with files a/hello.txt and b/hello.txt both containing foo. Entering a glob for `a/*.*` or `b/*.*` will work, but `{a/*.*,b/*.*}` will return no results.\r\n\r\n`{a/*.*,b/*.*}` is a valid glob and should work\r\n\r\n",
+        "createdAt": "2022-12-16T18:06:01Z"
+      },
+      "query": "`FindTextInFiles` doesn't support comma-separated globs with {}\n\nTry extension with: ```typescript const disposable = vscode.commands.registerCommand('extension.helloWorld', async () => { const results: string[] = []; const glob = await vscode.window.showInputBox({ prompt: 'Glob pattern' }); await vscode.workspace.findTextInFiles({ pattern: 'foo' }, { include: new vscode.RelativePattern(vscode.workspace.workspaceFolders![0], glob!), }, r => results.push(r.uri.toString())); vscode.window.showInformationMessage(JSON.stringify(results)); }); ``` ...and a workspace with files a/hello.txt and b/hello.txt both containing foo. Entering a glob for `a/*.*` or `b/*.*` will work, but `{a/*.*,b/*.*}` will return no results. `{a/*.*,b/*.*}` is a valid glob and should work",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/services/search/node/ripgrepTextSearchEngine.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/services/search/test/node/ripgrepTextSearchEngineUtils.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/services/search/node/ripgrepTextSearchEngine.ts",
+        "src/vs/workbench/services/search/test/node/ripgrepTextSearchEngineUtils.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "verified",
+        "search",
+        "search-api",
+        "insiders-released"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:41:40.736Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-170242-pr-170250",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "56c7c6a2103494d267830db7d3e99a04ff2eaba7",
+      "patchCommit": "cbc8c30de56cd92499cc698e7a59d1b746a032da",
+      "pullRequest": {
+        "number": 170250,
+        "url": "https://github.com/microsoft/vscode/pull/170250",
+        "mergedAt": "2023-01-06T15:38:01Z"
+      },
+      "issue": {
+        "number": 170242,
+        "url": "https://github.com/microsoft/vscode/issues/170242",
+        "title": "Add tests for terminalInstance.ts#preparePathForShell",
+        "body": "",
+        "createdAt": "2022-12-29T20:25:41Z"
+      },
+      "query": "Add tests for terminalInstance.ts#preparePathForShell",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+          "src/vs/workbench/contrib/terminal/common/terminalEnvironment.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/terminal/test/common/terminalEnvironment.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+        "src/vs/workbench/contrib/terminal/common/terminalEnvironment.ts",
+        "src/vs/workbench/contrib/terminal/test/common/terminalEnvironment.test.ts"
+      ],
+      "labels": [
+        "debt",
+        "insiders-released"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:41:40.736Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-170484-pr-170887",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "f807491a9278cec2d3567ffe5e481dc458b8e97d",
+      "patchCommit": "5fe77b78fa0e7cfa7c9f4fafcbb539a0fb694332",
+      "pullRequest": {
+        "number": 170887,
+        "url": "https://github.com/microsoft/vscode/pull/170887",
+        "mergedAt": "2023-01-10T20:07:00Z"
+      },
+      "issue": {
+        "number": 170484,
+        "url": "https://github.com/microsoft/vscode/issues/170484",
+        "title": "Add quick fix provider for new pwsh preview feedback providers",
+        "body": "https://github.com/PowerShell/PowerShell/releases/tag/v7.4.0-preview.1\r\n\r\nhttps://github.com/PowerShell/PowerShell/pull/18252\r\n\r\n![image](https://user-images.githubusercontent.com/2193314/210380677-32c9f51f-8550-475d-b424-0df1ed811143.png)\r\n",
+        "createdAt": "2023-01-03T14:49:15Z"
+      },
+      "query": "Add quick fix provider for new pwsh preview feedback providers\n\nhttps://github.com/PowerShell/PowerShell/releases/tag/v7.4.0-preview.1 https://github.com/PowerShell/PowerShell/pull/18252 ![image](https://user-images.githubusercontent.com/2193314/210380677-32c9f51f-8550-475d-b424-0df1ed811143.png)",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/contrib/terminal/browser/terminal.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalQuickFixBuiltinActions.ts",
+          "src/vs/workbench/contrib/terminal/browser/xterm/quickFixAddon.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/terminal/test/browser/quickFixAddon.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/contrib/terminal/browser/terminal.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalQuickFixBuiltinActions.ts",
+        "src/vs/workbench/contrib/terminal/browser/xterm/quickFixAddon.ts",
+        "src/vs/workbench/contrib/terminal/test/browser/quickFixAddon.test.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "verified",
+        "insiders-released",
+        "terminal-shell-pwsh",
+        "terminal-quick-fix"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:42:53.439Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-99878-pr-171066",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "85e992bffaaf9e7983d1fdacd49afa5f48fe991e",
+      "patchCommit": "90aced5c37517e989817264452ced2b9ccf1894f",
+      "pullRequest": {
+        "number": 171066,
+        "url": "https://github.com/microsoft/vscode/pull/171066",
+        "mergedAt": "2023-01-11T15:44:25Z"
+      },
+      "issue": {
+        "number": 99878,
+        "url": "https://github.com/microsoft/vscode/issues/99878",
+        "title": "Prepending PATH env var with environmentVariableCollection doesn't work on macOS",
+        "body": "This was covered a little bit in https://github.com/microsoft/vscode/issues/94153 but that issue is locked and can't be discussed there. This feature feels pretty broken on macOS and I hope might be revisited.\r\n\r\nThe issue is on macOS prepending to `PATH`:\r\n\r\n```\r\ncontext.environmentVariableCollection.prepend(\"PATH\", \"/foo/my/path:\");\r\n```\r\n\r\nThis ends up being added to the end of the path, rather than the start. @Tyriar wrote up why this is in microsoft/vscode-docs@38653d4 and offered two workarounds, however neither of them are usable in my testing (as well as not really being feasible to tell all users to change):\r\n\r\n- `\"terminal.integrated.inheritEnv\": false` makes no difference at all, the PATH till is added to the end (this is a problem because the purpose of using `prepend` above is that we need to override any existing SDK on PATH with the one the user just selected)\r\n- `\"terminal.integrated.shellArgs\": []` results in a completely empty `PATH` besides the values I've prepended, which means that pretty much everything else is missing and won't work. This might be solvable by pushing `process.env.PATH` into `environmentVariableCollection` too, however the prompt to the user would look ridiculous as it would include their entire PATH\r\n\r\nI appreciate this probably isn't VS Code's fault, but given macOS is fairly common and this behaviour seems to happen on a clean macOS install (it happens on both of mine, and I've customised almost nothing) it feels like it's worth trying to fix (maybe even if it means sending `export PATH=foo:$PATH` once the shell is initialised? 😄).",
+        "createdAt": "2020-06-11T15:05:04Z"
+      },
+      "query": "Prepending PATH env var with environmentVariableCollection doesn't work on macOS\n\nThis was covered a little bit in https://github.com/microsoft/vscode/issues/94153 but that issue is locked and can't be discussed there. This feature feels pretty broken on macOS and I hope might be revisited. The issue is on macOS prepending to `PATH`: ``` context.environmentVariableCollection.prepend(\"PATH\", \"/foo/my/path:\"); ``` This ends up being added to the end of the path, rather than the start. @Tyriar wrote up why this is in microsoft/vscode-docs@38653d4 and offered two workarounds, however neither of them are usable in my testing (as well as not really being feasible to tell all users to change): - `\"terminal.integrated.inheritEnv\": false` makes no difference at all, the PATH till is added to the end (this is a problem because the purpose of using `prepend` above is that we need to override any existing SDK on PATH with the one the user just selected) - `\"terminal.integrated.shellArgs\": []` results in a completely empty `PATH` besides the values I've prepended, which means that pretty much everything else is missing and won't work. This might be solvable by pushing `process.env.PATH` into `environmentVariableCollection` too, however the prompt to the user would look ridiculous as it would include their entire PATH I appreciate this probably isn't VS Code's fault, but given macOS is fairly common and this behaviour seems to happen on a clean macOS install (it happens on both of mine, and I've customised almost nothing) it feels like it's worth trying to fix (maybe even if it means sending `export PATH=foo:$PATH` once the shell is initialised? 😄).",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/platform/terminal/common/environmentVariable.ts",
+          "src/vs/platform/terminal/common/environmentVariableCollection.ts",
+          "src/vs/platform/terminal/common/environmentVariableShared.ts",
+          "src/vs/platform/terminal/node/terminalEnvironment.ts",
+          "src/vs/platform/terminal/node/terminalProcess.ts",
+          "src/vs/server/node/remoteTerminalChannel.ts",
+          "src/vs/workbench/api/browser/mainThreadTerminalService.ts",
+          "src/vs/workbench/api/common/extHost.protocol.ts",
+          "src/vs/workbench/api/common/extHostTerminalService.ts",
+          "src/vs/workbench/contrib/terminal/browser/environmentVariableInfo.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+          "src/vs/workbench/contrib/terminal/browser/terminalProcessManager.ts",
+          "src/vs/workbench/contrib/terminal/common/environmentVariable.ts",
+          "src/vs/workbench/contrib/terminal/common/environmentVariableService.ts",
+          "src/vs/workbench/contrib/terminal/common/remoteTerminalChannel.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/platform/terminal/test/node/terminalEnvironment.test.ts",
+          "src/vs/workbench/contrib/terminal/browser/media/shellIntegration-bash.sh",
+          "src/vs/workbench/contrib/terminal/browser/media/shellIntegration-profile.zsh",
+          "src/vs/workbench/contrib/terminal/browser/media/shellIntegration.fish",
+          "src/vs/workbench/contrib/terminal/test/common/environmentVariableCollection.test.ts",
+          "src/vs/workbench/contrib/terminal/test/common/environmentVariableService.test.ts",
+          "src/vs/workbench/contrib/terminal/test/common/environmentVariableShared.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/platform/terminal/common/environmentVariable.ts",
+        "src/vs/platform/terminal/common/environmentVariableCollection.ts",
+        "src/vs/platform/terminal/common/environmentVariableShared.ts",
+        "src/vs/platform/terminal/node/terminalEnvironment.ts",
+        "src/vs/platform/terminal/node/terminalProcess.ts",
+        "src/vs/platform/terminal/test/node/terminalEnvironment.test.ts",
+        "src/vs/server/node/remoteTerminalChannel.ts",
+        "src/vs/workbench/api/browser/mainThreadTerminalService.ts",
+        "src/vs/workbench/api/common/extHost.protocol.ts",
+        "src/vs/workbench/api/common/extHostTerminalService.ts",
+        "src/vs/workbench/contrib/terminal/browser/environmentVariableInfo.ts",
+        "src/vs/workbench/contrib/terminal/browser/media/shellIntegration-bash.sh",
+        "src/vs/workbench/contrib/terminal/browser/media/shellIntegration-profile.zsh",
+        "src/vs/workbench/contrib/terminal/browser/media/shellIntegration.fish",
+        "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalProcessManager.ts",
+        "src/vs/workbench/contrib/terminal/common/environmentVariable.ts",
+        "src/vs/workbench/contrib/terminal/common/environmentVariableService.ts",
+        "src/vs/workbench/contrib/terminal/common/remoteTerminalChannel.ts",
+        "src/vs/workbench/contrib/terminal/test/common/environmentVariableCollection.test.ts",
+        "src/vs/workbench/contrib/terminal/test/common/environmentVariableService.test.ts",
+        "src/vs/workbench/contrib/terminal/test/common/environmentVariableShared.test.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "api",
+        "verified",
+        "macos",
+        "verification-needed",
+        "insiders-released",
+        "terminal-shell-integration"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:43:43.005Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-171200-pr-171212",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "7d707d16ef7237e3a888c91bb67c8d1373de61d7",
+      "patchCommit": "8f9abdacc2bda61c0ae6a8b247b93422f85c52d4",
+      "pullRequest": {
+        "number": 171212,
+        "url": "https://github.com/microsoft/vscode/pull/171212",
+        "mergedAt": "2023-01-13T16:49:26Z"
+      },
+      "issue": {
+        "number": 171200,
+        "url": "https://github.com/microsoft/vscode/issues/171200",
+        "title": "support screen reader reading the line and audio cues when go to next/previous diff are used in diff view",
+        "body": "Fulfilled for normal editors in these:\r\nhttps://github.com/microsoft/vscode/issues/166518\r\nhttps://github.com/microsoft/vscode/issues/164988",
+        "createdAt": "2023-01-12T20:10:19Z"
+      },
+      "query": "support screen reader reading the line and audio cues when go to next/previous diff are used in diff view\n\nFulfilled for normal editors in these: https://github.com/microsoft/vscode/issues/166518 https://github.com/microsoft/vscode/issues/164988",
+      "taskType": "feature-location",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/editor/browser/widget/diffNavigator.ts",
+          "src/vs/editor/standalone/browser/standaloneEditor.ts",
+          "src/vs/platform/audioCues/browser/audioCueService.ts",
+          "src/vs/workbench/browser/parts/editor/textDiffEditor.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/contrib/terminal/test/browser/terminalProfileService.integrationTest.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/editor/browser/widget/diffNavigator.ts",
+        "src/vs/editor/standalone/browser/standaloneEditor.ts",
+        "src/vs/platform/audioCues/browser/audioCueService.ts",
+        "src/vs/workbench/browser/parts/editor/textDiffEditor.ts",
+        "src/vs/workbench/contrib/terminal/test/browser/terminalProfileService.integrationTest.ts"
+      ],
+      "labels": [
+        "feature-request",
+        "verified",
+        "accessibility",
+        "on-testplan",
+        "insiders-released"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:44:12.211Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-94817-pr-171224",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "aa07f0733910ac048fafbc7137f4ac0748274963",
+      "patchCommit": "7d084eeca8d27d442b62506ea06f9d444ed28eae",
+      "pullRequest": {
+        "number": 171224,
+        "url": "https://github.com/microsoft/vscode/pull/171224",
+        "mergedAt": "2023-02-25T14:53:54Z"
+      },
+      "issue": {
+        "number": 94817,
+        "url": "https://github.com/microsoft/vscode/issues/94817",
+        "title": "Allow extensions to get the current editor layout",
+        "body": "<!-- ⚠️⚠️ Do Not Delete This! feature_request_template ⚠️⚠️ -->\r\n<!-- Please read our Rules of Conduct: https://opensource.microsoft.com/codeofconduct/ -->\r\n<!-- Please search existing issues to avoid creating duplicates. -->\r\n\r\n<!-- Describe the feature you'd like. -->\r\nWhen developing a extension I am using `vscode.setEditorLayout` as described in https://code.visualstudio.com/api/references/commands, and I am able to set editor layout/groups:\r\n\r\n```javascript\r\nvscode.commands.executeCommand(\r\n  'vscode.setEditorLayout',\r\n  { orientation: 1, groups: [{size: 0.4 }, { size: 0.6 }], }\r\n);\r\n```\r\n\r\nThe problem is that, before setting the layout, sometimes is good the get the current state, so we don't mess with the current displayed layout: \r\n\r\n```javascript\r\nlet layout = vscode.window.editorLayout \r\nconsole.log(layout)\r\n// { orientation: 1, groups: [{size: 0.7 }, { size: 0.3 }], }\r\n```\r\n\r\nIn the above example we could check that we already have two groups in vertical orientation, and because of that we won't change the size, we will respect the sizes the user already set.\r\n\r\nI looked at vscode source code and found IEditorGroupsService, but couldn't find a way for a extension to access it, so sorry if I missed something.\r\n\r\nPS: the window.editorLayout is just an idea, I don't know if there is another name or more appropriate namespace for this.\r\n",
+        "createdAt": "2020-04-09T18:11:16Z"
+      },
+      "query": "Allow extensions to get the current editor layout\n\nWhen developing a extension I am using `vscode.setEditorLayout` as described in https://code.visualstudio.com/api/references/commands, and I am able to set editor layout/groups: ```javascript vscode.commands.executeCommand( 'vscode.setEditorLayout', { orientation: 1, groups: [{size: 0.4 }, { size: 0.6 }], } ); ``` The problem is that, before setting the layout, sometimes is good the get the current state, so we don't mess with the current displayed layout: ```javascript let layout = vscode.window.editorLayout console.log(layout) // { orientation: 1, groups: [{size: 0.7 }, { size: 0.3 }], } ``` In the above example we could check that we already have two groups in vertical orientation, and because of that we won't change the size, we will respect the sizes the user already set. I looked at vscode source code and found IEditorGroupsService, but couldn't find a way for a extension to access it, so sorry if I missed something. PS: the window.editorLayout is just an idea, I don't know if there is another name or more appropriate namespace for this.",
+      "taskType": "repository-navigation",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/browser/parts/editor/editorCommands.ts",
+          "src/vs/workbench/browser/parts/editor/editorPart.ts",
+          "src/vs/workbench/services/editor/common/editorGroupsService.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/services/editor/test/browser/editorGroupsService.test.ts",
+          "src/vs/workbench/test/browser/workbenchTestServices.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/browser/parts/editor/editorCommands.ts",
+        "src/vs/workbench/browser/parts/editor/editorPart.ts",
+        "src/vs/workbench/services/editor/common/editorGroupsService.ts",
+        "src/vs/workbench/services/editor/test/browser/editorGroupsService.test.ts",
+        "src/vs/workbench/test/browser/workbenchTestServices.ts"
+      ],
+      "labels": [
+        "help wanted",
+        "feature-request",
+        "api",
+        "verified",
+        "good first issue",
+        "verification-needed",
+        "workbench-editor-grid",
+        "insiders-released",
+        "workbench-editor-groups"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-v1",
+        "collectedAt": "2026-07-13T17:44:12.211Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "pullRequestNumber": 285516,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285516",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285416,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285416",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285351,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285351",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285312,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285312",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285289,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285289",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285288,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285288",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285099,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285099",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285039,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285039",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285035,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285035",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 285033,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/285033",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284993,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284993",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284961,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284961",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284927,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284927",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284889,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284889",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284748,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284748",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284711,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284711",
+      "reasons": [
+        "no production source file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284673,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284673",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284597,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284597",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284505,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284505",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284445,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284445",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284434,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284434",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284311,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284311",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284286,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284286",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284283,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284283",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284282,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284282",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284260,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284260",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284253,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284253",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284244,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284244",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284226,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284226",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284224,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284224",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284149,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284149",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284147,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284147",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284132,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284132",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284078,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284078",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284037,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284037",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 284031,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/284031",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283989,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283989",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283936,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283936",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283925,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283925",
+      "reasons": [
+        "no production source file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283922,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283922",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283919,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283919",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283917,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283917",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283916,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283916",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283906,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283906",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283897,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283897",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283896,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283896",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283889,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283889",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283877,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283877",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283874,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283874",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283872,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283872",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283868,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283868",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283847,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283847",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283835,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283835",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283827,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283827",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283819,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283819",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283818,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283818",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283780,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283780",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283757,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283757",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 283750,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/283750",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 65264,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/65264",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 127320,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/127320",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 136633,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/136633",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 145788,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/145788",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 149952,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/149952",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 157318,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/157318",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 167568,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/167568",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 167662,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/167662",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 167827,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/167827",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 168375,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/168375",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 168921,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/168921",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 169221,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/169221",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170015,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170015",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170241,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170241",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170305,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170305",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170339,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170339",
+      "reasons": [
+        "no production source file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170403,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170403",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170562,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170562",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170564,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170564",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170567,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170567",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170574,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170574",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170680,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170680",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170689,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170689",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170691,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170691",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170696,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170696",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170697,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170697",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170698,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170698",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170707,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170707",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170718,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170718",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170720,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170720",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170722,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170722",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170730,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170730",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170867,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170867",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170875,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170875",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170909,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170909",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170914,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170914",
+      "reasons": [
+        "no production source file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170944,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170944",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170978,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170978",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 170983,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/170983",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171008,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171008",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171009,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171009",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171014,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171014",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171058,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171058",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171068,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171068",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171084,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171084",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171090,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171090",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171098,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171098",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171118,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171118",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171125,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171125",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171129,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171129",
+      "reasons": [
+        "more than 15 production files changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171151,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171151",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171186,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171186",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171237,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171237",
+      "reasons": [
+        "no production source file changed",
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 171251,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/171251",
+      "reasons": [
+        "no regression test or validation file changed"
+      ]
+    },
+    {
+      "pullRequestNumber": 160270,
+      "pullRequestUrl": "https://github.com/microsoft/vscode/pull/160270",
+      "reasons": [
+        "issue context is too short"
+      ]
+    }
+  ]
+}
+

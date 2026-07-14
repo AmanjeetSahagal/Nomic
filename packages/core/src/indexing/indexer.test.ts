@@ -146,6 +146,22 @@ describe("FilesystemParserProvider", () => {
     await expect(parser.indexRepository({ repositoryRoot, signal: controller.signal })).rejects.toThrow("cancelled");
   });
 
+  it("honors corpus-specific excluded path prefixes and globs", async () => {
+    const repositoryRoot = await createTempRepository();
+    await mkdir(path.join(repositoryRoot, "tests", "baselines"), { recursive: true });
+    await mkdir(path.join(repositoryRoot, "extensions", "sample"), { recursive: true });
+    await writeFile(path.join(repositoryRoot, "src", "kept.ts"), "export const kept = true;", "utf8");
+    await writeFile(path.join(repositoryRoot, "tests", "baselines", "generated.js"), "generated", "utf8");
+    await writeFile(path.join(repositoryRoot, "extensions", "sample", "package.nls.json"), "{}", "utf8");
+
+    const index = await new FilesystemParserProvider().indexRepository({
+      repositoryRoot,
+      excludedPaths: ["tests/baselines/", "extensions/*/package.nls.json"]
+    });
+
+    expect(index.files.map((file) => file.path)).toEqual(["src/kept.ts"]);
+  });
+
   it("falls back safely when the TypeScript parser rejects an intentionally invalid fixture", async () => {
     const repositoryRoot = await createTempRepository();
     await writeFile(
