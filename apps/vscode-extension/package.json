@@ -80,6 +80,6 @@
     "@nomic/core": "0.1.0"
   },
   "devDependencies": {
-    "@types/vscode": "^1.97.0"
+    "@types/vscode": "^1.125.0"
   }
 }
