@@ -13,3 +13,9 @@ No expansion task may move from `draft` to `accepted` until a reviewer checks:
 7. Generated, release, documentation-only, dependency, localization, and security-sensitive tasks remain rejected.
 
 Candidate shards under `benchmarks/results/ranking-corpus-100/` contain exactly 50 deterministic records per task and all 28 `ranking-features-v1` values. All-negative groups remain useful for candidate-generation evaluation but must not be sampled as pairwise ranking tasks.
+
+The candidate diagnostic writes an explicit adjudication registry. Every task must record a reviewer, primary and supporting production files, tests, positive symbols, renamed paths, generated-file exclusions, base-commit verification, issue/fix-link verification, notes, and `labels_frozen: true`. Draft records remain `pending`; generated diagnostics do not promote them.
+
+After labels are frozen, each fused-pool miss receives exactly one reviewed reason from the versioned failure taxonomy. Until then, its taxonomy status is `blocked-on-adjudication`. The training gate remains closed while any task is pending or candidate coverage is inadequate.
+
+The current provisional audit is recorded in `candidate-generation-audit.json`. It distinguishes the frozen production-style top-50 pool (45% recall under draft labels) from body-only BM25 (63%) and experimental lexical RRF (68%). These are different candidate policies, and the latter two remain non-claimable until the 82 drafts are adjudicated.

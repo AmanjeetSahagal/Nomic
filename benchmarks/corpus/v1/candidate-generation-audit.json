@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T17:20:16.505Z",
+  "status": "provisional-review-required",
+  "tasks": 100,
+  "reviewedTasks": 18,
+  "draftTasks": 82,
+  "warning": "Draft-label results are diagnostic only and cannot authorize training or ML claims.",
+  "frozenProductionPool": {
+    "policy": "frozen BM25 plus exact-symbol evidence, top 50",
+    "recallAt50": 0.45,
+    "tasksWithPositive": 45,
+    "repositories": {
+      "django/django": 0.725,
+      "microsoft/TypeScript": 0.2,
+      "microsoft/vscode": 0.4
+    }
+  },
+  "experimentalCandidateRecall": [
+    { "mode": "bm25-files", "recallAt10": 0.45, "recallAt20": 0.55, "recallAt50": 0.63, "recallAt100": 0.68, "recallAt200": 0.71 },
+    { "mode": "exact-symbol", "recallAt10": 0.31, "recallAt20": 0.36, "recallAt50": 0.41, "recallAt100": 0.43, "recallAt200": 0.45 },
+    { "mode": "bm25-plus-exact-symbol", "recallAt10": 0.43, "recallAt20": 0.54, "recallAt50": 0.62, "recallAt100": 0.68, "recallAt200": 0.7 },
+    { "mode": "symbol-bm25", "recallAt10": 0.4, "recallAt20": 0.47, "recallAt50": 0.56, "recallAt100": 0.64, "recallAt200": 0.67 },
+    { "mode": "bm25-plus-symbol-bm25", "recallAt10": 0.54, "recallAt20": 0.6, "recallAt50": 0.66, "recallAt100": 0.67, "recallAt200": 0.71 },
+    { "mode": "bm25-plus-path", "recallAt10": 0.36, "recallAt20": 0.49, "recallAt50": 0.62, "recallAt100": 0.69, "recallAt200": 0.7 },
+    { "mode": "rrf-lexical", "recallAt10": 0.53, "recallAt20": 0.61, "recallAt50": 0.68, "recallAt100": 0.68, "recallAt200": 0.7 }
+  ],
+  "rrfLexicalRecallAt50ByRepository": {
+    "django/django": 0.975,
+    "microsoft/TypeScript": 0.325,
+    "microsoft/vscode": 0.8
+  },
+  "trainingGate": {
+    "status": "closed",
+    "allTasksReviewed": false,
+    "labelLeakageChecksPass": true,
+    "candidateRecallAt50Acceptable": false,
+    "repositoryCoverageMeaningful": true,
+    "minimumCandidateRecallAt50": 0.7,
+    "preferredCandidateRecallAt50": 0.8
+  },
+  "failureReview": {
+    "rrfLexicalMissesAt50": 32,
+    "blockedOnAdjudication": 23,
+    "reviewedTasksPendingTaxonomy": 9
+  },
+  "detailedArtifacts": "benchmarks/results/candidate-generation-100/"
+}
