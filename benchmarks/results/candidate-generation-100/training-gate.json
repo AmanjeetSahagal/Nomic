@@ -1,0 +1,21 @@
+{
+  "status": "closed",
+  "labelsFrozen": false,
+  "reviewedTasks": 18,
+  "totalTasks": 100,
+  "frozenProductionCandidateRecallAt50": 0.45,
+  "provisionalBm25FileRecallAt50": 0.63,
+  "provisionalRrfLexicalRecallAt50": 0.68,
+  "evaluatedCandidateGenerator": "rrf-lexical",
+  "engineeringTarget": {
+    "minimum": 0.7,
+    "preferred": 0.8
+  },
+  "conditions": {
+    "allTasksReviewed": false,
+    "labelLeakageChecksPass": true,
+    "candidateRecallAt50Acceptable": false,
+    "repositoryCoverageMeaningful": true
+  },
+  "conclusion": "Do not train until every condition passes. Draft-label measurements are diagnostic only."
+}

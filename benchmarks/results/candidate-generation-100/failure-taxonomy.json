@@ -1,0 +1,657 @@
+{
+  "schemaVersion": 1,
+  "reasons": [
+    "vocabulary mismatch",
+    "symbol mentioned but file missed",
+    "relevant file too large or generic",
+    "test file outranks implementation",
+    "path or rename mismatch",
+    "parser or indexing omission",
+    "generated-file labeling issue",
+    "cross-file architectural dependency",
+    "incorrect benchmark label",
+    "candidate cutoff too low"
+  ],
+  "tasks": [
+    {
+      "taskId": "django-django-issue-33647-pr-20480",
+      "repository": "django/django",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-55843-pr-62873",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62462-pr-62661",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62675-pr-62676",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62720-pr-62722",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62782-pr-62783",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62912-pr-62914",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62920-pr-62923",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62921-pr-62928",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "reviewed",
+      "taxonomyStatus": "pending-review",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-55588-pr-62751",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61223-pr-62656",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62606-pr-62604",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62153-pr-62155",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-60438-pr-61935",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61181-pr-61927",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61916-pr-61920",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61734-pr-61824",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61784-pr-61788",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61772-pr-61777",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61547-pr-61683",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-58195-pr-61582",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61466-pr-61481",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61351-pr-61352",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61334-pr-61342",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61318-pr-61317",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61239-pr-61261",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-48524-pr-49226",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-48829-pr-49636",
+      "repository": "microsoft/TypeScript",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-284524-pr-284554",
+      "repository": "microsoft/vscode",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-282676-pr-284341",
+      "repository": "microsoft/vscode",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-283902-pr-284127",
+      "repository": "microsoft/vscode",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-82415-pr-166318",
+      "repository": "microsoft/vscode",
+      "labelStatus": "draft",
+      "taxonomyStatus": "blocked-on-adjudication",
+      "mainReason": null,
+      "allowedReasons": [
+        "vocabulary mismatch",
+        "symbol mentioned but file missed",
+        "relevant file too large or generic",
+        "test file outranks implementation",
+        "path or rename mismatch",
+        "parser or indexing omission",
+        "generated-file labeling issue",
+        "cross-file architectural dependency",
+        "incorrect benchmark label",
+        "candidate cutoff too low"
+      ],
+      "notes": ""
+    }
+  ]
+}

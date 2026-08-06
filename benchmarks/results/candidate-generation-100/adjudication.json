@@ -1,0 +1,2312 @@
+{
+  "schemaVersion": 1,
+  "labelsFrozen": false,
+  "tasks": [
+    {
+      "taskId": "django-django-issue-24920-pr-20445",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/db/models/fields/__init__.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/invalid_models_tests/test_ordinary_fields.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "DecimalField.check",
+          "path": "django/db/models/fields/__init__.py",
+          "grade": 3,
+          "startLine": 1716,
+          "endLine": 1729
+        },
+        {
+          "name": "DecimalField._check_decimal_places",
+          "path": "django/db/models/fields/__init__.py",
+          "grade": 3,
+          "startLine": 1730,
+          "endLine": 1769
+        },
+        {
+          "name": "DecimalField._check_max_digits",
+          "path": "django/db/models/fields/__init__.py",
+          "grade": 3,
+          "startLine": 1770,
+          "endLine": 1809
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-33647-pr-20480",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/db/backends/postgresql/compiler.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/backends/postgresql/test_compilation.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "SQLInsertCompiler.assemble_as_sql",
+          "path": "django/db/backends/postgresql/compiler.py",
+          "grade": 3,
+          "startLine": 49,
+          "endLine": 62
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-36618-pr-20426",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/forms/forms.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/forms_tests/tests/test_forms.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "BaseForm.add_error",
+          "path": "django/forms/forms.py",
+          "grade": 3,
+          "startLine": 284,
+          "endLine": 321
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-36787-pr-20437",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/db/models/lookups.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/lookup/tests.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "FieldGetDbPrepValueIterableMixin.get_prep_lookup",
+          "path": "django/db/models/lookups.py",
+          "grade": 3,
+          "startLine": 285,
+          "endLine": 307
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-36796-pr-20459",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/urls/resolvers.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/urlpatterns/lazy_path_urls.py",
+        "tests/urlpatterns/test_resolvers.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "RoutePattern.match",
+          "path": "django/urls/resolvers.py",
+          "grade": 3,
+          "startLine": 329,
+          "endLine": 347
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-36800-pr-20411",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/db/backends/base/schema.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/schema/tests.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "BaseDatabaseSchemaEditor._field_should_be_altered",
+          "path": "django/db/backends/base/schema.py",
+          "grade": 3,
+          "startLine": 1687,
+          "endLine": 1735
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-36806-pr-20421",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/db/models/fields/generated.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/invalid_models_tests/test_ordinary_fields.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "GeneratedField.__init__",
+          "path": "django/db/models/fields/generated.py",
+          "grade": 3,
+          "startLine": 20,
+          "endLine": 38
+        },
+        {
+          "name": "GeneratedField.check",
+          "path": "django/db/models/fields/generated.py",
+          "grade": 3,
+          "startLine": 77,
+          "endLine": 99
+        },
+        {
+          "name": "GeneratedField._check_ignored_options",
+          "path": "django/db/models/fields/generated.py",
+          "grade": 3,
+          "startLine": 190,
+          "endLine": 204
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-36818-pr-20443",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/db/backends/sqlite3/features.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/backends/sqlite/test_features.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "DatabaseFeatures.max_query_params",
+          "path": "django/db/backends/sqlite3/features.py",
+          "grade": 3,
+          "startLine": 153,
+          "endLine": 162
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue text and focused commit patches; release notes excluded from relevance and production symbols annotated."
+    },
+    {
+      "taskId": "django-django-issue-36829-pr-20471",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "django/contrib/admin/widgets.py",
+        "django/forms/widgets.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/forms_tests/widget_tests/test_clearablefileinput.py"
+      ],
+      "positive_symbols": [
+        {
+          "name": "AdminFileWidget",
+          "path": "django/contrib/admin/widgets.py",
+          "grade": 3,
+          "startLine": 123,
+          "endLine": 125
+        },
+        {
+          "name": "ClearableFileInput",
+          "path": "django/forms/widgets.py",
+          "grade": 3,
+          "startLine": 526,
+          "endLine": 578
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public Django issue and commit diff; release notes excluded from relevance."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-55843-pr-62873",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/lib/es2020.string.d.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [],
+      "positive_symbols": [
+        {
+          "name": "String.matchAll",
+          "path": "src/lib/es2020.string.d.ts",
+          "grade": 3,
+          "startLine": 5,
+          "endLine": 12
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Corrected symbol alignment after review; verified against focused public commit patches."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62462-pr-62661",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/iterableWithNeverAsUnionMember.ts"
+      ],
+      "positive_symbols": [
+        {
+          "name": "createTypeChecker.getIterationTypesOfIterable",
+          "path": "src/compiler/checker.ts",
+          "grade": 3,
+          "startLine": 45835,
+          "endLine": 45860
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue and commit patch; broad module deprecation task rejected from initial localization pilot."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62675-pr-62676",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/forAwaitForIntersection1.ts"
+      ],
+      "positive_symbols": [
+        {
+          "name": "createTypeChecker.getIterationTypesOfIterable",
+          "path": "src/compiler/checker.ts",
+          "grade": 3,
+          "startLine": 45910,
+          "endLine": 45980
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue and commit patch; broad module deprecation task rejected from initial localization pilot."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62720-pr-62722",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/reverseMappedTypeInferenceWidening1.ts",
+        "tests/cases/compiler/reverseMappedTypeInferenceWidening2.ts"
+      ],
+      "positive_symbols": [
+        {
+          "name": "createTypeChecker.inferTypeForHomomorphicMappedType",
+          "path": "src/compiler/checker.ts",
+          "grade": 3,
+          "startLine": 26425,
+          "endLine": 26442
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Corrected symbol alignment after review; verified against focused public commit patches."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62782-pr-62783",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/binder.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [],
+      "positive_symbols": [
+        {
+          "name": "createBinder.bind",
+          "path": "src/compiler/binder.ts",
+          "grade": 3,
+          "startLine": 1080,
+          "endLine": 1110
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Corrected symbol alignment after review; verified against focused public commit patches."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62841-pr-62844",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/moduleNameResolver.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/node/nodeModulesPackageImportsRootWildcard.ts",
+        "tests/cases/conformance/node/nodeModulesPackageImportsRootWildcardNode16.ts"
+      ],
+      "positive_symbols": [
+        {
+          "name": "NodeResolutionFeatures",
+          "path": "src/compiler/moduleNameResolver.ts",
+          "grade": 3,
+          "startLine": 1680,
+          "endLine": 1705
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Corrected symbol alignment after review; verified against focused public commit patches."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62912-pr-62914",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/reachabilityChecksNoCrash1.ts"
+      ],
+      "positive_symbols": [
+        {
+          "name": "createTypeChecker.checkUnreachable",
+          "path": "src/compiler/checker.ts",
+          "grade": 3,
+          "startLine": 49225,
+          "endLine": 49280
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue and commit patch; broad module deprecation task rejected from initial localization pilot."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62920-pr-62923",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/errorInUnnamedClassExpression.ts"
+      ],
+      "positive_symbols": [
+        {
+          "name": "createTypeChecker.checkPropertyAccessibility",
+          "path": "src/compiler/checker.ts",
+          "grade": 3,
+          "startLine": 34440,
+          "endLine": 34470
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue and commit patch; broad module deprecation task rejected from initial localization pilot."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62921-pr-62928",
+      "status": "reviewed",
+      "reviewer": "legacy review; identity not recorded",
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/checkInheritedProperty.ts",
+        "tests/cases/compiler/noCrashOnMixin2.ts"
+      ],
+      "positive_symbols": [
+        {
+          "name": "createTypeChecker.getBaseTypes",
+          "path": "src/compiler/checker.ts",
+          "grade": 3,
+          "startLine": 13212,
+          "endLine": 13235
+        },
+        {
+          "name": "createTypeChecker.isPropertyDeclaredInAncestorClass",
+          "path": "src/compiler/checker.ts",
+          "grade": 3,
+          "startLine": 35053,
+          "endLine": 35070
+        }
+      ],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": true,
+      "issue_fix_link_verified": true,
+      "labels_frozen": true,
+      "notes": "Reviewed against public issue and commit patch; broad module deprecation task rejected from initial localization pilot."
+    },
+    {
+      "taskId": "django-django-issue-36810-pr-20427",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/utils/csp.py",
+        "django/utils/functional.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/utils_tests/test_csp.py",
+        "tests/utils_tests/test_lazyobject.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36783-pr-20379",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/template/defaulttags.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/template_tests/syntax_tests/test_querystring.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36112-pr-20312",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/backends/oracle/operations.py",
+        "django/db/backends/postgresql/operations.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/backends/base/test_operations.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36724-pr-20080",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/forms/boundfield.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/forms_tests/tests/test_forms.py",
+        "tests/forms_tests/tests/test_i18n.py",
+        "tests/forms_tests/widget_tests/test_clearablefileinput.py",
+        "tests/forms_tests/widget_tests/test_selectdatewidget.py",
+        "tests/model_forms/tests.py",
+        "tests/model_formsets/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36715-pr-20065",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/utils/numberformat.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/humanize_tests/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36710-pr-20060",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/utils/html.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/utils_tests/test_html.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36321-pr-20021",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/core/management/base.py",
+        "django/utils/version.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/admin_scripts/tests.py",
+        "tests/user_commands/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36656-pr-19943",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/middleware/gzip.py",
+        "django/utils/text.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/middleware/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36611-pr-19884",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/models/base.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/invalid_models_tests/test_models.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36480-pr-19845",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/models/sql/query.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/annotations/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36590-pr-19840",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/core/cache/backends/base.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cache/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36488-pr-19833",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/views/generic/base.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/generic_views/test_base.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36410-pr-19643",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/template/__init__.py",
+        "django/template/base.py",
+        "django/template/defaulttags.py",
+        "django/template/engine.py",
+        "django/utils/datastructures.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "django/test/utils.py",
+        "tests/template_tests/syntax_tests/test_partials.py",
+        "tests/template_tests/templates/partial_base.html",
+        "tests/template_tests/templates/partial_child.html",
+        "tests/template_tests/templates/partial_examples.html",
+        "tests/template_tests/test_partials.py",
+        "tests/utils_tests/test_datastructures.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36453-pr-19555",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/models/expressions.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/expressions/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-26434-pr-19519",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/models/sql/query.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/aggregation_regress/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36411-pr-19507",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/http/request.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/requests_tests/test_accept_header.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36404-pr-19494",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/models/aggregates.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/aggregation/test_filter_argument.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36388-pr-19472",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/models/query.py"
+      ],
+      "supporting_files": [
+        "AUTHORS"
+      ],
+      "test_files": [
+        "tests/queries/test_qs_combinators.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36210-pr-19459",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/backends/base/features.py",
+        "django/db/backends/oracle/features.py",
+        "django/db/models/expressions.py",
+        "django/db/models/fields/tuple_lookups.py",
+        "django/db/models/sql/query.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/annotations/tests.py",
+        "tests/composite_pk/test_filter.py",
+        "tests/expressions/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-33174-pr-19423",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/migrations/state.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/migrations/migrations_test_apps/with_generic_model/__init__.py",
+        "tests/migrations/migrations_test_apps/with_generic_model/migrations/0001_initial.py",
+        "tests/migrations/migrations_test_apps/with_generic_model/migrations/0002_customgenericmodel.py",
+        "tests/migrations/migrations_test_apps/with_generic_model/migrations/__init__.py",
+        "tests/migrations/migrations_test_apps/with_generic_model/models.py",
+        "tests/migrations/test_commands.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36348-pr-19408",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/contrib/staticfiles/storage.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/staticfiles_tests/project/documents/cached/data_uri_with_nested_url.css",
+        "tests/staticfiles_tests/test_storage.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-27489-pr-19405",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/contrib/auth/apps.py",
+        "django/contrib/auth/management/__init__.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/auth_tests/operations_migrations/0001_initial.py",
+        "tests/auth_tests/operations_migrations/0002_rename_oldmodel_to_newmodel.py",
+        "tests/auth_tests/operations_migrations/__init__.py",
+        "tests/auth_tests/test_management.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-35595-pr-19361",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/migrations/autodetector.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/migrations/test_autodetector.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36284-pr-19328",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/contrib/admin/static/admin/js/admin/RelatedObjectLookups.js"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "js_tests/admin/RelatedObjectLookups.test.js"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36252-pr-19264",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/core/management/commands/shell.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/shell/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36222-pr-19236",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/contrib/postgres/constraints.py"
+      ],
+      "supporting_files": [
+        "AUTHORS"
+      ],
+      "test_files": [
+        "tests/postgres_tests/test_constraints.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-35839-pr-19199",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/backends/base/schema.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/schema/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36114-pr-19078",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/contrib/admin/templatetags/admin_list.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/admin_changelist/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-36005-pr-19067",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/migrations/serializer.py",
+        "django/db/models/enums.py",
+        "django/db/models/fields/files.py",
+        "django/views/debug.py"
+      ],
+      "supporting_files": [
+        ".github/workflows/schedule_tests.yml",
+        ".github/workflows/screenshots.yml",
+        "INSTALL",
+        "pyproject.toml",
+        "tox.ini"
+      ],
+      "test_files": [
+        "django/test/runner.py",
+        "django/test/testcases.py",
+        "tests/mail/tests.py",
+        "tests/model_enums/tests.py",
+        "tests/model_fields/test_filefield.py",
+        "tests/runtests.py",
+        "tests/test_runner/test_debug_sql.py",
+        "tests/test_runner/test_discover_runner.py",
+        "tests/test_runner/test_parallel.py",
+        "tests/test_runner/tests.py",
+        "tests/test_utils/tests.py",
+        "tests/utils_tests/test_dateparse.py",
+        "tests/utils_tests/test_functional.py",
+        "tests/view_tests/tests/test_debug.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-35972-pr-19057",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/contrib/gis/db/models/lookups.py",
+        "django/contrib/postgres/search.py",
+        "django/db/backends/base/schema.py",
+        "django/db/models/expressions.py",
+        "django/db/models/functions/comparison.py",
+        "django/db/models/lookups.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/custom_lookups/tests.py",
+        "tests/expressions/tests.py",
+        "tests/migrations/test_operations.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "django-django-issue-35677-pr-19042",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "django/db/models/fields/related_descriptors.py",
+        "django/db/models/sql/query.py"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/prefetch_related/models.py",
+        "tests/prefetch_related/tests.py"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62211-pr-62876",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/utilities.ts"
+      ],
+      "supporting_files": [
+        "src/compiler/diagnosticMessages.json"
+      ],
+      "test_files": [
+        "tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts",
+        "tests/cases/compiler/circularModuleImports.ts",
+        "tests/cases/compiler/cloduleTest1.ts",
+        "tests/cases/compiler/cloduleWithRecursiveReference.ts",
+        "tests/cases/compiler/declareDottedExtend.ts",
+        "tests/cases/compiler/dottedModuleName2.ts",
+        "tests/cases/compiler/escapedIdentifiers.ts",
+        "tests/cases/compiler/functionInIfStatementInModule.ts",
+        "tests/cases/compiler/moduleClassArrayCodeGenTest.ts",
+        "tests/cases/compiler/moduleKeywordDeprecated.ts",
+        "tests/cases/compiler/moduleMerge.ts",
+        "tests/cases/compiler/moduleScopingBug.ts",
+        "tests/cases/compiler/namedFunctionExpressionInModule.ts",
+        "tests/cases/compiler/nestedModulePrivateAccess.ts",
+        "tests/cases/compiler/primaryExpressionMods.ts",
+        "tests/cases/compiler/reachabilityChecks11.ts",
+        "tests/cases/compiler/recursiveCloduleReference.ts",
+        "tests/cases/compiler/selfRef.ts",
+        "tests/cases/compiler/unexportedInstanceClassVariables.ts",
+        "tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts",
+        "tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts",
+        "tests/cases/projects/DeclareExportAdded/ref.d.ts",
+        "tests/cases/projects/declareVariableCollision/decl.d.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-55588-pr-62751",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/binder.ts",
+        "src/compiler/checker.ts",
+        "src/compiler/types.ts",
+        "src/compiler/utilities.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/reachabilityChecks10.ts",
+        "tests/cases/compiler/reachabilityChecks11.ts",
+        "tests/cases/compiler/reachabilityChecks9.ts",
+        "tests/cases/compiler/reachabilityChecksIgnored.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62657-pr-62659",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/parser.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/decorators/invalid/decoratorOnAwait.ts",
+        "tests/cases/conformance/decorators/invalid/decoratorOnUsing.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61223-pr-62656",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/spreadUnionPropOverride.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62606-pr-62604",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/variancePropagation.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62590-pr-62593",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/parser.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/importAttributes/importAttributes11.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62439-pr-62483",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/moduleNameResolver.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/moduleResolution/conditionalExportsResolutionFallbackNull.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62421-pr-62443",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/commandLineParser.ts"
+      ],
+      "supporting_files": [
+        "src/compiler/diagnosticMessages.json"
+      ],
+      "test_files": [
+        "tests/cases/compiler/ambientExportDefaultErrors.ts",
+        "tests/cases/compiler/moduleAugmentationGlobal5.ts",
+        "tests/cases/compiler/moduleResolutionWithExtensions_unexpected.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62343-pr-62351",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/lib/esnext.float16.d.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/typedArrayConstructorOverloads.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62153-pr-62155",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/privateFieldsInClassExpressionDeclaration.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-60438-pr-61935",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/bigintAmbientMinimal.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61181-pr-61927",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/accessorInAmbientContextES5.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61916-pr-61920",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/parser.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/importAttributes/importAttributes10.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61734-pr-61824",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/disallowedBlockScopedInPresenceOfParseErrors1.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61784-pr-61788",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/controlFlow/controlFlowAliasing2.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61772-pr-61777",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/enumWithBigint.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61747-pr-61764",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/parser.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForOf.4.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61547-pr-61683",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/exactOptionalPropertyTypesIdentical.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-59937-pr-61668",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/types.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/genericCallInferenceInConditionalTypes1.ts",
+        "tests/cases/compiler/genericCallInferenceUsingThisTypeNoInvalidCacheReuseAfterMappedTypeApplication1.ts",
+        "tests/cases/compiler/genericCallInferenceWithGenericLocalFunction.ts",
+        "tests/cases/compiler/genericCallWithinOwnBodyCastTypeParameterIdentity.ts",
+        "tests/cases/compiler/inferenceFromGenericClassNoCrash1.ts",
+        "tests/cases/compiler/nestedGenericSpreadInference.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-58195-pr-61582",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/exportAssignmentExpressionIsExpressionNode.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61466-pr-61481",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/missingDomElement_UsingDomLib.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61338-pr-61392",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/expressionToTypeNode.ts",
+        "src/compiler/types.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/declarationEmitGenericTypeParamerSerialization.ts",
+        "tests/cases/compiler/declarationEmitGenericTypeParamerSerialization2.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61369-pr-61372",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/utilities.ts",
+        "src/testRunner/unittests/printer.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingAssignmentVsPrivateFieldsJsEmit1.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61351-pr-61352",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/computedPropertyBindingElementDeclarationNoCrash1.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61334-pr-61342",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/expressionToTypeNode.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/declarationEmitShadowing.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61318-pr-61317",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/genericCallAtYieldExpressionInGenericCall1.ts",
+        "tests/cases/compiler/genericCallAtYieldExpressionInGenericCall2.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61239-pr-61261",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/expressionToTypeNode.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/declarationEmitNoInvalidCommentReuse1.ts",
+        "tests/cases/compiler/declarationEmitNoInvalidCommentReuse2.ts",
+        "tests/cases/compiler/declarationEmitNoInvalidCommentReuse3.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-7411-pr-47356",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/emitter.ts",
+        "src/compiler/factory/nodeFactory.ts",
+        "src/compiler/factory/nodeTests.ts",
+        "src/compiler/parser.ts",
+        "src/compiler/scanner.ts",
+        "src/compiler/transformers/jsx.ts",
+        "src/compiler/types.ts",
+        "src/compiler/utilities.ts",
+        "src/compiler/utilitiesPublic.ts",
+        "src/compiler/visitorPublic.ts",
+        "src/services/codefixes/fixAddMissingMember.ts",
+        "src/services/completions.ts",
+        "src/services/stringCompletions.ts"
+      ],
+      "supporting_files": [
+        "src/compiler/diagnosticMessages.json"
+      ],
+      "test_files": [
+        "tests/cases/conformance/jsx/tsxNamespacedAttributeName1.tsx",
+        "tests/cases/conformance/jsx/tsxNamespacedAttributeName2.tsx",
+        "tests/cases/conformance/jsx/tsxNamespacedTagName1.tsx",
+        "tests/cases/conformance/jsx/tsxNamespacedTagName2.tsx"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-48524-pr-49226",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/inferFromNestedSameShapeTuple.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-48783-pr-49627",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/checker.ts",
+        "src/compiler/types.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "tests/cases/compiler/declarationEmitGlobalThisPreserved.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-48829-pr-49636",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/compiler/commandLineParser.ts",
+        "src/lib/es2023.array.d.ts",
+        "src/lib/es2023.d.ts",
+        "src/lib/es2023.full.d.ts",
+        "src/lib/esnext.d.ts"
+      ],
+      "supporting_files": [
+        "src/lib/libs.json"
+      ],
+      "test_files": [
+        "tests/cases/compiler/findLast.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-285213-pr-285214",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/platform/quickinput/browser/quickInput.ts",
+        "src/vs/platform/quickinput/browser/quickInputController.ts",
+        "src/vs/platform/quickinput/browser/quickInputList.ts",
+        "src/vs/platform/quickinput/browser/quickInputUtils.ts",
+        "src/vs/platform/quickinput/browser/tree/quickInputTreeRenderer.ts",
+        "src/vs/platform/quickinput/common/quickInput.ts"
+      ],
+      "supporting_files": [
+        "src/vs/platform/quickinput/browser/media/quickInput.css"
+      ],
+      "test_files": [
+        "src/vs/platform/quickinput/test/browser/quickInputUtils.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-280540-pr-284668",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/editor/contrib/quickAccess/browser/gotoLineQuickAccess.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/editor/contrib/quickAccess/test/browser/gotoLineQuickAccess.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-284524-pr-284554",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/notebook/browser/view/cellParts/codeCell.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/notebook/test/browser/view/cellPart.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-278618-pr-284438",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/platform/url/common/trustedDomains.ts",
+        "src/vs/platform/url/common/urlGlob.ts",
+        "src/vs/platform/webContentExtractor/common/webContentExtractor.ts",
+        "src/vs/platform/webContentExtractor/electron-main/webContentExtractorService.ts",
+        "src/vs/platform/webContentExtractor/electron-main/webPageLoader.ts",
+        "src/vs/workbench/contrib/chat/common/chatUrlFetchingPatterns.ts",
+        "src/vs/workbench/contrib/chat/electron-browser/tools/fetchPageTool.ts",
+        "src/vs/workbench/contrib/externalUriOpener/common/externalUriOpenerService.ts",
+        "src/vs/workbench/contrib/url/browser/trustedDomainService.ts",
+        "src/vs/workbench/contrib/url/browser/trustedDomainsValidator.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/platform/url/test/common/trustedDomains.test.ts",
+        "src/vs/platform/url/test/common/urlGlob.test.ts",
+        "src/vs/platform/webContentExtractor/test/electron-main/webPageLoader.test.ts",
+        "src/vs/workbench/contrib/url/test/browser/mockTrustedDomainService.ts",
+        "src/vs/workbench/contrib/url/test/browser/trustedDomains.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-249040-pr-284371",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/editor/common/model/indentationGuesser.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/editor/test/common/model/textModel.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-282676-pr-284341",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/notebook/browser/view/cellParts/codeCell.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/notebook/test/browser/view/cellPart.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-282209-pr-284248",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/common/terminalChatAgentToolsConfiguration.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/test/electron-browser/runInTerminalTool.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-275562-pr-284134",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/chat/browser/actions/chatCodeblockActions.ts",
+        "src/vs/workbench/contrib/tasks/browser/terminalTaskSystem.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminal.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalActions.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalEditorService.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalGroupService.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalService.ts",
+        "src/vs/workbench/contrib/terminalContrib/chat/browser/terminalChatActions.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/test/browser/workbenchTestServices.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-283902-pr-284127",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/tools/monitoring/outputMonitor.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/test/browser/outputMonitor.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-281595-pr-283942",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/chat/browser/chat.ts",
+        "src/vs/workbench/contrib/chat/browser/chatAccessibilityService.ts",
+        "src/vs/workbench/contrib/chat/browser/chatWidget.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/inlineChat/test/browser/inlineChatController.test.ts",
+        "src/vs/workbench/contrib/inlineChat/test/browser/inlineChatSession.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-284110-pr-283934",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/chat/browser/chat.contribution.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/computeAutomaticInstructions.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/config/config.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/config/promptFileLocations.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/service/promptsService.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/service/promptsServiceImpl.ts",
+        "src/vs/workbench/contrib/chat/common/promptSyntax/utils/promptFilesLocator.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/chat/test/common/mockPromptsService.ts",
+        "src/vs/workbench/contrib/chat/test/common/promptSyntax/service/promptsService.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-264202-pr-283885",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/tasks/browser/abstractTaskService.ts",
+        "src/vs/workbench/contrib/tasks/common/problemMatcher.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/tasks/test/common/problemMatcher.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-142135-pr-143054",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/debug/browser/debugConfigurationManager.ts",
+        "src/vs/workbench/contrib/debug/common/debug.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/debug/test/browser/debugConfigurationManager.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-82415-pr-166318",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/services/search/common/queryBuilder.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/services/search/test/common/queryBuilder.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-169422-pr-169885",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/services/search/node/ripgrepTextSearchEngine.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/services/search/test/node/ripgrepTextSearchEngineUtils.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-170242-pr-170250",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+        "src/vs/workbench/contrib/terminal/common/terminalEnvironment.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/terminal/test/common/terminalEnvironment.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-170484-pr-170887",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/contrib/terminal/browser/terminal.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalQuickFixBuiltinActions.ts",
+        "src/vs/workbench/contrib/terminal/browser/xterm/quickFixAddon.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/terminal/test/browser/quickFixAddon.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-99878-pr-171066",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/platform/terminal/common/environmentVariable.ts",
+        "src/vs/platform/terminal/common/environmentVariableCollection.ts",
+        "src/vs/platform/terminal/common/environmentVariableShared.ts",
+        "src/vs/platform/terminal/node/terminalEnvironment.ts",
+        "src/vs/platform/terminal/node/terminalProcess.ts",
+        "src/vs/server/node/remoteTerminalChannel.ts",
+        "src/vs/workbench/api/browser/mainThreadTerminalService.ts",
+        "src/vs/workbench/api/common/extHost.protocol.ts",
+        "src/vs/workbench/api/common/extHostTerminalService.ts",
+        "src/vs/workbench/contrib/terminal/browser/environmentVariableInfo.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalInstance.ts",
+        "src/vs/workbench/contrib/terminal/browser/terminalProcessManager.ts",
+        "src/vs/workbench/contrib/terminal/common/environmentVariable.ts",
+        "src/vs/workbench/contrib/terminal/common/environmentVariableService.ts",
+        "src/vs/workbench/contrib/terminal/common/remoteTerminalChannel.ts"
+      ],
+      "supporting_files": [
+        "src/vs/workbench/contrib/terminal/browser/media/shellIntegration-bash.sh",
+        "src/vs/workbench/contrib/terminal/browser/media/shellIntegration-profile.zsh",
+        "src/vs/workbench/contrib/terminal/browser/media/shellIntegration.fish"
+      ],
+      "test_files": [
+        "src/vs/platform/terminal/test/node/terminalEnvironment.test.ts",
+        "src/vs/workbench/contrib/terminal/test/common/environmentVariableCollection.test.ts",
+        "src/vs/workbench/contrib/terminal/test/common/environmentVariableService.test.ts",
+        "src/vs/workbench/contrib/terminal/test/common/environmentVariableShared.test.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-171200-pr-171212",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/editor/browser/widget/diffNavigator.ts",
+        "src/vs/editor/standalone/browser/standaloneEditor.ts",
+        "src/vs/platform/audioCues/browser/audioCueService.ts",
+        "src/vs/workbench/browser/parts/editor/textDiffEditor.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/contrib/terminal/test/browser/terminalProfileService.integrationTest.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    },
+    {
+      "taskId": "microsoft-vscode-issue-94817-pr-171224",
+      "status": "pending",
+      "reviewer": null,
+      "primary_files": [
+        "src/vs/workbench/browser/parts/editor/editorCommands.ts",
+        "src/vs/workbench/browser/parts/editor/editorPart.ts",
+        "src/vs/workbench/services/editor/common/editorGroupsService.ts"
+      ],
+      "supporting_files": [],
+      "test_files": [
+        "src/vs/workbench/services/editor/test/browser/editorGroupsService.test.ts",
+        "src/vs/workbench/test/browser/workbenchTestServices.ts"
+      ],
+      "positive_symbols": [],
+      "renamed_paths": [],
+      "generated_file_exclusions": [],
+      "base_commit_verified": false,
+      "issue_fix_link_verified": false,
+      "labels_frozen": false,
+      "notes": ""
+    }
+  ]
+}
