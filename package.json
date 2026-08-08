@@ -24,7 +24,12 @@
     "corpus:validate": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js validate",
     "corpus:stats": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js stats",
     "corpus:benchmark": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/corpus-cli.js benchmark",
-    "corpus:candidates": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/candidate-evaluation-cli.js"
+    "corpus:candidates": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/candidate-evaluation-cli.js",
+    "corpus:adjudicate": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/adjudication-cli.js",
+    "corpus:freeze": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/freeze-corpus-cli.js",
+    "corpus:classify-failures": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/classify-failures-cli.js",
+    "corpus:dataset": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/ranking-dataset-cli.js",
+    "corpus:graph-reachability": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/graph-reachability-cli.js"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",

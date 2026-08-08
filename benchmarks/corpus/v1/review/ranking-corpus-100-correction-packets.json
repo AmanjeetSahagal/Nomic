@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-06T17:22:37.074Z",
+  "status": "review-required",
+  "tasks": [
+    {
+      "taskId": "microsoft-TypeScript-issue-62655-pr-62656",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62655,
+        "url": "https://github.com/microsoft/TypeScript/issues/62655",
+        "title": "TS2783 False Positive",
+        "body": "TypeScript reports that `id` is specified more than once and will be overwritten when an object literal spreads the result of `find('foo') ?? { label: 'Foo' }`. The spread has type `Thing | { label: string }`, so `id` is not present on every union constituent and is not always overwritten. Expected behavior is no TS2783 diagnostic for a property that is only present in some constituents of the spread union.",
+        "createdAt": "2025-10-22T05:26:25Z"
+      },
+      "pullRequest": {
+        "number": 62656,
+        "url": "https://github.com/microsoft/TypeScript/pull/62656",
+        "mergedAt": "2025-10-22T23:44:11Z"
+      },
+      "query": "TS2783 False Positive\n\nTypeScript reports that `id` is specified more than once and will be overwritten when an object literal spreads the result of `find('foo') ?? { label: 'Foo' }`. The spread has type `Thing | { label: string }`, so `id` is not present on every union constituent and is not always overwritten. Expected behavior is no TS2783 diagnostic for a property that is only present in some constituents of the spread union.",
+      "originalBaseCommit": "af3a3779de6bc27619c85077e1b4d1de8feddd35",
+      "originalPatchCommit": "542b09547f598d5966431e5b4a229199122ec41d",
+      "verifiedBaseCommit": "cbc2059b53fe1976a803c6b533cc7432517131ac",
+      "verifiedPatchCommit": "542b09547f598d5966431e5b4a229199122ec41d",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fix TS2783 false positive for union types in object spread expressions (#62656)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/checker.ts",
+          "pathAfterFix": "src/compiler/checker.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "createTypeChecker",
+              "qualifiedName": "createTypeChecker",
+              "kind": "function",
+              "startLine": 1479,
+              "endLine": 53625
+            },
+            {
+              "name": "checkSpreadPropOverrides",
+              "qualifiedName": "checkSpreadPropOverrides",
+              "kind": "function",
+              "startLine": 33859,
+              "endLine": 33869
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/spreadUnionPropOverride.errors.txt",
+          "status": "A",
+          "role": "generated",
+          "additions": 81,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/spreadUnionPropOverride.js",
+          "status": "A",
+          "role": "generated",
+          "additions": 100,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/spreadUnionPropOverride.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 172,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/spreadUnionPropOverride.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 319,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/spreadUnionPropOverride.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 67,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/spreadUnionPropOverride.errors.txt",
+        "tests/baselines/reference/spreadUnionPropOverride.js",
+        "tests/baselines/reference/spreadUnionPropOverride.symbols",
+        "tests/baselines/reference/spreadUnionPropOverride.types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/spreadUnionPropOverride.errors.txt",
+          "tests/baselines/reference/spreadUnionPropOverride.js",
+          "tests/baselines/reference/spreadUnionPropOverride.symbols",
+          "tests/baselines/reference/spreadUnionPropOverride.types",
+          "tests/cases/compiler/spreadUnionPropOverride.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createTypeChecker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 1479,
+            "endLine": 53625
+          },
+          {
+            "name": "checkSpreadPropOverrides",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 33859,
+            "endLine": 33869
+          }
+        ],
+        "notes": []
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 1,
+    "correctedBaseCommits": 1,
+    "correctedPatchCommits": 0,
+    "insufficientQueries": 0,
+    "tasksWithoutPrimaryProposal": 0,
+    "renamedPaths": 0,
+    "generatedFileExclusions": 4,
+    "manualReviewFlags": 0
+  }
+}

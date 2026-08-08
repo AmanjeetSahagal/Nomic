@@ -18,4 +18,8 @@ The candidate diagnostic writes an explicit adjudication registry. Every task mu
 
 After labels are frozen, each fused-pool miss receives exactly one reviewed reason from the versioned failure taxonomy. Until then, its taxonomy status is `blocked-on-adjudication`. The training gate remains closed while any task is pending or candidate coverage is inadequate.
 
-The current provisional audit is recorded in `candidate-generation-audit.json`. It distinguishes the frozen production-style top-50 pool (45% recall under draft labels) from body-only BM25 (63%) and experimental lexical RRF (68%). These are different candidate policies, and the latter two remain non-claimable until the 82 drafts are adjudicated.
+The corpus is frozen as `ranking-corpus-100-reviewed-v1`: 40 Django, 40 TypeScript, and 20 VS Code tasks. Five candidates were rejected or corrected during review. The frozen manifest and adjudication registry validate with no errors or warnings.
+
+The reviewed audit is recorded in `candidate-generation-audit.json`. Under the frozen 1 MB policy, file BM25 reaches 63% Recall@50, BM25 plus exact-symbol reaches 62%, and lexical RRF reaches 68% overall (97.5% Django, 32.5% TypeScript, 80% VS Code). All 32 baseline misses are classified.
+
+An audit-only 5 MB policy removes the dominant TypeScript indexing omission. With title, identifier, symbol, chunk, path, test, and one-hop structural channels, high-recall RRF reaches 89% Recall@50 and 96% Recall@200. A bounded reserved-slot policy raises Recall@50 to 90% with no regressions and preserves 96% Recall@200. All ten remaining top-50 misses are classified, so the controlled-training gate is open. Production behavior and the default indexing limit remain unchanged.

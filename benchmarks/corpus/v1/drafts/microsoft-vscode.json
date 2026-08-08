@@ -1138,6 +1138,100 @@
         "collectedAt": "2026-07-13T17:44:12.211Z",
         "queryUsesPreFixEvidenceOnly": true
       }
+    },
+    {
+      "id": "microsoft-vscode-issue-177464-pr-177465",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "5e00b5b7da6bafe58b6fb1f7979927773a4979ab",
+      "patchCommit": "07cfcaa1f44d2bd3325a272338c604fb80a0dbd8",
+      "pullRequest": {
+        "number": 177465,
+        "url": "https://github.com/microsoft/vscode/pull/177465",
+        "mergedAt": "2023-03-17T12:57:42Z"
+      },
+      "issue": {
+        "number": 177464,
+        "url": "https://github.com/microsoft/vscode/issues/177464",
+        "title": "Hidden views re-appear on switching profiles",
+        "body": "Create profile A and move the timeline view to the secondary sidebar. Create profile B and hide the timeline view. When switching from profile A to profile B, the hidden timeline view incorrectly reappears.",
+        "createdAt": "2023-03-17T12:40:54Z"
+      },
+      "query": "Hidden views re-appear on switching profiles\n\nCreate profile A and move the timeline view to the secondary sidebar. Create profile B and hide the timeline view. When switching from profile A to profile B, the hidden timeline view incorrectly reappears.",
+      "taskType": "bug-localization",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/workbench/services/views/browser/viewDescriptorService.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/workbench/services/views/test/browser/viewDescriptorService.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/workbench/services/views/browser/viewDescriptorService.ts",
+        "src/vs/workbench/services/views/test/browser/viewDescriptorService.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "workbench-views"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-reviewed-replacement-v1",
+        "collectedAt": "2026-08-05T00:00:00.000Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
+    },
+    {
+      "id": "microsoft-vscode-issue-174463-pr-174464",
+      "repositoryId": "microsoft/vscode",
+      "baseCommit": "68a7a39382d3aa2b118e6311f3fd5000918c8b25",
+      "patchCommit": "9197f4d3c9925ae82f3d5c03b32db99261a8f2e6",
+      "pullRequest": {
+        "number": 174464,
+        "url": "https://github.com/microsoft/vscode/pull/174464",
+        "mergedAt": "2023-02-15T15:59:17Z"
+      },
+      "issue": {
+        "number": 174463,
+        "url": "https://github.com/microsoft/vscode/issues/174463",
+        "title": "Extensions are not loaded if relativeLocation is empty string",
+        "body": "Install some extensions, open the extensions folder and edit extensions.json so the relativeLocation property is an empty string, then restart VS Code. No extensions are shown, although the stored absolute location remains available.",
+        "createdAt": "2023-02-15T15:38:37Z"
+      },
+      "query": "Extensions are not loaded if relativeLocation is empty string\n\nInstall some extensions, open the extensions folder and edit extensions.json so the relativeLocation property is an empty string, then restart VS Code. No extensions are shown, although the stored absolute location remains available.",
+      "taskType": "bug-localization",
+      "relevance": {
+        "primaryFiles": [
+          "src/vs/platform/extensionManagement/common/extensionsProfileScannerService.ts"
+        ],
+        "supportingFiles": [
+          "src/vs/platform/extensionManagement/test/common/extensionsProfileScannerService.test.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/vs/platform/extensionManagement/common/extensionsProfileScannerService.ts",
+        "src/vs/platform/extensionManagement/test/common/extensionsProfileScannerService.test.ts"
+      ],
+      "labels": [
+        "bug",
+        "extensions"
+      ],
+      "split": "train",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-reviewed-replacement-v1",
+        "collectedAt": "2026-08-05T00:00:00.000Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
     }
   ],
   "rejected": [
@@ -1954,4 +2048,3 @@
     }
   ]
 }
-

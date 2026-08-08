@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "status": "negative-result-no-promotion",
+  "dataset": "benchmarks/corpus/v1/datasets/ranking-corpus-100-reserved-fusion-v1.split.jsonl",
+  "datasetSha256": "38cd12ae8cd2efeb5e2f62adde378dbb75196073d278e43b0536a1891c073edf",
+  "split": {
+    "strategy": "first-experiment",
+    "train": { "repositories": ["django/django"], "tasks": 40, "rows": 2000, "conditionalTasks": 39 },
+    "validation": { "repositories": ["microsoft/TypeScript"], "beforeYear": 2023, "tasks": 4, "rows": 200, "conditionalTasks": 4 },
+    "test": { "repositories": ["microsoft/TypeScript", "microsoft/vscode"], "tasks": 56, "rows": 2800, "conditionalTasks": 47 }
+  },
+  "testEndToEnd": {
+    "deterministicCandidateOrder": { "recallAt5": 0.4642857142857143, "mrr": 0.30210064028064915, "ndcgAt10": 0.3026302624077592 },
+    "logisticSeed42": { "recallAt5": 0.10714285714285714, "mrr": 0.11413070068930013, "ndcgAt10": 0.09160195483777035 },
+    "lightgbmSeed42": { "recallAt5": 0.4107142857142857, "mrr": 0.23750240746618959, "ndcgAt10": 0.26156372454481813 },
+    "pairwiseMlp": {
+      "seeds": [42, 43, 44],
+      "recallAt5": { "mean": 0.2857142857142857, "sampleStdDev": 0.1461670137834366, "best": { "seed": 44, "value": 0.4107142857142857 }, "worst": { "seed": 42, "value": 0.125 } },
+      "mrr": { "mean": 0.20091127573095152, "sampleStdDev": 0.07061771186259874, "best": { "seed": 44, "value": 0.2458751959408472 }, "worst": { "seed": 42, "value": 0.11951797853179388 } },
+      "ndcgAt10": { "mean": 0.19020418879212164, "sampleStdDev": 0.09193733388017347, "best": { "seed": 44, "value": 0.24366088885771237 }, "worst": { "seed": 42, "value": 0.0840449928959742 } }
+    }
+  },
+  "testConditional": {
+    "deterministicCandidateOrder": { "recallAt5": 0.5531914893617021, "mrr": 0.3599496990577947, "ndcgAt10": 0.3605807381879684 },
+    "logisticSeed42": { "recallAt5": 0.1276595744680851, "mrr": 0.1359855157149108, "ndcgAt10": 0.10914275470032213 },
+    "lightgbmSeed42": { "recallAt5": 0.48936170212765956, "mrr": 0.28298159187460886, "ndcgAt10": 0.3116503952023365 },
+    "pairwiseMlp": {
+      "seeds": [42, 43, 44],
+      "recallAt5": { "mean": 0.3404255319148936, "sampleStdDev": 0.17415644195473298, "best": { "seed": 44, "value": 0.48936170212765956 }, "worst": { "seed": 42, "value": 0.14893617021276595 } },
+      "mrr": { "mean": 0.2393836476794316, "sampleStdDev": 0.08414025243203255, "best": { "seed": 44, "value": 0.2929576802699456 }, "worst": { "seed": 42, "value": 0.14240439995277568 } },
+      "ndcgAt10": { "mean": 0.22662626749699602, "sampleStdDev": 0.1095423552614833, "best": { "seed": 44, "value": 0.2903193569368488 }, "worst": { "seed": 42, "value": 0.10013871493988415 } }
+    }
+  },
+  "repositoryDiagnostics": {
+    "microsoft/TypeScript": {
+      "tasks": 36,
+      "deterministicCandidateOrder": { "recallAt5": 0.4444444444444444, "mrr": 0.25493763620376103 },
+      "lightgbmSeed42": { "recallAt5": 0.4444444444444444, "mrr": 0.21330696828352413 },
+      "pairwiseMlpSeed44": { "recallAt5": 0.4444444444444444, "mrr": 0.25402267485600816 }
+    },
+    "microsoft/vscode": {
+      "tasks": 20,
+      "deterministicCandidateOrder": { "recallAt5": 0.5, "mrr": 0.3869940476190476 },
+      "lightgbmSeed42": { "recallAt5": 0.35, "mrr": 0.2810541979949875 },
+      "pairwiseMlpSeed44": { "recallAt5": 0.35, "mrr": 0.23120973389355742 }
+    }
+  },
+  "postRunDiagnostics": {
+    "categoricalIdsConsumedAsContinuous": ["fileExtensionId", "repositoryLanguageId", "symbolTypeId"],
+    "positiveRowAbsoluteStandardizedDifference": {
+      "fileExtensionId": 12.022,
+      "repositoryLanguageId": 8.076,
+      "chunkTokenCount": 1.082,
+      "directoryDepth": 0.891,
+      "isImplementationFile": 0.877,
+      "isTestFile": 0.877
+    },
+    "interpretation": "Exploratory evidence of preprocessing and ecosystem shift; do not tune against the current test split."
+  },
+  "decision": "Keep deterministic ranking active. Do not export or deploy a learned artifact."
+}

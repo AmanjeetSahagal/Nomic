@@ -41,4 +41,34 @@ describe("experimental candidate generation", () => {
     const paths = generateCandidates("The failure is in checker.ts", index, "bm25-plus-path", 3).candidates.map((item) => item.path);
     expect(paths).toContain("src/checker.ts");
   });
+
+  it("maps a strong matching chunk back to its large containing file", () => {
+    const paths = generateCandidates("resolve structured type members", index, "chunk-bm25", 3).candidates.map((item) => item.path);
+    expect(paths).toContain("tests/structured.ts");
+  });
+
+  it("uses the issue title as an independent low-noise query", () => {
+    const paths = generateCandidates("Parse syntax failure\n\nnoisy structured members reproduction", index, "title-bm25", 3).candidates.map((item) => item.path);
+    expect(paths[0]).toBe("src/parser.ts");
+  });
+
+  it("injects files containing identifiers extracted from code-like query text", () => {
+    const paths = generateCandidates("Regression in `resolveStructuredTypeMembers()`", index, "exact-identifier", 3).candidates.map((item) => item.path);
+    expect(paths).toContain("src/checker.ts");
+  });
+
+  it("keeps shallow expansion bounded to direct graph neighbors", () => {
+    const withEdges: RepositoryIndex = {
+      ...index,
+      edges: [{ from: "tests/structured.ts", to: "src/checker.ts", kind: "test", weight: 4 }]
+    };
+    const paths = generateCandidates("structured type members regression", withEdges, "structural-expansion", 30).candidates.map((item) => item.path);
+    expect(paths).toContain("src/checker.ts");
+  });
+
+  it("deduplicates reserved-source candidates against the fused core", () => {
+    const candidates = generateCandidates("resolveStructuredTypeMembers checker.ts", index, "rrf-reserved-balanced", 3).candidates;
+    expect(new Set(candidates.map((candidate) => candidate.path)).size).toBe(candidates.length);
+    expect(candidates.map((candidate) => candidate.path)).toContain("src/checker.ts");
+  });
 });

@@ -325,7 +325,7 @@
       }
     },
     {
-      "id": "microsoft-TypeScript-issue-61223-pr-62656",
+      "id": "microsoft-TypeScript-issue-62655-pr-62656",
       "repositoryId": "microsoft/TypeScript",
       "baseCommit": "af3a3779de6bc27619c85077e1b4d1de8feddd35",
       "patchCommit": "542b09547f598d5966431e5b4a229199122ec41d",
@@ -335,13 +335,13 @@
         "mergedAt": "2025-10-22T23:44:11Z"
       },
       "issue": {
-        "number": 61223,
-        "url": "https://github.com/microsoft/TypeScript/issues/61223",
-        "title": "Warn when tsconfig.json extends a file that contains `references`",
-        "body": "### 🔎 Search Terms\n\ntsconfig, extends, references\n\n### 🕗 Version & Regression Information\n\nThis is intended behaviour according to https://www.typescriptlang.org/tsconfig/#extends\n\n### ⏯ Playground Link\n\n_No response_\n\n### 💻 Code\n\n```ts\n// Your code here\n```\n\n\n### 🙁 Actual behavior\n\nI spent 2 days trying to get tsconfig.json file inheritance working with `references`. Then I found in the manual:\n\n> Currently, the only top-level property that is excluded from inheritance is [references](https://www.typescriptlang.org/tsconfig/#references).\n\nThere was no warning in the command line when I was trying to extend a tsconfig.json file that contained `references` - instead it was just silently ignored.\n\n### 🙂 Expected behavior\n\nShould log a warning when extending a tsconfig.json file that contains `references`. This warning should explain that `references` are not inherited so therefore will be ignored\n\n### Additional information about the issue\n\n_No response_",
-        "createdAt": "2025-02-19T09:28:42Z"
+        "number": 62655,
+        "url": "https://github.com/microsoft/TypeScript/issues/62655",
+        "title": "TS2783 False Positive",
+        "body": "TypeScript reports that `id` is specified more than once and will be overwritten when an object literal spreads the result of `find('foo') ?? { label: 'Foo' }`. The spread has type `Thing | { label: string }`, so `id` is not present on every union constituent and is not always overwritten. Expected behavior is no TS2783 diagnostic for a property that is only present in some constituents of the spread union.",
+        "createdAt": "2025-10-22T05:26:25Z"
       },
-      "query": "Warn when tsconfig.json extends a file that contains `references`\n\n### 🔎 Search Terms tsconfig, extends, references ### 🕗 Version & Regression Information This is intended behaviour according to https://www.typescriptlang.org/tsconfig/#extends ### ⏯ Playground Link _No response_ ### 💻 Code ```ts // Your code here ``` ### 🙁 Actual behavior I spent 2 days trying to get tsconfig.json file inheritance working with `references`. Then I found in the manual: > Currently, the only top-level property that is excluded from inheritance is [references](https://www.typescriptlang.org/tsconfig/#references). There was no warning in the command line when I was trying to extend a tsconfig.json file that contained `references` - instead it was just silently ignored. ### 🙂 Expected behavior Should log a warning when extending a tsconfig.json file that contains `references`. This warning should explain that `references` are not inherited so therefore will be ignored ### Additional information about the issue _No response_",
+      "query": "TS2783 False Positive\n\nTypeScript reports that `id` is specified more than once and will be overwritten when an object literal spreads the result of `find('foo') ?? { label: 'Foo' }`. The spread has type `Thing | { label: string }`, so `id` is not present on every union constituent and is not always overwritten. Expected behavior is no TS2783 diagnostic for a property that is only present in some constituents of the spread union.",
       "taskType": "bug-localization",
       "relevance": {
         "primaryFiles": [
@@ -362,16 +362,15 @@
         "tests/cases/compiler/spreadUnionPropOverride.ts"
       ],
       "labels": [
-        "Suggestion",
-        "Declined"
+        "Bug"
       ],
       "split": "test",
       "review": {
         "status": "draft"
       },
       "provenance": {
-        "collectorVersion": "github-connector-v1",
-        "collectedAt": "2026-07-13T17:46:05.450Z",
+        "collectorVersion": "github-connector-corrected-link-v1",
+        "collectedAt": "2026-08-05T00:00:00.000Z",
         "queryUsesPreFixEvidenceOnly": true
       }
     },
@@ -1935,6 +1934,56 @@
         "collectedAt": "2026-07-13T17:51:21.250Z",
         "queryUsesPreFixEvidenceOnly": true
       }
+    },
+    {
+      "id": "microsoft-TypeScript-issue-61098-pr-61113",
+      "repositoryId": "microsoft/TypeScript",
+      "baseCommit": "62b172b515452b3fe19f4f2da81d4869caedc904",
+      "patchCommit": "75202af2ccb8c797180f42f3317373ddc5793ad9",
+      "pullRequest": {
+        "number": 61113,
+        "url": "https://github.com/microsoft/TypeScript/pull/61113",
+        "mergedAt": "2025-04-24T20:55:56Z"
+      },
+      "issue": {
+        "number": 61098,
+        "url": "https://github.com/microsoft/TypeScript/issues/61098",
+        "title": "Type containing templated, branded string is not assignable to itself",
+        "body": "A type containing a branded string inside a template literal is not assignable to an identical copy of itself. This regressed between TypeScript 5.0.4 and 5.1.6. For example, two identical generic functions whose conditional return types use `${'a' & { a: 1 }}` produce an error saying that two different types with this name exist but are unrelated. Removing either the outer template literal or the inner brand restores assignability. The expected behavior is that the copied type is assignable to itself.",
+        "createdAt": "2025-02-01T23:35:35Z"
+      },
+      "query": "Type containing templated, branded string is not assignable to itself\n\nA type containing a branded string inside a template literal is not assignable to an identical copy of itself. This regressed between TypeScript 5.0.4 and 5.1.6. For example, two identical generic functions whose conditional return types use `${'a' & { a: 1 }}` produce an error saying that two different types with this name exist but are unrelated. Removing either the outer template literal or the inner brand restores assignability. The expected behavior is that the copied type is assignable to itself.",
+      "taskType": "bug-localization",
+      "relevance": {
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [
+          "tests/cases/compiler/assignmentToConditionalBrandedStringTemplateOrMapping.ts"
+        ],
+        "relevantUnchangedFiles": [],
+        "symbols": []
+      },
+      "patchTouchedFiles": [
+        "src/compiler/checker.ts",
+        "tests/baselines/reference/assignmentToConditionalBrandedStringTemplateOrMapping.js",
+        "tests/baselines/reference/assignmentToConditionalBrandedStringTemplateOrMapping.symbols",
+        "tests/baselines/reference/assignmentToConditionalBrandedStringTemplateOrMapping.types",
+        "tests/cases/compiler/assignmentToConditionalBrandedStringTemplateOrMapping.ts"
+      ],
+      "labels": [
+        "Help Wanted",
+        "Possible Improvement"
+      ],
+      "split": "test",
+      "review": {
+        "status": "draft"
+      },
+      "provenance": {
+        "collectorVersion": "github-connector-reviewed-replacement-v1",
+        "collectedAt": "2026-08-05T00:00:00.000Z",
+        "queryUsesPreFixEvidenceOnly": true
+      }
     }
   ],
   "rejected": [
@@ -2210,4 +2259,3 @@
     }
   ]
 }
-

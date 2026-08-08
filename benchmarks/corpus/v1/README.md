@@ -15,10 +15,10 @@ Repository scopes, exclusions, roles, and held-out status are versioned in `mani
 
 The collector accepts only explicitly issue-linked merged pull requests. Queries contain the issue title and body available before the fix. Pull-request titles, commit messages, patches, post-fix comments, and future repository state are excluded from queries.
 
-Each task pins:
+Each reviewed task pins:
 
-- the first parent of the merged patch as `baseCommit`;
-- the merged patch commit;
+- the verified repository state immediately before the focused fix as `baseCommit`;
+- the verified focused fix endpoint as `patchCommit`, including contiguous ticket commits where required;
 - issue and pull-request provenance;
 - patch-touched files;
 - grade 3 primary implementation files;
@@ -80,9 +80,9 @@ The runner writes `run-metadata.json`, `per-task-results.jsonl`, `aggregate-resu
 
 ## Pilot acceptance gate
 
-- Current reviewed pilot: 18 accepted tasks (9 Django, 9 TypeScript), each with production-file and symbol labels.
-- Two repositories: Django and TypeScript.
-- Ten reviewed tasks during pipeline debugging, then 50 total.
+- Current reviewed corpus: 100 accepted tasks (40 Django, 40 TypeScript, 20 VS Code), each with production-file labels and resolvable base-tree symbol evidence.
+- Five bad candidates were rejected or corrected during the uniform evidence review.
+- The frozen 1 MB lexical baseline is 68% Recall@50. Audit-only 5 MB reserved fusion reaches 90% Recall@50 and 96% Recall@200, opening the controlled-training gate without changing production behavior.
 - Both BM25 and heuristic baselines.
 - Machine-readable per-task and aggregate results.
 - Manual analysis of the ten worst failures.

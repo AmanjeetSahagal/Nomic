@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "corpus": "ranking-corpus-100-reviewed-v1",
+  "candidateGenerationMode": "rrf-reserved-balanced",
+  "candidateLimit": 50,
+  "maxFileSizeBytes": 5000000,
+  "featureSchemaVersion": "ranking-features-v1",
+  "featureCount": 28,
+  "tasks": 100,
+  "rows": 5000,
+  "datasetSha256": "17bdcd7f0de86e900b1f5ef60b15f47dd813c6c2cb0f4c70bc339f096a59c6f4",
+  "groupsSha256": "5f53832abeb960dc061a0495cbc591cd99a57ba65f0f8131cdbb35e18f793134"
+}

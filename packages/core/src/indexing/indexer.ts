@@ -14,12 +14,17 @@ import {
   type RepositoryIndex
 } from "../types/contracts";
 
-interface ParsedFileDetails {
+export interface ParsedFileDetails {
   imports: string[];
   symbols: IndexedSymbol[];
   references: string[];
   calls: string[];
   importedBindings: Array<{ localName: string; source: string }>;
+}
+
+/** Parse one in-memory source file for benchmark adjudication and focused indexing tools. */
+export function parseSourceFile(filePath: string, content: string): ParsedFileDetails {
+  return parseFile(filePath, content);
 }
 
 export class RepositoryIndexer {

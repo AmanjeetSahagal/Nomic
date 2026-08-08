@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "Codex evidence review",
+  "reviewedAt": "2026-08-05T00:00:00.000Z",
+  "method": "Issue text, focused pre-fix/fix commit boundaries, changed-file roles, base-tree symbols, rename provenance, and generated-file exclusions were reviewed before promotion.",
+  "rejected": {
+    "django-django-issue-36005-pr-19067": "Release and Python compatibility maintenance is excluded by corpus policy; replaced by django-django-issue-36025-pr-18964.",
+    "microsoft-TypeScript-issue-55588-pr-62751": "The collected query is a linkage-only stub referring to a different issue, so issue/fix provenance is not trustworthy; replaced by microsoft-TypeScript-issue-61098-pr-61113.",
+    "microsoft-TypeScript-issue-61223-pr-62656": "The PR body contained two closing references and the collector selected an unrelated issue; relabeled from the actual pre-fix issue as microsoft-TypeScript-issue-62655-pr-62656.",
+    "microsoft-vscode-issue-99878-pr-171066": "The focused fix changes 16 production files and exceeds the 15-file scope limit; replaced by microsoft-vscode-issue-177464-pr-177465.",
+    "microsoft-vscode-issue-171200-pr-171212": "The focused fix has no regression test or validation-file change; replaced by microsoft-vscode-issue-174463-pr-174464."
+  },
+  "primaryOverrides": {
+    "django-django-issue-36829-pr-20471": [
+      "django/contrib/admin/widgets.py",
+      "django/forms/widgets.py"
+    ],
+    "django-django-issue-35972-pr-19057": [
+      "django/db/models/lookups.py"
+    ],
+    "microsoft-TypeScript-issue-62211-pr-62876": [
+      "src/compiler/checker.ts"
+    ],
+    "microsoft-TypeScript-issue-61239-pr-61261": [
+      "src/compiler/checker.ts",
+      "src/compiler/expressionToTypeNode.ts"
+    ]
+  },
+  "acceptedReviewNotes": {
+    "microsoft-TypeScript-issue-55843-pr-62873": "The library declaration is the primary change and the updated baseline is validation evidence; generated baseline output remains excluded from retrieval labels.",
+    "microsoft-TypeScript-issue-62782-pr-62783": "The binder fix includes two focused fourslash regression tests; those tests are recorded as evidence but remain excluded from retrieval labels by repository policy.",
+    "django-django-issue-36410-pr-19643": "Cohesive template-partials feature; defaulttags.py contains the primary user-facing implementation and the other changed production files are supporting infrastructure.",
+    "django-django-issue-35972-pr-19057": "Cohesive parameter-immutability fix across lookup implementations; the core lookup implementation is primary and backend-specific adaptations are supporting files.",
+    "microsoft-TypeScript-issue-62211-pr-62876": "Language-syntax deprecation task, not platform-release maintenance; checker.ts changes the diagnostic behavior and is primary.",
+    "microsoft-TypeScript-issue-62421-pr-62443": "Cohesive compiler-option default change; checker.ts implements behavior while option metadata and diagnostics support it.",
+    "microsoft-TypeScript-issue-61239-pr-61261": "The declaration-emit regression genuinely spans checker node-range preservation and expression-to-type-node reuse, so both files are co-primary.",
+    "microsoft-TypeScript-issue-7411-pr-47356": "Large but policy-compliant 15-file JSX syntax feature; parser.ts is the localization anchor and the remaining compiler/service changes are supporting files.",
+    "microsoft-vscode-issue-285213-pr-285214": "Cohesive quick-input UI change with an added regression test; quickInputList.ts is the main rendering implementation.",
+    "microsoft-vscode-issue-278618-pr-284438": "Cohesive redirect and trusted-domain path across ten production files; webPageLoader.ts owns the redirect behavior and is primary.",
+    "microsoft-vscode-issue-275562-pr-284134": "Cohesive terminal reveal API migration; terminalService.ts owns the central behavior and callers are supporting files.",
+    "microsoft-vscode-issue-284110-pr-283934": "The concise issue still identifies Agent Skills discovery/settings behavior; promptFilesLocator.ts is the concrete localization anchor.",
+    "microsoft-vscode-issue-170242-pr-170250": "The short query names the exact pre-fix symbol and file; the patch moves that production behavior and adds focused tests, so the evidence is sufficient."
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "corpus": "ranking-corpus-100-reviewed-v1",
+  "candidateGenerator": "rrf-high-recall",
+  "cutoff": 50,
+  "reviewer": "Codex evidence review",
+  "reviewedAt": "2026-08-05T00:00:00.000Z",
+  "summary": {
+    "misses": 11,
+    "fusion dilution across candidate sources": 7,
+    "vocabulary mismatch": 2,
+    "symbol mentioned but file missed": 1,
+    "candidate cutoff too low": 1
+  },
+  "tasks": [
+    {
+      "taskId": "django-django-issue-33647-pr-20480",
+      "mainReason": "fusion dilution across candidate sources",
+      "evidence": "Title-only BM25 finds the PostgreSQL compiler positive at rank 47, but equal-weight multi-source fusion does not retain it by rank 200."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-55843-pr-62873",
+      "mainReason": "symbol mentioned but file missed",
+      "evidence": "The issue repeatedly names matchAll, but the declaration member is not represented by the current symbol index and no audited source retrieves es2020.string.d.ts by rank 200."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62782-pr-62783",
+      "mainReason": "fusion dilution across candidate sources",
+      "evidence": "Exact-identifier retrieval finds binder.ts at rank 25 after large-file indexing, but the all-source RRF ranks it 139."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-60438-pr-61935",
+      "mainReason": "fusion dilution across candidate sources",
+      "evidence": "Exact-identifier retrieval finds checker.ts at rank 39, while chunk BM25 ranks it 181 and all-source RRF ranks it 141."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61334-pr-61342",
+      "mainReason": "vocabulary mismatch",
+      "evidence": "The generated-declaration symptom weakly matches expressionToTypeNode internals; exact-identifier and chunk channels reach the positive only at ranks 170 and 154, and fusion misses it by 200."
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-48829-pr-49636",
+      "mainReason": "fusion dilution across candidate sources",
+      "evidence": "Exact-identifier retrieval finds a positive at rank 13, but the multi-file library-registration task is diluted to rank 106 by all-source RRF."
+    },
+    {
+      "taskId": "microsoft-vscode-issue-284524-pr-284554",
+      "mainReason": "fusion dilution across candidate sources",
+      "evidence": "Title-only BM25 finds codeCell.ts at rank 13, but all-source RRF places it at rank 76."
+    },
+    {
+      "taskId": "microsoft-vscode-issue-282676-pr-284341",
+      "mainReason": "candidate cutoff too low",
+      "evidence": "The positive is present in body, title, chunk, and fused pools between ranks 113 and 174, but no source reaches it by rank 50."
+    },
+    {
+      "taskId": "microsoft-vscode-issue-283902-pr-284127",
+      "mainReason": "vocabulary mismatch",
+      "evidence": "The hanging-terminal symptom does not name the output-monitor pattern-detection implementation, and no audited source finds the positive by rank 200."
+    },
+    {
+      "taskId": "microsoft-vscode-issue-82415-pr-166318",
+      "mainReason": "fusion dilution across candidate sources",
+      "evidence": "Title-only BM25 finds queryBuilder.ts at rank 11, but all-source RRF places it at rank 76."
+    },
+    {
+      "taskId": "microsoft-vscode-issue-169422-pr-169885",
+      "mainReason": "fusion dilution across candidate sources",
+      "evidence": "Body BM25 and symbol BM25 find ripgrepTextSearchEngine.ts at ranks 48 and 37, while all-source RRF regresses it to rank 110."
+    }
+  ]
+}

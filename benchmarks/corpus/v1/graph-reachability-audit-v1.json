@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "status": "complete-stop-graph-investment",
+  "corpus": "ranking-corpus-100-reviewed-v1",
+  "scope": "offline reachability audit only",
+  "productionRankingChanged": false,
+  "learnedRankingFeaturesChanged": false,
+  "configuration": {
+    "lexicalSeedMode": "rrf-lexical",
+    "lexicalSeedCount": 10,
+    "edgeConfidence": "exact-source-derived-only",
+    "edgeKinds": ["import", "call", "reference", "extends", "implements", "test-to-implementation"],
+    "maxNeighborsPerNode": 12,
+    "maxGraphCandidates": 200,
+    "maxHops": 2,
+    "maxFileSizeBytes": 5000000,
+    "acceptableWarmTraversalP95Ms": 25
+  },
+  "baseline": {
+    "candidateGenerator": "rrf-reserved-balanced",
+    "recallAt50": 0.9,
+    "recallAt200": 0.96,
+    "existingSourceOracleRecallAt200": 0.98,
+    "p95WarmLatencyMs": 888.0219610002823
+  },
+  "reachability": {
+    "lexicalTop10": {
+      "recall": 0.57,
+      "meanCandidateCount": 10,
+      "p95WarmLatencyMs": 488.9086240003817
+    },
+    "exactOneHop": {
+      "recall": 0.61,
+      "meanCandidateCount": 52.46,
+      "p95WarmTraversalMs": 0.06554100010544062,
+      "uniqueBaseline200MissesRecovered": [],
+      "uniqueSourceOracle200MissesRecovered": []
+    },
+    "exactBoundedTwoHop": {
+      "recall": 0.82,
+      "meanCandidateCount": 149.34,
+      "p95WarmTraversalMs": 0.10599999999976717,
+      "uniqueBaseline200MissesRecovered": [
+        "django-django-issue-33647-pr-20480",
+        "microsoft-TypeScript-issue-61334-pr-61342"
+      ],
+      "uniqueSourceOracle200MissesRecovered": []
+    }
+  },
+  "recoveredPaths": [
+    {
+      "taskId": "django-django-issue-33647-pr-20480",
+      "positive": "tests/backends/postgresql/test_compilation.py",
+      "seed": { "rank": 1, "path": "django/db/models/query.py" },
+      "edges": [
+        {
+          "from": "django/db/models/query.py",
+          "to": "django/db/models/expressions.py",
+          "kind": "call",
+          "sourceLine": 970,
+          "symbol": "Value",
+          "module": "django.db.models.expressions",
+          "direction": "forward"
+        },
+        {
+          "from": "tests/backends/postgresql/test_compilation.py",
+          "to": "django/db/models/expressions.py",
+          "kind": "test-to-implementation",
+          "sourceLine": 5,
+          "symbol": "RawSQL",
+          "module": "django.db.models.expressions",
+          "direction": "reverse"
+        }
+      ]
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-61334-pr-61342",
+      "positive": "src/compiler/expressionToTypeNode.ts",
+      "seed": { "rank": 1, "path": "src/compiler/semver.ts" },
+      "edges": [
+        {
+          "from": "src/compiler/semver.ts",
+          "to": "src/compiler/_namespaces/ts.ts",
+          "kind": "call",
+          "sourceLine": 59,
+          "symbol": "checkDefined",
+          "module": "./_namespaces/ts.js",
+          "direction": "forward"
+        },
+        {
+          "from": "src/compiler/expressionToTypeNode.ts",
+          "to": "src/compiler/_namespaces/ts.ts",
+          "kind": "call",
+          "sourceLine": 178,
+          "symbol": "getStrictOptionValue",
+          "module": "./_namespaces/ts.js",
+          "direction": "reverse"
+        }
+      ]
+    }
+  ],
+  "sourceOracleMisses": [
+    {
+      "taskId": "microsoft-TypeScript-issue-55843-pr-62873",
+      "positive": "src/lib/es2020.string.d.ts",
+      "oneHopReachable": false,
+      "twoHopReachable": false
+    },
+    {
+      "taskId": "microsoft-vscode-issue-283902-pr-284127",
+      "positives": [
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/tools/monitoring/outputMonitor.ts",
+        "src/vs/workbench/contrib/terminalContrib/chatAgentTools/test/browser/outputMonitor.test.ts"
+      ],
+      "oneHopReachable": false,
+      "twoHopReachable": false
+    }
+  ],
+  "graphConstruction": {
+    "meanEdges": 34317.3,
+    "p95ColdBuildMs": 21361.257749999873,
+    "p95AdjacencyBuildMs": 545.6365839999635,
+    "failedFileOccurrencesAcrossCommits": 93,
+    "uniqueFailedFilePaths": [
+      "tests/cases/compiler/binderBinaryExpressionStress.ts",
+      "tests/cases/compiler/binderBinaryExpressionStressJs.ts",
+      "tests/cases/conformance/decorators/invalid/decoratorOnAwait.ts"
+    ]
+  },
+  "decisionGate": {
+    "status": "stop-graph-investment",
+    "recoversPreviouslyUnreachablePositive": false,
+    "latencyAcceptable": true,
+    "conclusion": "Bounded exact graph traversal recovered fusion-level misses but no existing-source-oracle miss. Return effort to fusion and lexical/symbol retrieval."
+  },
+  "rawArtifacts": {
+    "report": "benchmarks/results/graph-reachability-100-exact-v1-final/graph-reachability-report.json",
+    "reportSha256": "a7f4d369e4275028644d588c42be513cbc12919a2855780e999712073792d0cd",
+    "perTask": "benchmarks/results/graph-reachability-100-exact-v1-final/per-task-graph-reachability.jsonl",
+    "perTaskSha256": "0b4218d29f854ea3ce24f65f6f93391544652fb41faf09214b89b1eb36cbe1b0"
+  }
+}

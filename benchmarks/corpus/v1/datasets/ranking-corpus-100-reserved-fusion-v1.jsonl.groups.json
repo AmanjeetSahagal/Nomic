@@ -1,0 +1,402 @@
+[
+  {
+    "taskId": "django-django-issue-24920-pr-20445",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-33647-pr-20480",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36618-pr-20426",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36787-pr-20437",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36796-pr-20459",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36800-pr-20411",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36806-pr-20421",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36818-pr-20443",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36829-pr-20471",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-55843-pr-62873",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62462-pr-62661",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62675-pr-62676",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62720-pr-62722",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62782-pr-62783",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62841-pr-62844",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62912-pr-62914",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62920-pr-62923",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62921-pr-62928",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36810-pr-20427",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36783-pr-20379",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36112-pr-20312",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36724-pr-20080",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36715-pr-20065",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36710-pr-20060",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36321-pr-20021",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36656-pr-19943",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36611-pr-19884",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36480-pr-19845",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36590-pr-19840",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36488-pr-19833",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36410-pr-19643",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36453-pr-19555",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-26434-pr-19519",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36411-pr-19507",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36404-pr-19494",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36388-pr-19472",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36210-pr-19459",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-33174-pr-19423",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36348-pr-19408",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-27489-pr-19405",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-35595-pr-19361",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36284-pr-19328",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36252-pr-19264",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36222-pr-19236",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-35839-pr-19199",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36114-pr-19078",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-35972-pr-19057",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-35677-pr-19042",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62211-pr-62876",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62657-pr-62659",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62606-pr-62604",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62590-pr-62593",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62439-pr-62483",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62421-pr-62443",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62343-pr-62351",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62153-pr-62155",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-60438-pr-61935",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61181-pr-61927",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61916-pr-61920",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61734-pr-61824",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61784-pr-61788",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61772-pr-61777",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61747-pr-61764",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61547-pr-61683",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-59937-pr-61668",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-58195-pr-61582",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61466-pr-61481",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61338-pr-61392",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61369-pr-61372",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61351-pr-61352",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61334-pr-61342",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61318-pr-61317",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61239-pr-61261",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-7411-pr-47356",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-48524-pr-49226",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-48783-pr-49627",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-48829-pr-49636",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-285213-pr-285214",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-280540-pr-284668",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-284524-pr-284554",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-278618-pr-284438",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-249040-pr-284371",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-282676-pr-284341",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-282209-pr-284248",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-275562-pr-284134",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-283902-pr-284127",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-281595-pr-283942",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-284110-pr-283934",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-264202-pr-283885",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-142135-pr-143054",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-82415-pr-166318",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-169422-pr-169885",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-170242-pr-170250",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-170484-pr-170887",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-94817-pr-171224",
+    "size": 50
+  },
+  {
+    "taskId": "django-django-issue-36025-pr-18964",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-61098-pr-61113",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-177464-pr-177465",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-vscode-issue-174463-pr-174464",
+    "size": 50
+  },
+  {
+    "taskId": "microsoft-TypeScript-issue-62655-pr-62656",
+    "size": 50
+  }
+]

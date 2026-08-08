@@ -3,7 +3,7 @@ import unittest
 from ml.common import FEATURES, stable_id, validate_rows
 from ml.data.build_dataset import build
 from ml.data.generate_pairs import generate
-from ml.data.split_dataset import split_repository
+from ml.data.split_dataset import split_first_experiment, split_repository
 from ml.evaluation.metrics import task_metrics
 
 class PipelineTests(unittest.TestCase):
@@ -19,4 +19,8 @@ class PipelineTests(unittest.TestCase):
         metrics=task_metrics([3,0,1]); self.assertEqual(metrics["recallAt5"],1); self.assertEqual(metrics["mrr"],1)
     def test_stable_category_hash_matches_runtime_fnv(self):
         self.assertEqual(stable_id("typescript"), 40)
+    def test_first_experiment_split_is_repository_and_time_held_out(self):
+        rows=[{"taskId":"d","repository":"django/django","createdAt":"2025-01-01"},{"taskId":"old","repository":"microsoft/TypeScript","createdAt":"2022-01-01"},{"taskId":"new","repository":"microsoft/TypeScript","createdAt":"2025-01-01"},{"taskId":"v","repository":"microsoft/vscode","createdAt":"2020-01-01"}]
+        assigned=split_first_experiment(rows)
+        self.assertEqual({row["taskId"]:row["split"] for row in assigned},{"d":"train","old":"validation","new":"test","v":"test"})
 if __name__ == "__main__": unittest.main()

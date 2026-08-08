@@ -1,0 +1,2454 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-06T17:22:41.601Z",
+  "status": "review-required",
+  "tasks": [
+    {
+      "taskId": "django-django-issue-24920-pr-20445",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 24920,
+        "url": "https://code.djangoproject.com/ticket/24920",
+        "title": "Database type NUMERIC with no parameters is not supported",
+        "body": "Django's `DecimalField` requires both `max_digits` and `decimal_places`. Database backends allow them to be dropped, to specify an \"unlimited precision\" field.\r\n\r\nThis leads to bugs in `inspectdb`: On Oracle, a column defined as `NUMERIC` is inspected as having 0 digits and negative precision; on Postgresql, it is inspected as having 65535 (a C short -1?) digits and decimal places, when the [http://www.postgresql.org/docs/9.4/static/datatype-numeric.html documentation] says you can only explicitly define up to 1000 decimal places (and even the implicitly defined precision is only 16383).\r\n\r\nDiscussion in the context of Oracle (from 2012):\r\nhttps://groups.google.com/d/topic/django-developers/qSAfzPyqKqw/discussion\r\n\r\n(This could be solved more easily by adding a new field type than by modifying the behavior of the existing `DecimalField`; however, I'm having a hard time suggesting a name for such a field type, which may be an indication that it is a bad interface. Besides that decision, this probably applies as an easy picking).",
+        "createdAt": "2015-06-04T11:04:15Z"
+      },
+      "pullRequest": {
+        "number": 20445,
+        "url": "https://github.com/django/django/pull/20445",
+        "mergedAt": "2025-12-28T18:21:49Z"
+      },
+      "query": "Database type NUMERIC with no parameters is not supported\n\nDjango's `DecimalField` requires both `max_digits` and `decimal_places`. Database backends allow them to be dropped, to specify an \"unlimited precision\" field. This leads to bugs in `inspectdb`: On Oracle, a column defined as `NUMERIC` is inspected as having 0 digits and negative precision; on Postgresql, it is inspected as having 65535 (a C short -1?) digits and decimal places, when the [http://www.postgresql.org/docs/9.4/static/datatype-numeric.html documentation] says you can only explicitly define up to 1000 decimal places (and even the implicitly defined precision is only 16383). Discussion in the context of Oracle (from 2012): https://groups.google.com/d/topic/django-developers/qSAfzPyqKqw/discussion (This could be solved more easily by adding a new field type than by modifying the behavior of the existing `DecimalField`; however, I'm having a hard time suggesting a name for such a field type, which may be an indication that it is a bad interface. Besides that decision, this probably applies as an easy picking).",
+      "originalBaseCommit": "4afe463950453b6d71f0c98f23fd0f1f2bd341bc",
+      "originalPatchCommit": "1c34b8716afde049f95ad1c72c2f8e148f826662",
+      "verifiedBaseCommit": "4afe463950453b6d71f0c98f23fd0f1f2bd341bc",
+      "verifiedPatchCommit": "1c34b8716afde049f95ad1c72c2f8e148f826662",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Refs #24920 -- Made DecimalField system checks database dependent."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/db/models/fields/__init__.py",
+          "pathAfterFix": "django/db/models/fields/__init__.py",
+          "status": "M",
+          "role": "production",
+          "additions": 57,
+          "deletions": 46,
+          "symbols": [
+            {
+              "name": "DecimalField",
+              "qualifiedName": "DecimalField",
+              "kind": "class",
+              "startLine": 1698,
+              "endLine": 1728
+            },
+            {
+              "name": "_check_decimal_places",
+              "qualifiedName": "_check_decimal_places",
+              "kind": "function",
+              "startLine": 1729,
+              "endLine": 1766
+            },
+            {
+              "name": "_check_max_digits",
+              "qualifiedName": "_check_max_digits",
+              "kind": "function",
+              "startLine": 1767,
+              "endLine": 1804
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/invalid_models_tests/test_ordinary_fields.py",
+          "pathAfterFix": "tests/invalid_models_tests/test_ordinary_fields.py",
+          "status": "M",
+          "role": "test",
+          "additions": 6,
+          "deletions": 6,
+          "symbols": [
+            {
+              "name": "test_both_attributes_omitted",
+              "qualifiedName": "test_both_attributes_omitted",
+              "kind": "function",
+              "startLine": 603,
+              "endLine": 624
+            },
+            {
+              "name": "test_only_max_digits_defined",
+              "qualifiedName": "test_only_max_digits_defined",
+              "kind": "function",
+              "startLine": 636,
+              "endLine": 653
+            },
+            {
+              "name": "test_only_decimal_places_defined",
+              "qualifiedName": "test_only_decimal_places_defined",
+              "kind": "function",
+              "startLine": 654,
+              "endLine": 670
+            },
+            {
+              "name": "test_negative_max_digits_and_decimal_places",
+              "qualifiedName": "test_negative_max_digits_and_decimal_places",
+              "kind": "function",
+              "startLine": 671,
+              "endLine": 691
+            },
+            {
+              "name": "test_bad_values_of_max_digits_and_decimal_places",
+              "qualifiedName": "test_bad_values_of_max_digits_and_decimal_places",
+              "kind": "function",
+              "startLine": 692,
+              "endLine": 712
+            },
+            {
+              "name": "test_decimal_places_greater_than_max_digits",
+              "qualifiedName": "test_decimal_places_greater_than_max_digits",
+              "kind": "function",
+              "startLine": 713,
+              "endLine": 737
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/db/models/fields/__init__.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/invalid_models_tests/test_ordinary_fields.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "DecimalField",
+            "path": "django/db/models/fields/__init__.py",
+            "grade": 3,
+            "startLine": 1698,
+            "endLine": 1728
+          },
+          {
+            "name": "_check_decimal_places",
+            "path": "django/db/models/fields/__init__.py",
+            "grade": 3,
+            "startLine": 1729,
+            "endLine": 1766
+          },
+          {
+            "name": "_check_max_digits",
+            "path": "django/db/models/fields/__init__.py",
+            "grade": 3,
+            "startLine": 1767,
+            "endLine": 1804
+          },
+          {
+            "name": "test_both_attributes_omitted",
+            "path": "tests/invalid_models_tests/test_ordinary_fields.py",
+            "grade": 1,
+            "startLine": 603,
+            "endLine": 624
+          },
+          {
+            "name": "test_only_max_digits_defined",
+            "path": "tests/invalid_models_tests/test_ordinary_fields.py",
+            "grade": 1,
+            "startLine": 636,
+            "endLine": 653
+          },
+          {
+            "name": "test_only_decimal_places_defined",
+            "path": "tests/invalid_models_tests/test_ordinary_fields.py",
+            "grade": 1,
+            "startLine": 654,
+            "endLine": 670
+          },
+          {
+            "name": "test_negative_max_digits_and_decimal_places",
+            "path": "tests/invalid_models_tests/test_ordinary_fields.py",
+            "grade": 1,
+            "startLine": 671,
+            "endLine": 691
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-33647-pr-20480",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 33647,
+        "url": "https://code.djangoproject.com/ticket/33647",
+        "title": "bulk_update and bulk_create silently truncating values for size limited fields on postgres",
+        "body": "On postgres backend, `bulk_update` passes overlong values for size limited fields along without any notification/exception, instead truncating the value.\r\n\r\nRepro:\r\n{{{\r\n#!div style=\"font-size: 80%\"\r\nCode highlighting:\r\n  {{{#!python\r\n  # some model to repro\r\n  class TestModel(models.Model):\r\n      name = models.CharField(max_length=32)\r\n  \r\n  # in the shell\r\n  >>> from bulk_test.models import TestModel\r\n  >>> tm=TestModel(name='hello')\r\n  >>> tm.save()\r\n  >>> tm.name\r\n  'hello'\r\n  >>> tm.name='m'*100\r\n  >>> tm.save()  # good, raises:\r\n  ...\r\n  django.db.utils.DataError: value too long for type character varying(32)\r\n  \r\n  >>> TestModel.objects.all().values('name')\r\n  <QuerySet [{'name': 'hello'}]>\r\n  >>> TestModel.objects.all().update(name='z'*100)  # good, raises as well:\r\n  ...\r\n  django.db.utils.DataError: value too long for type character varying(32)\r\n  \r\n  >>> TestModel.objects.all().values('name')\r\n  <QuerySet [{'name': 'hello'}]>\r\n  >>> TestModel.objects.bulk_update([tm], ['name'])  # not raising, instead truncating:\r\n  1\r\n  >>> TestModel.objects.all().values('name')\r\n  <QuerySet [{'name': 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'}]>\r\n  }}}\r\n}}}\r\n\r\nNot sure, if this is intended/expected behavior, well it is inconsistent to `.save` or `.update`, which both raise here. I only tested postgres backend for this, it may apply to other size limiting databases as well (sqlite itself is not affected, as it does not limit values).\r\n\r\nIf this is intended, it may be a good idea to at least document the slightly different behavior, so users are aware of it, and can prepare their code to avoid silent truncation with follow-up errors. A better way prolly would fix `bulk_update` to spot value overflows and raise, but I am not sure, if thats feasible.",
+        "createdAt": "2022-04-15T13:11:01Z"
+      },
+      "pullRequest": {
+        "number": 20480,
+        "url": "https://github.com/django/django/pull/20480",
+        "mergedAt": "2025-12-31T15:41:55Z"
+      },
+      "query": "bulk_update and bulk_create silently truncating values for size limited fields on postgres\n\nOn postgres backend, `bulk_update` passes overlong values for size limited fields along without any notification/exception, instead truncating the value. Repro: {{{ #!div style=\"font-size: 80%\" Code highlighting: {{{#!python # some model to repro class TestModel(models.Model): name = models.CharField(max_length=32) # in the shell >>> from bulk_test.models import TestModel >>> tm=TestModel(name='hello') >>> tm.save() >>> tm.name 'hello' >>> tm.name='m'*100 >>> tm.save() # good, raises: ... django.db.utils.DataError: value too long for type character varying(32) >>> TestModel.objects.all().values('name') <QuerySet [{'name': 'hello'}]> >>> TestModel.objects.all().update(name='z'*100) # good, raises as well: ... django.db.utils.DataError: value too long for type character varying(32) >>> TestModel.objects.all().values('name') <QuerySet [{'name': 'hello'}]> >>> TestModel.objects.bulk_update([tm], ['name']) # not raising, instead truncating: 1 >>> TestModel.objects.all().values('name') <QuerySet [{'name': 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'}]> }}} }}} Not sure, if this is intended/expected behavior, well it is inconsistent to `.save` or `.update`, which both raise here. I only tested postgres backend for this, it may apply to other size limiting databases as well (sqlite itself is not affected, as it does not limit values). If this is intended, it may be a good idea to at least document the slightly different behavior, so users are aware of it, and can prepare their code to avoid silent truncation with follow-up errors. A better way prolly would fix `bulk_update` to spot value overflows and raise, but I am not sure, if thats feasible.",
+      "originalBaseCommit": "79ab0993d0f2253e10ea638bcefc98ec2d890a47",
+      "originalPatchCommit": "d6ae2ed868e43671afc4d433c3d8f4d27f7eb555",
+      "verifiedBaseCommit": "79ab0993d0f2253e10ea638bcefc98ec2d890a47",
+      "verifiedPatchCommit": "d6ae2ed868e43671afc4d433c3d8f4d27f7eb555",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Refs #33647 -- Fixed silent data truncation in bulk_create on Postgres."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/db/backends/postgresql/compiler.py",
+          "pathAfterFix": "django/db/backends/postgresql/compiler.py",
+          "status": "M",
+          "role": "production",
+          "additions": 3,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "assemble_as_sql",
+              "qualifiedName": "assemble_as_sql",
+              "kind": "function",
+              "startLine": 29,
+              "endLine": 60
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/releases/5.2.10.txt",
+          "pathAfterFix": "docs/releases/5.2.10.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 5,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "5.2.10.txt",
+              "qualifiedName": "5.2.10.txt",
+              "kind": "module"
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/releases/6.0.1.txt",
+          "pathAfterFix": "docs/releases/6.0.1.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 4,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "6.0.1.txt",
+              "qualifiedName": "6.0.1.txt",
+              "kind": "module"
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/backends/postgresql/test_compilation.py",
+          "pathAfterFix": "tests/backends/postgresql/test_compilation.py",
+          "status": "M",
+          "role": "test",
+          "additions": 10,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "test_unnest_eligible_foreign_keys",
+              "qualifiedName": "test_unnest_eligible_foreign_keys",
+              "kind": "function",
+              "startLine": 38,
+              "endLine": 51
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "docs/releases/5.2.10.txt",
+        "docs/releases/6.0.1.txt"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/db/backends/postgresql/compiler.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/backends/postgresql/test_compilation.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "assemble_as_sql",
+            "path": "django/db/backends/postgresql/compiler.py",
+            "grade": 3,
+            "startLine": 29,
+            "endLine": 60
+          },
+          {
+            "name": "test_unnest_eligible_foreign_keys",
+            "path": "tests/backends/postgresql/test_compilation.py",
+            "grade": 1,
+            "startLine": 38,
+            "endLine": 51
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-36618-pr-20426",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 36618,
+        "url": "https://code.djangoproject.com/ticket/36618",
+        "title": "BaseForm.add_error() misleading exception message when both field and dict provided",
+        "body": "This code creates a form and attempts to add an error for a single field to it:\r\n\r\n{{{\r\nfrom django import forms\r\nfrom django.core.exceptions import ValidationError\r\n\r\nclass FooForm(forms.Form):\r\n    the_field = forms.CharField(max_length=100)\r\n\r\nexc = ValidationError({'the_field': 'Something is wrong with the field'})\r\nform = FooForm()\r\n\r\nform.add_error('the_field', exc)\r\n}}}\r\n\r\nIt results in the following error message:\r\n{{{\r\nTypeError: The argument `field` must be `None` when the `error` argument contains errors for multiple fields.\r\n}}}\r\n\r\nThe reference to \"errors for multiple fields\" is just wrong - the error in question is for a single field.\r\n\r\nFor background, in my case the ValidationError is raised by my custom Model.clean(). What I really want to do it to map it from the Model field to the form field (which in general may not have the same name). The error message was quite confusing.\r\n",
+        "createdAt": "2025-09-23T18:22:12Z"
+      },
+      "pullRequest": {
+        "number": 20426,
+        "url": "https://github.com/django/django/pull/20426",
+        "mergedAt": "2025-12-19T20:10:12Z"
+      },
+      "query": "BaseForm.add_error() misleading exception message when both field and dict provided\n\nThis code creates a form and attempts to add an error for a single field to it: {{{ from django import forms from django.core.exceptions import ValidationError class FooForm(forms.Form): the_field = forms.CharField(max_length=100) exc = ValidationError({'the_field': 'Something is wrong with the field'}) form = FooForm() form.add_error('the_field', exc) }}} It results in the following error message: {{{ TypeError: The argument `field` must be `None` when the `error` argument contains errors for multiple fields. }}} The reference to \"errors for multiple fields\" is just wrong - the error in question is for a single field. For background, in my case the ValidationError is raised by my custom Model.clean(). What I really want to do it to map it from the Model field to the form field (which in general may not have the same name). The error message was quite confusing.",
+      "originalBaseCommit": "5a851bdbfcd627865df7289197190c52221ca070",
+      "originalPatchCommit": "e49e14fd9032feb7a8cf254658ac4e74a4ffb712",
+      "verifiedBaseCommit": "5a851bdbfcd627865df7289197190c52221ca070",
+      "verifiedPatchCommit": "e49e14fd9032feb7a8cf254658ac4e74a4ffb712",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed #36618 -- Corrected error message in BaseForm.add_error()."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/forms/forms.py",
+          "pathAfterFix": "django/forms/forms.py",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "add_error",
+              "qualifiedName": "add_error",
+              "kind": "function",
+              "startLine": 264,
+              "endLine": 317
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/forms_tests/tests/test_forms.py",
+          "pathAfterFix": "tests/forms_tests/tests/test_forms.py",
+          "status": "M",
+          "role": "test",
+          "additions": 7,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "clean",
+              "qualifiedName": "clean",
+              "kind": "function",
+              "startLine": 1536,
+              "endLine": 1662
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/forms/forms.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/forms_tests/tests/test_forms.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "add_error",
+            "path": "django/forms/forms.py",
+            "grade": 3,
+            "startLine": 264,
+            "endLine": 317
+          },
+          {
+            "name": "clean",
+            "path": "tests/forms_tests/tests/test_forms.py",
+            "grade": 1,
+            "startLine": 1536,
+            "endLine": 1662
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-36787-pr-20437",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 36787,
+        "url": "https://code.djangoproject.com/ticket/36787",
+        "title": "In and Range lookups crash when provided to filter() if RHS contains mix of expressions and strings",
+        "body": "The invariance between `__in` and `In` is broken when the right hand side contains a mix of expressions and strings (where the strings are possible literal values). EDIT: replaced draft test case, first version was misleading.\r\n{{{#!diff\r\ndiff --git a/tests/lookup/tests.py b/tests/lookup/tests.py\r\nindex 5b9dd8e5ec..a34d95b8cb 100644\r\n--- a/tests/lookup/tests.py\r\n+++ b/tests/lookup/tests.py\r\n@@ -1855,6 +1855,19 @@ class LookupQueryingTests(TestCase):\r\n                     Season.objects.filter(In(F(\"year\"), years)).order_by(\"pk\"), seasons\r\n                 )\r\n \r\n+    def test_in_lookup_in_filter_text_field(self):\r\n+        self.assertSequenceEqual(\r\n+            # this works...\r\n+            # Season.objects.filter(\r\n+            #     nulled_text_field__in=[F(\"nulled_text_field\"), \"special_value\"]\r\n+            # ),\r\n+            # this doesn't...\r\n+            Season.objects.filter(\r\n+                In(F(\"nulled_text_field\"), [F(\"nulled_text_field\"), \"special_value\"])\r\n+            ),\r\n+            [self.s2],\r\n+        )\r\n+\r\n     def test_filter_lookup_lhs(self):\r\n         qs = Season.objects.annotate(before_20=LessThan(F(\"year\"), 2000)).filter(\r\n             before_20=LessThan(F(\"year\"), 1900),\r\n\r\n}}}\r\n{{{#!py\r\n======================================================================\r\nERROR: test_in_lookup_in_filter_text_field (lookup.tests.LookupQueryingTests.test_in_lookup_in_filter_text_field)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"/django/source/tests/lookup/tests.py\", line 1866, in test_in_lookup_in_filter_text_field\r\n    In(F(\"nulled_text_field\"), [F(\"nulled_text_field\"), \"special_value\"])\r\n  File \"/django/source/django/db/models/lookups.py\", line 35, in __init__\r\n    self.rhs = self.get_prep_lookup()\r\n               ^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"/django/source/django/db/models/lookups.py\", line 517, in get_prep_lookup\r\n    return super().get_prep_lookup()\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"/django/source/django/db/models/lookups.py\", line 310, in get_prep_lookup\r\n    Value(prep_value, self.lhs.output_field)\r\n                      ^^^^^^^^^^^^^^^^^^^^^\r\nAttributeError: 'F' object has no attribute 'output_field'\r\n}}}\r\nSeems like 089deb82b9ac2d002af36fd36f288368cdac4b53 (5.2) needed the same tweak as 0bfaa55708d402432d44882d9a8e4cb85011472c (5.2).",
+        "createdAt": "2025-12-09T20:05:13Z"
+      },
+      "pullRequest": {
+        "number": 20437,
+        "url": "https://github.com/django/django/pull/20437",
+        "mergedAt": "2025-12-22T19:25:45Z"
+      },
+      "query": "In and Range lookups crash when provided to filter() if RHS contains mix of expressions and strings\n\nThe invariance between `__in` and `In` is broken when the right hand side contains a mix of expressions and strings (where the strings are possible literal values). EDIT: replaced draft test case, first version was misleading. {{{#!diff diff --git a/tests/lookup/tests.py b/tests/lookup/tests.py index 5b9dd8e5ec..a34d95b8cb 100644 --- a/tests/lookup/tests.py +++ b/tests/lookup/tests.py @@ -1855,6 +1855,19 @@ class LookupQueryingTests(TestCase): Season.objects.filter(In(F(\"year\"), years)).order_by(\"pk\"), seasons ) + def test_in_lookup_in_filter_text_field(self): + self.assertSequenceEqual( + # this works... + # Season.objects.filter( + # nulled_text_field__in=[F(\"nulled_text_field\"), \"special_value\"] + # ), + # this doesn't... + Season.objects.filter( + In(F(\"nulled_text_field\"), [F(\"nulled_text_field\"), \"special_value\"]) + ), + [self.s2], + ) + def test_filter_lookup_lhs(self): qs = Season.objects.annotate(before_20=LessThan(F(\"year\"), 2000)).filter( before_20=LessThan(F(\"year\"), 1900), }}} {{{#!py ====================================================================== ERROR: test_in_lookup_in_filter_text_field (lookup.tests.LookupQueryingTests.test_in_lookup_in_filter_text_field) ---------------------------------------------------------------------- Traceback (most recent call last): File \"/django/source/tests/lookup/tests.py\", line 1866, in test_in_lookup_in_filter_text_field In(F(\"nulled_text_field\"), [F(\"nulled_text_field\"), \"special_value\"]) File \"/django/source/django/db/models/lookups.py\", line 35, in __init__ self.rhs = self.get_prep_lookup() ^^^^^^^^^^^^^^^^^^^^^^ File \"/django/source/django/db/models/lookups.py\", line 517, in get_prep_lookup return super().get_prep_lookup() ^^^^^^^^^^^^^^^^^^^^^^^^^ File \"/django/source/django/db/models/lookups.py\", line 310, in get_prep_lookup Value(prep_value, self.lhs.output_field) ^^^^^^^^^^^^^^^^^^^^^ AttributeError: 'F' object has no attribute 'output_field' }}} Seems like 089deb82b9ac2d002af36fd36f288368cdac4b53 (5.2) needed the same tweak as 0bfaa55708d402432d44882d9a8e4cb85011472c (5.2).",
+      "originalBaseCommit": "95394443bff2cd6c5cb47c752422fe1f391bb43d",
+      "originalPatchCommit": "163d92c1d66e2437a676da4ac8b11291dea3290b",
+      "verifiedBaseCommit": "95394443bff2cd6c5cb47c752422fe1f391bb43d",
+      "verifiedPatchCommit": "163d92c1d66e2437a676da4ac8b11291dea3290b",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed #36787 -- Fixed crash in In lookups with mixed expressions and strings."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/db/models/lookups.py",
+          "pathAfterFix": "django/db/models/lookups.py",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "FieldGetDbPrepValueIterableMixin",
+              "qualifiedName": "FieldGetDbPrepValueIterableMixin",
+              "kind": "class",
+              "startLine": 279,
+              "endLine": 327
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/lookup/tests.py",
+          "pathAfterFix": "tests/lookup/tests.py",
+          "status": "M",
+          "role": "test",
+          "additions": 8,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "test_in_lookup_in_filter",
+              "qualifiedName": "test_in_lookup_in_filter",
+              "kind": "function",
+              "startLine": 1839,
+              "endLine": 1857
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/db/models/lookups.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/lookup/tests.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "FieldGetDbPrepValueIterableMixin",
+            "path": "django/db/models/lookups.py",
+            "grade": 3,
+            "startLine": 279,
+            "endLine": 327
+          },
+          {
+            "name": "test_in_lookup_in_filter",
+            "path": "tests/lookup/tests.py",
+            "grade": 1,
+            "startLine": 1839,
+            "endLine": 1857
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-36796-pr-20459",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 36796,
+        "url": "https://code.djangoproject.com/ticket/36796",
+        "title": "URL resolution breaks if route defined with lazy string and uses an include",
+        "body": "After this commit:\r\n\r\nhttps://github.com/django/django/commit/f920937c8a63df6bea220e4386f59cdb45b2e355\r\n\r\nthis is not working if `self._route` is `gettext_lazy('test')`:\r\n\r\n{{{\r\n        elif path.startswith(self._route):\r\n            return path.removeprefix(self._route), (), {}\r\n}}}\r\n\r\nMore info here:\r\nhttps://forum.djangoproject.com/t/gettext-lazy-and-url-patterns/43703\r\n",
+        "createdAt": "2025-12-12T14:44:32Z"
+      },
+      "pullRequest": {
+        "number": 20459,
+        "url": "https://github.com/django/django/pull/20459",
+        "mergedAt": "2025-12-26T12:24:58Z"
+      },
+      "query": "URL resolution breaks if route defined with lazy string and uses an include\n\nAfter this commit: https://github.com/django/django/commit/f920937c8a63df6bea220e4386f59cdb45b2e355 this is not working if `self._route` is `gettext_lazy('test')`: {{{ elif path.startswith(self._route): return path.removeprefix(self._route), (), {} }}} More info here: https://forum.djangoproject.com/t/gettext-lazy-and-url-patterns/43703",
+      "originalBaseCommit": "8e4b531111ddd3256c45eee601947e475651e8e7",
+      "originalPatchCommit": "7bf3ac3ee255bcfe329e3203c7a2555b1275d506",
+      "verifiedBaseCommit": "8e4b531111ddd3256c45eee601947e475651e8e7",
+      "verifiedPatchCommit": "7bf3ac3ee255bcfe329e3203c7a2555b1275d506",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed #36796 -- Handled lazy routes correctly in RoutePattern.match()."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/urls/resolvers.py",
+          "pathAfterFix": "django/urls/resolvers.py",
+          "status": "M",
+          "role": "production",
+          "additions": 2,
+          "deletions": 2,
+          "symbols": [
+            {
+              "name": "RoutePattern",
+              "qualifiedName": "RoutePattern",
+              "kind": "class",
+              "startLine": 314,
+              "endLine": 364
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/releases/6.0.1.txt",
+          "pathAfterFix": "docs/releases/6.0.1.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 4,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "6.0.1.txt",
+              "qualifiedName": "6.0.1.txt",
+              "kind": "module"
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/urlpatterns/lazy_path_urls.py",
+          "status": "A",
+          "role": "test",
+          "additions": 9,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": "tests/urlpatterns/test_resolvers.py",
+          "pathAfterFix": "tests/urlpatterns/test_resolvers.py",
+          "status": "M",
+          "role": "test",
+          "additions": 31,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "test_has_converters",
+              "qualifiedName": "test_has_converters",
+              "kind": "function",
+              "startLine": 16,
+              "endLine": 22
+            },
+            {
+              "name": "test_resolver_cache_default__root_urlconf",
+              "qualifiedName": "test_resolver_cache_default__root_urlconf",
+              "kind": "function",
+              "startLine": 25,
+              "endLine": 30
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "docs/releases/6.0.1.txt"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/urls/resolvers.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/urlpatterns/lazy_path_urls.py",
+          "tests/urlpatterns/test_resolvers.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "RoutePattern",
+            "path": "django/urls/resolvers.py",
+            "grade": 3,
+            "startLine": 314,
+            "endLine": 364
+          },
+          {
+            "name": "test_has_converters",
+            "path": "tests/urlpatterns/test_resolvers.py",
+            "grade": 1,
+            "startLine": 16,
+            "endLine": 22
+          },
+          {
+            "name": "test_resolver_cache_default__root_urlconf",
+            "path": "tests/urlpatterns/test_resolvers.py",
+            "grade": 1,
+            "startLine": 25,
+            "endLine": 30
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-36800-pr-20411",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 36800,
+        "url": "https://code.djangoproject.com/ticket/36800",
+        "title": "Issue with ManyToManyField renaming",
+        "body": "Since Django 6.0, using Postgres 16 database, when a ManyToManyField is renamed, it cannot be access anymore.\r\n\r\n\r\nModels before field renaming:\r\n{{{\r\nfrom django.db import models\r\n\r\n\r\nclass Book(models.Model):\r\n    title = models.CharField(max_length=200)\r\n\r\n\r\nclass Author(models.Model):\r\n    name = models.CharField()\r\n    books = models.ManyToManyField(Book)\r\n\r\n}}}\r\n\r\nIn Postgres database I have the following table for the m2m relation **my_app_author_books**.\r\n\r\n\r\n\r\nI then renamed the m2m field \"books\" to \"volumes\":\r\n\r\n\r\n{{{\r\nfrom django.db import models\r\n\r\n\r\nclass Book(models.Model):\r\n    title = models.CharField(max_length=200)\r\n\r\n\r\nclass Author(models.Model):\r\n    name = models.CharField()\r\n    volumes = models.ManyToManyField(Book)\r\n}}}\r\n\r\nThis generates the following migration:\r\n\r\n\r\n{{{\r\n# Generated by Django 6.0 on 2025-12-15 10:04\r\n\r\nfrom django.db import migrations\r\n\r\n\r\nclass Migration(migrations.Migration):\r\n\r\n    dependencies = [\r\n        ('my_app', '0001_initial'),\r\n    ]\r\n\r\n    operations = [\r\n        migrations.RenameField(\r\n            model_name='author',\r\n            old_name='books',\r\n            new_name='volumes',\r\n        ),\r\n    ]\r\n}}}\r\n\r\nIn Postgres database I still have the following table for the m2m relation **my_app_author_books**. The table was not renamed to **my_app_author_volumes** which was the case in Django 5.2.\r\n\r\nMaybe this is a new behaviour but when I get all instances of volumes, in shell_plus:\r\n\r\n{{{author_instance.volumes.all()}}}\r\ngives\r\n{{{\r\nProgrammingError: relation \"my_app_author_volumes\" does not exist\r\nLINE 1: ...y_app_book\".\"title\" FROM \"my_app_book\" INNER JOIN \"my_app_au...\r\n}}}\r\n\r\nMigrations were played\r\n\r\n**python manage.py showmigrations** gives:\r\n{{{\r\nmy_app\r\n [X] 0001_initial\r\n [X] 0002_rename_books_author_volumes\r\n}}}\r\n",
+        "createdAt": "2025-12-15T10:27:41Z"
+      },
+      "pullRequest": {
+        "number": 20411,
+        "url": "https://github.com/django/django/pull/20411",
+        "mergedAt": "2025-12-16T22:45:35Z"
+      },
+      "query": "Issue with ManyToManyField renaming\n\nSince Django 6.0, using Postgres 16 database, when a ManyToManyField is renamed, it cannot be access anymore. Models before field renaming: {{{ from django.db import models class Book(models.Model): title = models.CharField(max_length=200) class Author(models.Model): name = models.CharField() books = models.ManyToManyField(Book) }}} In Postgres database I have the following table for the m2m relation **my_app_author_books**. I then renamed the m2m field \"books\" to \"volumes\": {{{ from django.db import models class Book(models.Model): title = models.CharField(max_length=200) class Author(models.Model): name = models.CharField() volumes = models.ManyToManyField(Book) }}} This generates the following migration: {{{ # Generated by Django 6.0 on 2025-12-15 10:04 from django.db import migrations class Migration(migrations.Migration): dependencies = [ ('my_app', '0001_initial'), ] operations = [ migrations.RenameField( model_name='author', old_name='books', new_name='volumes', ), ] }}} In Postgres database I still have the following table for the m2m relation **my_app_author_books**. The table was not renamed to **my_app_author_volumes** which was the case in Django 5.2. Maybe this is a new behaviour but when I get all instances of volumes, in shell_plus: {{{author_instance.volumes.all()}}} gives {{{ ProgrammingError: relation \"my_app_author_volumes\" does not exist LINE 1: ...y_app_book\".\"title\" FROM \"my_app_book\" INNER JOIN \"my_app_au... }}} Migrations were played **python manage.py showmigrations** gives: {{{ my_app [X] 0001_initial [X] 0002_rename_books_author_volumes }}}",
+      "originalBaseCommit": "d1a4979fa55071581411b7d62eb1ee20f2380ae3",
+      "originalPatchCommit": "6cc1231285a20b11058143f8cb0a6b4b3999b23a",
+      "verifiedBaseCommit": "d1a4979fa55071581411b7d62eb1ee20f2380ae3",
+      "verifiedPatchCommit": "6cc1231285a20b11058143f8cb0a6b4b3999b23a",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed #36800 -- Restored ManyToManyField renaming in BaseDatabaseSchemaEditor.alter_field()."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/db/backends/base/schema.py",
+          "pathAfterFix": "django/db/backends/base/schema.py",
+          "status": "M",
+          "role": "production",
+          "additions": 12,
+          "deletions": 4,
+          "symbols": [
+            {
+              "name": "_field_should_be_altered",
+              "qualifiedName": "_field_should_be_altered",
+              "kind": "function",
+              "startLine": 1684,
+              "endLine": 1724
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/releases/6.0.1.txt",
+          "pathAfterFix": "docs/releases/6.0.1.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 4,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "6.0.1.txt",
+              "qualifiedName": "6.0.1.txt",
+              "kind": "module"
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/schema/tests.py",
+          "pathAfterFix": "tests/schema/tests.py",
+          "status": "M",
+          "role": "test",
+          "additions": 34,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "test_m2m_repoint_inherited",
+              "qualifiedName": "test_m2m_repoint_inherited",
+              "kind": "function",
+              "startLine": 2889,
+              "endLine": 2892
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "docs/releases/6.0.1.txt"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/db/backends/base/schema.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/schema/tests.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "_field_should_be_altered",
+            "path": "django/db/backends/base/schema.py",
+            "grade": 3,
+            "startLine": 1684,
+            "endLine": 1724
+          },
+          {
+            "name": "test_m2m_repoint_inherited",
+            "path": "tests/schema/tests.py",
+            "grade": 1,
+            "startLine": 2889,
+            "endLine": 2892
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-36806-pr-20421",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 36806,
+        "url": "https://code.djangoproject.com/ticket/36806",
+        "title": "Add system check for null kwarg in GeneratedField definition",
+        "body": "**Summary**\r\nGeneratedField ignores null=False on MySQL - columns are always nullable\r\n\r\n**Description**\r\nWhen creating a GeneratedField with null=False on MySQL, the database column is always created as nullable, ignoring the null=False parameter.\r\nSteps to Reproduce\r\n\r\n{{{\r\npythonfrom django.db import models\r\n\r\nclass MyModel(models.Model):\r\n    area = models.GeneratedField(\r\n        .....\r\n        null=False,  # ← Ignored\r\n    )\r\n}}}\r\n\r\n\r\n- The migration file removes null=False from GeneratedField definition\r\n- Even if manually added to migration file, Django doesn't apply NOT NULL constraint to database",
+        "createdAt": "2025-12-16T15:20:13Z"
+      },
+      "pullRequest": {
+        "number": 20421,
+        "url": "https://github.com/django/django/pull/20421",
+        "mergedAt": "2025-12-22T14:41:42Z"
+      },
+      "query": "Add system check for null kwarg in GeneratedField definition\n\n**Summary** GeneratedField ignores null=False on MySQL - columns are always nullable **Description** When creating a GeneratedField with null=False on MySQL, the database column is always created as nullable, ignoring the null=False parameter. Steps to Reproduce {{{ pythonfrom django.db import models class MyModel(models.Model): area = models.GeneratedField( ..... null=False, # ← Ignored ) }}} - The migration file removes null=False from GeneratedField definition - Even if manually added to migration file, Django doesn't apply NOT NULL constraint to database",
+      "originalBaseCommit": "afaa527c437f95ab6f8860840d83480d4d15b099",
+      "originalPatchCommit": "6025eab3c509b4de922117e16866bbfe0ee99aa6",
+      "verifiedBaseCommit": "afaa527c437f95ab6f8860840d83480d4d15b099",
+      "verifiedPatchCommit": "6025eab3c509b4de922117e16866bbfe0ee99aa6",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed #36806 -- Added system check for null kwarg in GeneratedField."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/db/models/fields/generated.py",
+          "pathAfterFix": "django/db/models/fields/generated.py",
+          "status": "M",
+          "role": "production",
+          "additions": 16,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "__init__",
+              "qualifiedName": "__init__",
+              "kind": "function",
+              "startLine": 18,
+              "endLine": 35
+            },
+            {
+              "name": "check",
+              "qualifiedName": "check",
+              "kind": "function",
+              "startLine": 79,
+              "endLine": 120
+            },
+            {
+              "name": "_check_persistence",
+              "qualifiedName": "_check_persistence",
+              "kind": "function",
+              "startLine": 150,
+              "endLine": 190
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/ref/checks.txt",
+          "pathAfterFix": "docs/ref/checks.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 1,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "name",
+              "qualifiedName": "name",
+              "kind": "class",
+              "startLine": 61,
+              "endLine": 396
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/ref/models/fields.txt",
+          "pathAfterFix": "docs/ref/models/fields.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 3,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "images_path",
+              "qualifiedName": "images_path",
+              "kind": "function",
+              "startLine": 1247,
+              "endLine": 1499
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/invalid_models_tests/test_ordinary_fields.py",
+          "pathAfterFix": "tests/invalid_models_tests/test_ordinary_fields.py",
+          "status": "M",
+          "role": "test",
+          "additions": 23,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "test_output_field_check_warning",
+              "qualifiedName": "test_output_field_check_warning",
+              "kind": "function",
+              "startLine": 1491,
+              "endLine": 1513
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "docs/ref/checks.txt",
+        "docs/ref/models/fields.txt"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/db/models/fields/generated.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/invalid_models_tests/test_ordinary_fields.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "__init__",
+            "path": "django/db/models/fields/generated.py",
+            "grade": 3,
+            "startLine": 18,
+            "endLine": 35
+          },
+          {
+            "name": "check",
+            "path": "django/db/models/fields/generated.py",
+            "grade": 3,
+            "startLine": 79,
+            "endLine": 120
+          },
+          {
+            "name": "_check_persistence",
+            "path": "django/db/models/fields/generated.py",
+            "grade": 3,
+            "startLine": 150,
+            "endLine": 190
+          },
+          {
+            "name": "test_output_field_check_warning",
+            "path": "tests/invalid_models_tests/test_ordinary_fields.py",
+            "grade": 1,
+            "startLine": 1491,
+            "endLine": 1513
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-36818-pr-20443",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 36818,
+        "url": "https://code.djangoproject.com/ticket/36818",
+        "title": "AttributeError: 'NoneType' object has no attribute 'getlimit' when calling bulk_create as the first database operation on SQLite",
+        "body": "== Summary ==\r\nIn Django 6.0, using `bulk_create` with an SQLite backend causes an `AttributeError` if it is the first database operation performed after `django.setup()`. This occurs because `bulk_create` attempts to determine the `max_query_params` by calling `sqlite3.Connection.getlimit()`, but the underlying database connection has not yet been established.\r\n\r\n== Environment ==\r\n* '''Django Version:''' 6.0\r\n* '''Python Version:''' 3.11+ (Reproducible on 3.13)\r\n* '''Database:''' SQLite\r\n\r\n== Minimal Reproducible Example ==\r\n{{{\r\nimport os\r\nimport django\r\nfrom django.conf import settings\r\nfrom django.db import models\r\n\r\nif not settings.configured:\r\n    settings.configure(\r\n        DATABASES={\r\n            \"default\": {\r\n                \"ENGINE\": \"django.db.backends.sqlite3\",\r\n                \"NAME\": \":memory:\",\r\n            }\r\n        },\r\n        INSTALLED_APPS=[\"__main__\"],  \r\n    )\r\n\r\ndjango.setup()\r\n\r\nclass MyModel(models.Model):\r\n    name = models.CharField(max_length=100)\r\n\r\n    class Meta:\r\n        app_label = \"__main__\"  \r\n\r\nif __name__ == \"__main__\":\r\n    MyModel.objects.bulk_create([MyModel(name=\"test\")])\r\n    print(\"finished without error\")\r\n}}}\r\n\r\n== Traceback ==\r\n{{{\r\nAttributeError: 'NoneType' object has no attribute 'getlimit'\r\n  File \"django/db/models/query.py\", line 833, in bulk_create\r\n    returned_columns = self._batched_insert(...)\r\n  File \"django/db/models/query.py\", line 1937, in _batched_insert\r\n    max_batch_size = max(ops.bulk_batch_size(fields, objs), 1)\r\n  File \"django/db/backends/sqlite3/operations.py\", line 47, in bulk_batch_size\r\n    return self.connection.features.max_query_params // len(fields)\r\n  File \"django/db/backends/sqlite3/features.py\", line 152, in max_query_params\r\n    return self.connection.connection.getlimit(sqlite3.SQLITE_LIMIT_VARIABLE_NUMBER)\r\nAttributeError: 'NoneType' object has no attribute 'getlimit'\r\n}}}\r\n\r\n== Suspected Cause ==\r\nIn `django/db/backends/sqlite3/features.py`, the `max_query_params` property accesses `self.connection.connection` (the raw DB-API connection) without ensuring that a connection has been opened. \r\n\r\nDjango typically establishes connections lazily. However, `bulk_create` logic for SQLite now depends on `getlimit()`, which requires an active connection. Since this is accessed before any SQL is actually executed, the connection object is still `None`.\r\n\r\n== Workaround ==\r\nCalling `connection.ensure_connection()` or performing any other database query (e.g., `MyModel.objects.exists()`) before calling `bulk_create` resolves the issue.",
+        "createdAt": "2025-12-22T09:03:26Z"
+      },
+      "pullRequest": {
+        "number": 20443,
+        "url": "https://github.com/django/django/pull/20443",
+        "mergedAt": "2025-12-23T01:33:13Z"
+      },
+      "query": "AttributeError: 'NoneType' object has no attribute 'getlimit' when calling bulk_create as the first database operation on SQLite\n\n== Summary == In Django 6.0, using `bulk_create` with an SQLite backend causes an `AttributeError` if it is the first database operation performed after `django.setup()`. This occurs because `bulk_create` attempts to determine the `max_query_params` by calling `sqlite3.Connection.getlimit()`, but the underlying database connection has not yet been established. == Environment == * '''Django Version:''' 6.0 * '''Python Version:''' 3.11+ (Reproducible on 3.13) * '''Database:''' SQLite == Minimal Reproducible Example == {{{ import os import django from django.conf import settings from django.db import models if not settings.configured: settings.configure( DATABASES={ \"default\": { \"ENGINE\": \"django.db.backends.sqlite3\", \"NAME\": \":memory:\", } }, INSTALLED_APPS=[\"__main__\"], ) django.setup() class MyModel(models.Model): name = models.CharField(max_length=100) class Meta: app_label = \"__main__\" if __name__ == \"__main__\": MyModel.objects.bulk_create([MyModel(name=\"test\")]) print(\"finished without error\") }}} == Traceback == {{{ AttributeError: 'NoneType' object has no attribute 'getlimit' File \"django/db/models/query.py\", line 833, in bulk_create returned_columns = self._batched_insert(...) File \"django/db/models/query.py\", line 1937, in _batched_insert max_batch_size = max(ops.bulk_batch_size(fields, objs), 1) File \"django/db/backends/sqlite3/operations.py\", line 47, in bulk_batch_size return self.connection.features.max_query_params // len(fields) File \"django/db/backends/sqlite3/features.py\", line 152, in max_query_params return self.connection.connection.getlimit(sqlite3.SQLITE_LIMIT_VARIABLE_NUMBER) AttributeError: 'NoneType' object has no attribute 'getlimit' }}} == Suspected Cause == In `django/db/backends/sqlite3/features.py`, the `max_query_params` property accesses `self.connection.connection` (the raw DB-API connection) without ensuring that a connection has been opened. Django typically establishes connections lazily. However, `bulk_create` logic for SQLite now depends on `getlimit()`, which requires an active connection. Since this is accessed before any SQL is actually executed, the connection object is still `None`. == Workaround == Calling `connection.ensure_connection()` or performing any other database query (e.g., `MyModel.objects.exists()`) before calling `bulk_create` resolves the issue.",
+      "originalBaseCommit": "0def695e3cbaa9ede9ae4040a24cfed7417f9065",
+      "originalPatchCommit": "84bae9c22a8ae7663c56cce5e0c611ea7c17fce1",
+      "verifiedBaseCommit": "0def695e3cbaa9ede9ae4040a24cfed7417f9065",
+      "verifiedPatchCommit": "84bae9c22a8ae7663c56cce5e0c611ea7c17fce1",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed #36818 -- Ensured SQLite connection before accessing max_query_params."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/db/backends/sqlite3/features.py",
+          "pathAfterFix": "django/db/backends/sqlite3/features.py",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "max_query_params",
+              "qualifiedName": "max_query_params",
+              "kind": "function",
+              "startLine": 153,
+              "endLine": 162
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/releases/6.0.1.txt",
+          "pathAfterFix": "docs/releases/6.0.1.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 4,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "6.0.1.txt",
+              "qualifiedName": "6.0.1.txt",
+              "kind": "module"
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/backends/sqlite/test_features.py",
+          "pathAfterFix": "tests/backends/sqlite/test_features.py",
+          "status": "M",
+          "role": "test",
+          "additions": 11,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "test_features.py",
+              "qualifiedName": "test_features.py",
+              "kind": "test"
+            },
+            {
+              "name": "test_max_query_params_respects_variable_limit",
+              "qualifiedName": "test_max_query_params_respects_variable_limit",
+              "kind": "function",
+              "startLine": 22,
+              "endLine": 32
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "docs/releases/6.0.1.txt"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/db/backends/sqlite3/features.py"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/backends/sqlite/test_features.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "max_query_params",
+            "path": "django/db/backends/sqlite3/features.py",
+            "grade": 3,
+            "startLine": 153,
+            "endLine": 162
+          },
+          {
+            "name": "test_features.py",
+            "path": "tests/backends/sqlite/test_features.py",
+            "grade": 1
+          },
+          {
+            "name": "test_max_query_params_respects_variable_limit",
+            "path": "tests/backends/sqlite/test_features.py",
+            "grade": 1,
+            "startLine": 22,
+            "endLine": 32
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "django-django-issue-36829-pr-20471",
+      "repositoryId": "django/django",
+      "issue": {
+        "number": 36829,
+        "url": "https://code.djangoproject.com/ticket/36829",
+        "title": "ClearableFileInput.use_fieldset became True in Django 6.0",
+        "body": "Howdy y'all,\r\n\r\n#35892 flipped `django.forms.widgets.ClearableFileInput.use_fieldset` from false to true.\r\n\r\nThe change can be found here: https://github.com/django/django/blame/4187da258fe212d494cb578a0bc2b52c4979ab95/django/forms/widgets.py#L533\r\n\r\nThis changes the form rendering outside the admin too. Probably just a small oversight and not an intentional change, since changes weren't accompanied by release notes.\r\n\r\nAnyhow, both the input and the `use_fieldset` are part of the public documentation, and changes must undergo deprecation.\r\n\r\nThe problem gets amplified with #36828, since the current fieldset implementation violates HTML and WCAG 2.1\r\n\r\nThe only affected version is 6.0. I would recommend providing a regression patch in the next bugfix release.\r\n\r\nCheers!\r\nJoe",
+        "createdAt": "2025-12-26T15:50:30Z"
+      },
+      "pullRequest": {
+        "number": 20471,
+        "url": "https://github.com/django/django/pull/20471",
+        "mergedAt": "2025-12-31T15:14:00Z"
+      },
+      "query": "ClearableFileInput.use_fieldset became True in Django 6.0\n\nHowdy y'all, #35892 flipped `django.forms.widgets.ClearableFileInput.use_fieldset` from false to true. The change can be found here: https://github.com/django/django/blame/4187da258fe212d494cb578a0bc2b52c4979ab95/django/forms/widgets.py#L533 This changes the form rendering outside the admin too. Probably just a small oversight and not an intentional change, since changes weren't accompanied by release notes. Anyhow, both the input and the `use_fieldset` are part of the public documentation, and changes must undergo deprecation. The problem gets amplified with #36828, since the current fieldset implementation violates HTML and WCAG 2.1 The only affected version is 6.0. I would recommend providing a regression patch in the next bugfix release. Cheers! Joe",
+      "originalBaseCommit": "c496a7df64ec0a80c2bab7f155aad567155fb37b",
+      "originalPatchCommit": "79ab0993d0f2253e10ea638bcefc98ec2d890a47",
+      "verifiedBaseCommit": "c496a7df64ec0a80c2bab7f155aad567155fb37b",
+      "verifiedPatchCommit": "79ab0993d0f2253e10ea638bcefc98ec2d890a47",
+      "baseResolution": {
+        "strategy": "contiguous-ticket-commits",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed #36829 -- Reverted value of ClearableFileInput.use_fieldset to True."
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "django/contrib/admin/widgets.py",
+          "pathAfterFix": "django/contrib/admin/widgets.py",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "AdminFileWidget",
+              "qualifiedName": "AdminFileWidget",
+              "kind": "class",
+              "startLine": 123,
+              "endLine": 126
+            }
+          ]
+        },
+        {
+          "pathAtBase": "django/forms/widgets.py",
+          "pathAfterFix": "django/forms/widgets.py",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "ClearableFileInput",
+              "qualifiedName": "ClearableFileInput",
+              "kind": "class",
+              "startLine": 527,
+              "endLine": 534
+            }
+          ]
+        },
+        {
+          "pathAtBase": "docs/releases/6.0.1.txt",
+          "pathAfterFix": "docs/releases/6.0.1.txt",
+          "status": "M",
+          "role": "generated",
+          "additions": 4,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "6.0.1.txt",
+              "qualifiedName": "6.0.1.txt",
+              "kind": "module"
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/forms_tests/widget_tests/test_clearablefileinput.py",
+          "pathAfterFix": "tests/forms_tests/widget_tests/test_clearablefileinput.py",
+          "status": "M",
+          "role": "test",
+          "additions": 7,
+          "deletions": 8,
+          "symbols": [
+            {
+              "name": "test_fieldset",
+              "qualifiedName": "test_fieldset",
+              "kind": "function",
+              "startLine": 239,
+              "endLine": 264
+            }
+          ]
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "docs/releases/6.0.1.txt"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "django/forms/widgets.py"
+        ],
+        "supportingFiles": [
+          "django/contrib/admin/widgets.py"
+        ],
+        "testFiles": [
+          "tests/forms_tests/widget_tests/test_clearablefileinput.py"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "AdminFileWidget",
+            "path": "django/contrib/admin/widgets.py",
+            "grade": 2,
+            "startLine": 123,
+            "endLine": 126
+          },
+          {
+            "name": "ClearableFileInput",
+            "path": "django/forms/widgets.py",
+            "grade": 3,
+            "startLine": 527,
+            "endLine": 534
+          },
+          {
+            "name": "test_fieldset",
+            "path": "tests/forms_tests/widget_tests/test_clearablefileinput.py",
+            "grade": 1,
+            "startLine": 239,
+            "endLine": 264
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-55843-pr-62873",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 55843,
+        "url": "https://github.com/microsoft/TypeScript/issues/55843",
+        "title": "String#matchAll is too restrictive in its parameter type",
+        "body": "### 🔎 Search Terms\n\nmatchAll\n\n### 🕗 Version & Regression Information\n\n- This is the behavior in every version I tried, and I reviewed the FAQ for entries about RegExps and matchAll\r\n\n\n### ⏯ Playground Link\n\nhttps://www.typescriptlang.org/play?target=7#code/MYewdgzgLgBAtgTwMIFdojgeQEYCsCmwsAvDAN4CwAUDLTAFQDaAygnNiADYB0cAhlGAALAIKdOAXQAU0AE4BLMAHMAXDDmKlASjUBxfGHyyBIWQB4ASviUBRAB4AHe4RGzjCAHzlqdGAF9qAKpqUEgufG5OECUpRm54gHIAMxAQBN4BYTFOKURUdCw8QigtCS0AbmogA\n\n### 💻 Code\n\n```ts\r\nconst myCustomObject = {\r\n    *[Symbol.matchAll](string: string): Generator<RegExpExecArray> {\r\n    }\r\n}\r\n\r\nconsole.log([...'foo'.matchAll(myCustomObject)]);\r\n```\r\n\n\n### 🙁 Actual behavior\n\nTS rejects this code, because `myCustomObject` is not an instance of `RegExp`.\n\n### 🙂 Expected behavior\n\nAny value matching the following type should be accepted, including `myCustomObject`. The other parts of the RegExp object are not used.\r\n\r\n```ts\r\ntype MatchAllRegExpLike = {\r\n  [Symbol.matchAll](string: string): IterableIterator<RegExpExecArray>;\r\n  // If the object has a [Symbol.match] property that is truthy, its flags are checked. However, neither\r\n  // must be present, and even if it is present, [Symbol.match] doesn't have to be a function.\r\n  readonly [Symbol.match]?: any;\r\n  readonly flags?: string;\r\n};\r\n```\n\n### Additional information about the issue\n\nThis is distinct from #47310. That issue is about string-to-regexp conversion; this is about regexp-like objects.",
+        "createdAt": "2023-09-23T15:37:16Z"
+      },
+      "pullRequest": {
+        "number": 62873,
+        "url": "https://github.com/microsoft/TypeScript/pull/62873",
+        "mergedAt": "2025-12-11T19:46:41Z"
+      },
+      "query": "String#matchAll is too restrictive in its parameter type\n\n### 🔎 Search Terms matchAll ### 🕗 Version & Regression Information - This is the behavior in every version I tried, and I reviewed the FAQ for entries about RegExps and matchAll ### ⏯ Playground Link https://www.typescriptlang.org/play?target=7#code/MYewdgzgLgBAtgTwMIFdojgeQEYCsCmwsAvDAN4CwAUDLTAFQDaAygnNiADYB0cAhlGAALAIKdOAXQAU0AE4BLMAHMAXDDmKlASjUBxfGHyyBIWQB4ASviUBRAB4AHe4RGzjCAHzlqdGAF9qAKpqUEgufG5OECUpRm54gHIAMxAQBN4BYTFOKURUdCw8QigtCS0AbmogA ### 💻 Code ```ts const myCustomObject = { *[Symbol.matchAll](string: string): Generator<RegExpExecArray> { } } console.log([...'foo'.matchAll(myCustomObject)]); ``` ### 🙁 Actual behavior TS rejects this code, because `myCustomObject` is not an instance of `RegExp`. ### 🙂 Expected behavior Any value matching the following type should be accepted, including `myCustomObject`. The other parts of the RegExp object are not used. ```ts type MatchAllRegExpLike = { [Symbol.matchAll](string: string): IterableIterator<RegExpExecArray>; // If the object has a [Symbol.match] property that is truthy, its flags are checked. However, neither // must be present, and even if it is present, [Symbol.match] doesn't have to be a function. readonly [Symbol.match]?: any; readonly flags?: string; }; ``` ### Additional information about the issue This is distinct from #47310. That issue is about string-to-regexp conversion; this is about regexp-like objects.",
+      "originalBaseCommit": "366da34ae60b458e97c880fedf33298d6842ddd6",
+      "originalPatchCommit": "bbb5322c96e5d98fbdd50ac16ef7967e1560c92a",
+      "verifiedBaseCommit": "366da34ae60b458e97c880fedf33298d6842ddd6",
+      "verifiedPatchCommit": "bbb5322c96e5d98fbdd50ac16ef7967e1560c92a",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "ES2020: fix String.prototype.matchAll type and description (#62873)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/lib/es2020.string.d.ts",
+          "pathAfterFix": "src/lib/es2020.string.d.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 3,
+          "deletions": 3,
+          "symbols": [
+            {
+              "name": "String",
+              "qualifiedName": "String",
+              "kind": "interface",
+              "startLine": 5,
+              "endLine": 26
+            }
+          ]
+        },
+        {
+          "pathAtBase": "tests/baselines/reference/stringMatchAll.types",
+          "pathAfterFix": "tests/baselines/reference/stringMatchAll.types",
+          "status": "M",
+          "role": "generated",
+          "additions": 4,
+          "deletions": 4,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/stringMatchAll.types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/lib/es2020.string.d.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/stringMatchAll.types"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "String",
+            "path": "src/lib/es2020.string.d.ts",
+            "grade": 3,
+            "startLine": 5,
+            "endLine": 26
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62462-pr-62661",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62462,
+        "url": "https://github.com/microsoft/TypeScript/issues/62462",
+        "title": "`T[] | { t: 'a' } & { t: 'b' }` is not iterable (TS2488)",
+        "body": "### 🔎 Search Terms\n\nTS2488\n\n### 🕗 Version & Regression Information\n\n- This changed between versions 3.8.3 and 3.9.7 (tested with the playground)\n- I was unable to test this with every-ts because this issue seems to affect only the editor, not `tsc`\n\n### ⏯ Playground Link\n\nhttps://www.typescriptlang.org/play/?ts=3.9.7#code/CYUwxgNghgTiAEA3W8AeAueA7ArgWwCMQYBtAXXgB94BveAF0wHIon4BfeAMloeYLbsAUBBD14JEKLwUAvGiA\n\n### 💻 Code\n\n```ts\ndeclare var x: number[] | { t: 'a' } & { t: 'b' }\nlet [elem] = x\n```\n\n\n### 🙁 Actual behavior\n\nThe array destructure fails with this error:\n\n```\nType 'number[]' must have a '[Symbol.iterator]()' method that returns an iterator.(2488)\n```\n\n### 🙂 Expected behavior\n\nNo error should be present.\n\nSince an object cannot have a field `t` that holds both `'a'` and `'b'`, `{ t: 'a' } & { t: 'b' }` reduces to `never`. And `number[] | never` decays to `number[]`, which is iterable by definition.\n\n### Additional information about the issue\n\n_No response_",
+        "createdAt": "2025-09-18T01:03:56Z"
+      },
+      "pullRequest": {
+        "number": 62661,
+        "url": "https://github.com/microsoft/TypeScript/pull/62661",
+        "mergedAt": "2025-11-10T23:11:14Z"
+      },
+      "query": "`T[] | { t: 'a' } & { t: 'b' }` is not iterable (TS2488)\n\n### 🔎 Search Terms TS2488 ### 🕗 Version & Regression Information - This changed between versions 3.8.3 and 3.9.7 (tested with the playground) - I was unable to test this with every-ts because this issue seems to affect only the editor, not `tsc` ### ⏯ Playground Link https://www.typescriptlang.org/play/?ts=3.9.7#code/CYUwxgNghgTiAEA3W8AeAueA7ArgWwCMQYBtAXXgB94BveAF0wHIon4BfeAMloeYLbsAUBBD14JEKLwUAvGiA ### 💻 Code ```ts declare var x: number[] | { t: 'a' } & { t: 'b' } let [elem] = x ``` ### 🙁 Actual behavior The array destructure fails with this error: ``` Type 'number[]' must have a '[Symbol.iterator]()' method that returns an iterator.(2488) ``` ### 🙂 Expected behavior No error should be present. Since an object cannot have a field `t` that holds both `'a'` and `'b'`, `{ t: 'a' } & { t: 'b' }` reduces to `never`. And `number[] | never` decays to `number[]`, which is iterable by definition. ### Additional information about the issue _No response_",
+      "originalBaseCommit": "efca03ffed10dccede4fbc8dd8a624374e5424d9",
+      "originalPatchCommit": "48244d89f8ccc803fef4a2f0930100de1c77668d",
+      "verifiedBaseCommit": "efca03ffed10dccede4fbc8dd8a624374e5424d9",
+      "verifiedPatchCommit": "48244d89f8ccc803fef4a2f0930100de1c77668d",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "fix: `[Symbol.iterator]()` lost on union with `never` (#62661)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/checker.ts",
+          "pathAfterFix": "src/compiler/checker.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "createTypeChecker",
+              "qualifiedName": "createTypeChecker",
+              "kind": "function",
+              "startLine": 1479,
+              "endLine": 53632
+            },
+            {
+              "name": "getIterationTypesOfIterable",
+              "qualifiedName": "getIterationTypesOfIterable",
+              "kind": "function",
+              "startLine": 45844,
+              "endLine": 45902
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/iterableWithNeverAsUnionMember(target=es5).symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 94,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/iterableWithNeverAsUnionMember(target=es5).types",
+          "status": "A",
+          "role": "generated",
+          "additions": 138,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).errors.txt",
+          "status": "A",
+          "role": "generated",
+          "additions": 41,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 94,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).types",
+          "status": "A",
+          "role": "generated",
+          "additions": 138,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/iterableWithNeverAsUnionMember.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 33,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/iterableWithNeverAsUnionMember(target=es5).symbols",
+        "tests/baselines/reference/iterableWithNeverAsUnionMember(target=es5).types",
+        "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).errors.txt",
+        "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).symbols",
+        "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/iterableWithNeverAsUnionMember(target=es5).symbols",
+          "tests/baselines/reference/iterableWithNeverAsUnionMember(target=es5).types",
+          "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).errors.txt",
+          "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).symbols",
+          "tests/baselines/reference/iterableWithNeverAsUnionMember(target=esnext).types",
+          "tests/cases/compiler/iterableWithNeverAsUnionMember.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createTypeChecker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 1479,
+            "endLine": 53632
+          },
+          {
+            "name": "getIterationTypesOfIterable",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 45844,
+            "endLine": 45902
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62675-pr-62676",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62675,
+        "url": "https://github.com/microsoft/TypeScript/issues/62675",
+        "title": "Async for loop falling back to Iterable<T_Sync> even if object implements AsyncIterable<T_Async>.",
+        "body": "### 🔎 Search Terms\n\n+ `AsyncIterable`\n+ `for await`\n\n\n### 🕗 Version & Regression Information\n\n- This changed between versions N/A and N/A\n- This changed in commit or PR N/A\n- This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________\n- I was unable to test this on prior versions because _______\n\n\n### ⏯ Playground Link\n\nhttps://www.typescriptlang.org/play/?target=99#code/PTAEBcE8AcFNQMrgE6wIYFsA8AVAggDSg4BCAfKALygDeAUCKE0wNoKQYBGA9gDYB0AS3CxkacN2QBdABQBKAFygAkiLGdesVaPGTceMgG4GYZqDYceAtAGdIAOwDG2sROnyleO05doNWtV1kXHJjRgBfOjooOEQUdGwcAH12JyJkrwdHCmpff1wUrIoAMlBMn0D8jO9sqMdeWxsy2nDjesbQEhbjOlss0AAzAFcncEFue1Bebm5oGRt4zCUkVEwsQk6yOVo6M0ZuAGslADc0ZEE-TVAAAzRr0EEm7gGIGHhrvGvd5gHJUBlHBMFqA0KBnqAFqsMNsaJFvkxGCQ0AATE5nC7+G6ce42AAW3CGvGRoE48HBMXeJGu6QQIJsNlEImJHy+Zl+yBBAHc0MJ-oD7MDOGCXpCEjDIpEgA\n\n### 💻 Code\n\n```ts\ntype Stream<T_Sync, T_Async> = Iterable<T_Sync> & AsyncIterable<T_Async>\n\nclass A {};\nclass B {};\n\nasync function loop(stream: Stream<A, B>) {\n    // ok: variable `a` is of type `A`\n    for (const a of stream) {}\n\n    // Bad: variable `b` should be of type `B`, TS asserted `A`\n    for await (const b of stream) {}\n}\n```\n\n\n### 🙁 Actual behavior\n\nTS asserts `b` of type `A` even if `stream` implements `AsyncIterable<B>`.\n\n### 🙂 Expected behavior\n\n`b` should be asserted to type `B`.\n\n### Additional information about the issue\n\nRelated issue [#36153](https://github.com/microsoft/TypeScript/issues/36153) discussed adding a type helper `ForAwaitable` for types support **either** sync or async iteration. However, the OP does not cover the issue that TS should prefer `AsyncIterable<T>` in _async for loop_ when possible.\n",
+        "createdAt": "2025-10-25T20:47:53Z"
+      },
+      "pullRequest": {
+        "number": 62676,
+        "url": "https://github.com/microsoft/TypeScript/pull/62676",
+        "mergedAt": "2025-10-29T22:56:21Z"
+      },
+      "query": "Async for loop falling back to Iterable<T_Sync> even if object implements AsyncIterable<T_Async>.\n\n### 🔎 Search Terms + `AsyncIterable` + `for await` ### 🕗 Version & Regression Information - This changed between versions N/A and N/A - This changed in commit or PR N/A - This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________ - I was unable to test this on prior versions because _______ ### ⏯ Playground Link https://www.typescriptlang.org/play/?target=99#code/PTAEBcE8AcFNQMrgE6wIYFsA8AVAggDSg4BCAfKALygDeAUCKE0wNoKQYBGA9gDYB0AS3CxkacN2QBdABQBKAFygAkiLGdesVaPGTceMgG4GYZqDYceAtAGdIAOwDG2sROnyleO05doNWtV1kXHJjRgBfOjooOEQUdGwcAH12JyJkrwdHCmpff1wUrIoAMlBMn0D8jO9sqMdeWxsy2nDjesbQEhbjOlss0AAzAFcncEFue1Bebm5oGRt4zCUkVEwsQk6yOVo6M0ZuAGslADc0ZEE-TVAAAzRr0EEm7gGIGHhrvGvd5gHJUBlHBMFqA0KBnqAFqsMNsaJFvkxGCQ0AATE5nC7+G6ce42AAW3CGvGRoE48HBMXeJGu6QQIJsNlEImJHy+Zl+yBBAHc0MJ-oD7MDOGCXpCEjDIpEgA ### 💻 Code ```ts type Stream<T_Sync, T_Async> = Iterable<T_Sync> & AsyncIterable<T_Async> class A {}; class B {}; async function loop(stream: Stream<A, B>) { // ok: variable `a` is of type `A` for (const a of stream) {} // Bad: variable `b` should be of type `B`, TS asserted `A` for await (const b of stream) {} } ``` ### 🙁 Actual behavior TS asserts `b` of type `A` even if `stream` implements `AsyncIterable<B>`. ### 🙂 Expected behavior `b` should be asserted to type `B`. ### Additional information about the issue Related issue [#36153](https://github.com/microsoft/TypeScript/issues/36153) discussed adding a type helper `ForAwaitable` for types support **either** sync or async iteration. However, the OP does not cover the issue that TS should prefer `AsyncIterable<T>` in _async for loop_ when possible.",
+      "originalBaseCommit": "11ee01b22d8af755a1d0dc533cad0a496d0fa4cf",
+      "originalPatchCommit": "2a90a739c1c1e87e3c3d0c93e16f7e5baadf8035",
+      "verifiedBaseCommit": "11ee01b22d8af755a1d0dc533cad0a496d0fa4cf",
+      "verifiedPatchCommit": "2a90a739c1c1e87e3c3d0c93e16f7e5baadf8035",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed an issue with \"slow\" sync iteration types spoiling cached value for async ones (#62676)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/checker.ts",
+          "pathAfterFix": "src/compiler/checker.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 6,
+          "deletions": 11,
+          "symbols": [
+            {
+              "name": "createTypeChecker",
+              "qualifiedName": "createTypeChecker",
+              "kind": "function",
+              "startLine": 1479,
+              "endLine": 53625
+            },
+            {
+              "name": "getIterationTypesOfIterableWorker",
+              "qualifiedName": "getIterationTypesOfIterableWorker",
+              "kind": "function",
+              "startLine": 45917,
+              "endLine": 45986
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/forAwaitForIntersection1.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 119,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/forAwaitForIntersection1.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 115,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/forAwaitForIntersection1.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 45,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/forAwaitForIntersection1.symbols",
+        "tests/baselines/reference/forAwaitForIntersection1.types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/forAwaitForIntersection1.symbols",
+          "tests/baselines/reference/forAwaitForIntersection1.types",
+          "tests/cases/compiler/forAwaitForIntersection1.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createTypeChecker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 1479,
+            "endLine": 53625
+          },
+          {
+            "name": "getIterationTypesOfIterableWorker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 45917,
+            "endLine": 45986
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62720-pr-62722",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62720,
+        "url": "https://github.com/microsoft/TypeScript/issues/62720",
+        "title": "Conditional type inference fails when generic parameter has Readonly<T> in function parameter position",
+        "body": "### 🔎 Search Terms\n\nReadonly generic parameter conditional type inference conditional type matching with Readonly parameter generic constraint Readonly intersection type mapped type readonly conditional inference failure Readonly parameter affects return type inference\n\n### 🕗 Version & Regression Information\n\n- This is the behavior in every version I tried, and I reviewed the FAQ for entries about conditional types,\n  generic inference, mapped types, and readonly\n\n### ⏯ Playground Link\n\nhttps://www.typescriptlang.org/play/?#code/PTAEF5K7NBlApgFwK4AdQGMD2ATBEMRRAUEgJ5oEAqlCAYigHaZICW2TAPAErIoAnJrSoRQzANZNsAdyYA+MQAoAdGoCGAgOYBnAFyh1TcgG0AugEoIivqiEiEAbjJ1Q9ADbrdYgN4lQAaAmAGaeWgBy6gC2CAY6SAJsTFpmBn6BGaAUVAYOjCzsnM6ZgfjB6ijuSAD8BpLScsWBAL7OrS6ieWFccJgAFghR6jqgCAAeSAhMuCMeXjqK4KDpgSFhoEmgEgjk2MHw-YPDqQcDQzprXmajE1Mzy1l0uXT5rBzcScEIAqDU8o6gZr+Eqgaq-YElAxMBAAN2+JHaJBAhGIUFAAHVsAIJCMZGwkH1sCgkOIdEktKA+OpcJx3OQuItUUySCR8JhPAICMFmG9OKBgkxMdjyVwAPJoQpMEbjSbTWZhBZKCGgbAS976UDiyU6EgWZ5UOZaMVqzgLZw4KUkzk6SpIIUScliAX28lKFYBABG2Gw7gQRkNaUeOVAACFvb6jICADTKr0+v1MQ0AEQQ5VtaWVGWysVD4YTMZBoDKFSqBnK7h0CALLRjzQszmttpdyRUcYjibCSLAhcCAD1qiRG1Vm1pW3n-WEU2mql2e32ByzZ0y0SGUBSZAMmKTHVSaUw6QyUcuYCy2RyuTzJfymKujVr1TdZfdDYrlartQZd7T6ffTfJdfqDDdL+Ur-CQFrxKAQ5ILeTo3mubqxuOHZeIG2YGGG8aRs01aeshyapiWSAZoW6G5lhTC4Zkxbpvy6gVlWyo4Qi9aDggNpVLeY4UYas5zqA-ZsRxMFrtx7YEdOSB8XOglAA\n\n### 💻 Code\n\n```ts\n// ============ Setup code ==================\ntype TypeFunction<ReturnType = unknown> = (...args: any[]) => ReturnType;\ntype Flags = {\n    [flagName: string]: {\n        type: TypeFunction;\n        default?: unknown;\n    };\n};\ntype TypeFlag<Schemas extends Flags> = {\n    [flag in keyof Schemas]: Schemas[flag] extends { type: TypeFunction<infer T>; }\n        ? T\n        : never\n};\n\n// ============ Works without using Readonly<> ==================\n\ndeclare function fnWorking<Options extends Flags>(\n    options: Options\n): TypeFlag<Options>;\nconst resultWorking = fnWorking({\n    booleanFlag: { type: Boolean },\n    booleanFlagDefault: {\n        type: Boolean,\n        default: false,\n    },\n});\nresultWorking.booleanFlag\n//            ^? (property) booleanFlag: boolean\nresultWorking.booleanFlagDefault\n//            ^? (property) booleanFlagDefault: boolean\n\n\n\n// ============ Bug when using Readonly<> ==================\n\ndeclare function fnBug<Options extends Flags>(\n    options: Readonly<Options>\n): TypeFlag<Options>;\nconst resultBug = fnBug({\n    booleanFlag: { type: Boolean },\n    booleanFlagDefault: {\n        type: Boolean,\n        default: false,\n    },\n});\nresultBug.booleanFlag\n//            ^? (property) booleanFlag: boolean\nresultBug.booleanFlagDefault\n//            ^? (property) booleanFlagDefault: never\n\n```\n\n### 🙁 Actual behavior\n\nWhen a generic function has `Readonly<T>` in the parameter position, conditional type matching in the return type fails even though `T` itself is not `readonly`:\n\n```ts\ndeclare function fnBug<Options extends Flags>(\n    options: Readonly<Options>\n): TypeFlag<Options>; // Options is NOT readonly here\n\ntype Test = typeof resultBug. booleanFlagDefault; // Returns `never` (incorrect)\n```\n\nThe conditional type `Schemas[flag] extends { type: TypeFunction<infer T> }` fails to match and falls through to the `never` branch.\n\nThis happens even though:\n1. `Options` itself is not `Readonly` in the return type `TypeFlag<Options>`\n2. The inferred type from the argument has the correct structure\n3. The same pattern works perfectly without `Readonly<Options>` in the parameter\n\n### 🙂 Expected behavior\n\nThe conditional type should match successfully regardless of whether the parameter is `Readonly<Options>` or `Options`, since the return type `TypeFlag<Options>` uses `Options` directly (not `Readonly<Options>`).\n\nExpected result:\n```ts\ntype Test = typeof resultBug. booleanFlagDefault; // Should be `boolean`\n```\n\nThe `Readonly` modifier in the parameter position should not affect type inference in the return type when the generic parameter `Options` itself is not `readonly`.\n\n### Additional information about the issue\n\n#### Structural typing inconsistency\nThe types are structurally compatible:\n`{ type: BooleanConstructor; default: false }` should match `{ type: TypeFunction<infer T> }`\n\nbut TypeScript's conditional type matching fails when `Readonly<Options>` appears in the parameter.\n\n#### Workaround exists\nAdding an intersection to the conditional pattern fixes the issue, proving this is a pattern-matching bug rather than a semantic issue:\n```ts\nSchemas[flag] extends ({ type: TypeFunction<infer T> } & Record<PropertyKey, unknown>)\n```\n\nThis workaround doesn't change the logical meaning but helps TypeScript's matcher recognize the types as compatible.\n\n[TS Playground](https://www.typescriptlang.org/play/?#code/PTAEF5K7NBlApgFwK4AdQGMD2ATBEMRRAUEgJ5oEAqlCAYigHaZICW2TAPAErIoAnJrSoRQzANZNsAdyYA+MQAoAdGoCGAgOYBnAFyh1TcgG0AugEoIivqiEiEAbjJ1Q9ADbrdYgN4lQAaAmAGaeWgBy6gC2CAY6SAJsTFpmBn6BGaAUVAYOjCzsnM6ZgfjB6ijuSAD8BpLScsWBAL7OrS6ieWFccJgAFghR6jqgCAAeSAhMuCMeXjqK4KDpgSFhoEmgEgjk2MHw-YPDqQcDQzprXmajE1MzoEo+WXS5dPmsHNxJwQgCoNTyRygZqgABkoD4OAEuC4AAUBNgqAIKABpHYAGnETCksgUFn8JVA1X+BJKBiYCAAbr8SO0SCBCMQoKAAOrYAQSEYyNhIPrYFBIcQ6JJaCEIdS4TjuchcRZM+UkEj4TCeAQEYLMD6cUDBJhsjkirgAeTQhSYI3Gk2mszCCyUpNAiLN+lAJudJAsryocy0xtNnwWzhw5sFap0lSQ+okIrEuqjIseDoARthsO5xUwfWlnjlQAAhVPpozA9HJwsZn0AEQQ5QjaQdGWysXz5aMpcJoDKFSqBnK7h0CHbLVLzQszjDEfjyRUKbTFbC9LAHcCAD1qiQJ1Up1oZ63M2Fq7Wqovl6v14qT-LmXmUKKZAMmEKY3wJVKZXKr6QlQgVZp1ZqzR1Jgb19N0AxuK17h9O0HSdAMDBfSUmGlP1nXkD0vQYbowM4QMSGDeJQE3JAQNjYDb0TDJZyLfcvGzJsDALOdi2aIcAmo+cvEPbskHrDsGJbZimDYzIuzrHV1H7QcHVY2kxw3BBwyqEDdyEn0T1PUA1wUpSSNvVSaKrGseI009tKAA)\n\n#### Real world Impact\nThis bug affects any library that wants to accept readonly parameters while using conditional type inference, forcing authors to use syntactic workarounds that pollute the type definitions.\n",
+        "createdAt": "2025-11-05T14:41:48Z"
+      },
+      "pullRequest": {
+        "number": 62722,
+        "url": "https://github.com/microsoft/TypeScript/pull/62722",
+        "mergedAt": "2025-12-05T18:45:33Z"
+      },
+      "query": "Conditional type inference fails when generic parameter has Readonly<T> in function parameter position\n\n### 🔎 Search Terms Readonly generic parameter conditional type inference conditional type matching with Readonly parameter generic constraint Readonly intersection type mapped type readonly conditional inference failure Readonly parameter affects return type inference ### 🕗 Version & Regression Information - This is the behavior in every version I tried, and I reviewed the FAQ for entries about conditional types, generic inference, mapped types, and readonly ### ⏯ Playground Link https://www.typescriptlang.org/play/?#code/PTAEF5K7NBlApgFwK4AdQGMD2ATBEMRRAUEgJ5oEAqlCAYigHaZICW2TAPAErIoAnJrSoRQzANZNsAdyYA+MQAoAdGoCGAgOYBnAFyh1TcgG0AugEoIivqiEiEAbjJ1Q9ADbrdYgN4lQAaAmAGaeWgBy6gC2CAY6SAJsTFpmBn6BGaAUVAYOjCzsnM6ZgfjB6ijuSAD8BpLScsWBAL7OrS6ieWFccJgAFghR6jqgCAAeSAhMuCMeXjqK4KDpgSFhoEmgEgjk2MHw-YPDqQcDQzprXmajE1Mzy1l0uXT5rBzcScEIAqDU8o6gZr+Eqgaq-YElAxMBAAN2+JHaJBAhGIUFAAHVsAIJCMZGwkH1sCgkOIdEktKA+OpcJx3OQuItUUySCR8JhPAICMFmG9OKBgkxMdjyVwAPJoQpMEbjSbTWZhBZKCGgbAS976UDiyU6EgWZ5UOZaMVqzgLZw4KUkzk6SpIIUScliAX28lKFYBABG2Gw7gQRkNaUeOVAACFvb6jICADTKr0+v1MQ0AEQQ5VtaWVGWysVD4YTMZBoDKFSqBnK7h0CALLRjzQszmttpdyRUcYjibCSLAhcCAD1qiRG1Vm1pW3n-WEU2mql2e32ByzZ0y0SGUBSZAMmKTHVSaUw6QyUcuYCy2RyuTzJfymKujVr1TdZfdDYrlartQZd7T6ffTfJdfqDDdL+Ur-CQFrxKAQ5ILeTo3mubqxuOHZeIG2YGGG8aRs01aeshyapiWSAZoW6G5lhTC4Zkxbpvy6gVlWyo4Qi9aDggNpVLeY4UYas5zqA-ZsRxMFrtx7YEdOSB8XOglAA ### 💻 Code ```ts // ============ Setup code ================== type TypeFunction<ReturnType = unknown> = (...args: any[]) => ReturnType; type Flags = { [flagName: string]: { type: TypeFunction; default?: unknown; }; }; type TypeFlag<Schemas extends Flags> = { [flag in keyof Schemas]: Schemas[flag] extends { type: TypeFunction<infer T>; } ? T : never }; // ============ Works without using Readonly<> ================== declare function fnWorking<Options extends Flags>( options: Options ): TypeFlag<Options>; const resultWorking = fnWorking({ booleanFlag: { type: Boolean }, booleanFlagDefault: { type: Boolean, default: false, }, }); resultWorking.booleanFlag // ^? (property) booleanFlag: boolean resultWorking.booleanFlagDefault // ^? (property) booleanFlagDefault: boolean // ============ Bug when using Readonly<> ================== declare function fnBug<Options extends Flags>( options: Readonly<Options> ): TypeFlag<Options>; const resultBug = fnBug({ booleanFlag: { type: Boolean }, booleanFlagDefault: { type: Boolean, default: false, }, }); resultBug.booleanFlag // ^? (property) booleanFlag: boolean resultBug.booleanFlagDefault // ^? (property) booleanFlagDefault: never ``` ### 🙁 Actual behavior When a generic function has `Readonly<T>` in the parameter position, conditional type matching in the return type fails even though `T` itself is not `readonly`: ```ts declare function fnBug<Options extends Flags>( options: Readonly<Options> ): TypeFlag<Options>; // Options is NOT readonly here type Test = typeof resultBug. booleanFlagDefault; // Returns `never` (incorrect) ``` The conditional type `Schemas[flag] extends { type: TypeFunction<infer T> }` fails to match and falls through to the `never` branch. This happens even though: 1. `Options` itself is not `Readonly` in the return type `TypeFlag<Options>` 2. The inferred type from the argument has the correct structure 3. The same pattern works perfectly without `Readonly<Options>` in the parameter ### 🙂 Expected behavior The conditional type should match successfully regardless of whether the parameter is `Readonly<Options>` or `Options`, since the return type `TypeFlag<Options>` uses `Options` directly (not `Readonly<Options>`). Expected result: ```ts type Test = typeof resultBug. booleanFlagDefault; // Should be `boolean` ``` The `Readonly` modifier in the parameter position should not affect type inference in the return type when the generic parameter `Options` itself is not `readonly`. ### Additional information about the issue #### Structural typing inconsistency The types are structurally compatible: `{ type: BooleanConstructor; default: false }` should match `{ type: TypeFunction<infer T> }` but TypeScript's conditional type matching fails when `Readonly<Options>` appears in the parameter. #### Workaround exists Adding an intersection to the conditional pattern fixes the issue, proving this is a pattern-matching bug rather than a semantic issue: ```ts Schemas[flag] extends ({ type: TypeFunction<infer T> } & Record<PropertyKey, unknown>) ``` This workaround doesn't change the logical meaning but helps TypeScript's matcher recognize the types as compatible. [TS Playground](https://www.typescriptlang.org/play/?#code/PTAEF5K7NBlApgFwK4AdQGMD2ATBEMRRAUEgJ5oEAqlCAYigHaZICW2TAPAErIoAnJrSoRQzANZNsAdyYA+MQAoAdGoCGAgOYBnAFyh1TcgG0AugEoIivqiEiEAbjJ1Q9ADbrdYgN4lQAaAmAGaeWgBy6gC2CAY6SAJsTFpmBn6BGaAUVAYOjCzsnM6ZgfjB6ijuSAD8BpLScsWBAL7OrS6ieWFccJgAFghR6jqgCAAeSAhMuCMeXjqK4KDpgSFhoEmgEgjk2MHw-YPDqQcDQzprXmajE1MzoEo+WXS5dPmsHNxJwQgCoNTyRygZqgABkoD4OAEuC4AAUBNgqAIKABpHYAGnETCksgUFn8JVA1X+BJKBiYCAAbr8SO0SCBCMQoKAAOrYAQSEYyNhIPrYFBIcQ6JJaCEIdS4TjuchcRZM+UkEj4TCeAQEYLMD6cUDBJhsjkirgAeTQhSYI3Gk2mszCCyUpNAiLN+lAJudJAsryocy0xtNnwWzhw5sFap0lSQ+okIrEuqjIseDoARthsO5xUwfWlnjlQAAhVPpozA9HJwsZn0AEQQ5QjaQdGWysXz5aMpcJoDKFSqBnK7h0CHbLVLzQszjDEfjyRUKbTFbC9LAHcCAD1qiQJ1Up1oZ63M2Fq7Wqovl6v14qT-LmXmUKKZAMmEKY3wJVKZXKr6QlQgVZp1ZqzR1Jgb19N0AxuK17h9O0HSdAMDBfSUmGlP1nXkD0vQYbowM4QMSGDeJQE3JAQNjYDb0TDJZyLfcvGzJsDALOdi2aIcAmo+cvEPbskHrDsGJbZimDYzIuzrHV1H7QcHVY2kxw3BBwyqEDdyEn0T1PUA1wUpSSNvVSaKrGseI009tKAA) #### Real world Impact This bug affects any library that wants to accept readonly parameters while using conditional type inference, forcing authors to use syntactic workarounds that pollute the type definitions.",
+      "originalBaseCommit": "b33d37201e8f0353f69406d9872955dd4ccb9c34",
+      "originalPatchCommit": "07522781372a93e75cd4392927f3e1745be44e0c",
+      "verifiedBaseCommit": "b33d37201e8f0353f69406d9872955dd4ccb9c34",
+      "verifiedPatchCommit": "07522781372a93e75cd4392927f3e1745be44e0c",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Widen reverse mapped type properties to fix them being treated as EPC-valid sources (#62722)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/checker.ts",
+          "pathAfterFix": "src/compiler/checker.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 1,
+          "deletions": 1,
+          "symbols": [
+            {
+              "name": "createTypeChecker",
+              "qualifiedName": "createTypeChecker",
+              "kind": "function",
+              "startLine": 1482,
+              "endLine": 53747
+            },
+            {
+              "name": "inferReverseMappedTypeWorker",
+              "qualifiedName": "inferReverseMappedTypeWorker",
+              "kind": "function",
+              "startLine": 26436,
+              "endLine": 26442
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reverseMappedTypeInferenceWidening1.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 181,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reverseMappedTypeInferenceWidening1.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 244,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reverseMappedTypeInferenceWidening2.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 45,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reverseMappedTypeInferenceWidening2.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 62,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/reverseMappedTypeInferenceWidening1.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 60,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/reverseMappedTypeInferenceWidening2.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 17,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/reverseMappedTypeInferenceWidening1.symbols",
+        "tests/baselines/reference/reverseMappedTypeInferenceWidening1.types",
+        "tests/baselines/reference/reverseMappedTypeInferenceWidening2.symbols",
+        "tests/baselines/reference/reverseMappedTypeInferenceWidening2.types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/reverseMappedTypeInferenceWidening1.symbols",
+          "tests/baselines/reference/reverseMappedTypeInferenceWidening1.types",
+          "tests/baselines/reference/reverseMappedTypeInferenceWidening2.symbols",
+          "tests/baselines/reference/reverseMappedTypeInferenceWidening2.types",
+          "tests/cases/compiler/reverseMappedTypeInferenceWidening1.ts",
+          "tests/cases/compiler/reverseMappedTypeInferenceWidening2.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createTypeChecker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 1482,
+            "endLine": 53747
+          },
+          {
+            "name": "inferReverseMappedTypeWorker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 26436,
+            "endLine": 26442
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62782-pr-62783",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62782,
+        "url": "https://github.com/microsoft/TypeScript/issues/62782",
+        "title": "Incorrect unreachable code reported in latest nightly build",
+        "body": "From https://github.com/microsoft/vscode/issues/278270\n\n### 🔎 Search Terms\n\n- Unreachable\n\n### 🕗 Version & Regression Information\n\n- This changed between versions 6.0.0-dev.20251110 and 6.0.0-dev.20251117\n- Likely https://github.com/microsoft/TypeScript/commit/09e31cf04a195475cc6e1b75bfc9fac126a15c84\n\n\n### Repo\n\n1. In the VS Code repo, open `src/vs/code/browser/workbench/workbench.ts`\n2. add `throw new Error(\"foo\");` to the top of import block\n3. Delete it again\n\n### Bug\nUnreachable code still reported\n\n<img width=\"735\" height=\"969\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/39762c26-5c84-4824-8781-8a342d57349a\" />\n\nHere's the full server log: [tsserver.log](https://github.com/user-attachments/files/23620294/tsserver.log)\n",
+        "createdAt": "2025-11-19T06:14:24Z"
+      },
+      "pullRequest": {
+        "number": 62783,
+        "url": "https://github.com/microsoft/TypeScript/pull/62783",
+        "mergedAt": "2025-11-19T17:46:30Z"
+      },
+      "query": "Incorrect unreachable code reported in latest nightly build\n\nFrom https://github.com/microsoft/vscode/issues/278270 ### 🔎 Search Terms - Unreachable ### 🕗 Version & Regression Information - This changed between versions 6.0.0-dev.20251110 and 6.0.0-dev.20251117 - Likely https://github.com/microsoft/TypeScript/commit/09e31cf04a195475cc6e1b75bfc9fac126a15c84 ### Repo 1. In the VS Code repo, open `src/vs/code/browser/workbench/workbench.ts` 2. add `throw new Error(\"foo\");` to the top of import block 3. Delete it again ### Bug Unreachable code still reported <img width=\"735\" height=\"969\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/39762c26-5c84-4824-8781-8a342d57349a\" /> Here's the full server log: [tsserver.log](https://github.com/user-attachments/files/23620294/tsserver.log)",
+      "originalBaseCommit": "cc2610fd347127c28609b4fca6fa9d55ee5063c6",
+      "originalPatchCommit": "486fce7a129ae10798afb47ce26136fe4fc88705",
+      "verifiedBaseCommit": "cc2610fd347127c28609b4fca6fa9d55ee5063c6",
+      "verifiedPatchCommit": "486fce7a129ae10798afb47ce26136fe4fc88705",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fix unreachable code detection persisting after incremental edits (#62783)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/binder.ts",
+          "pathAfterFix": "src/compiler/binder.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 5,
+          "deletions": 0,
+          "symbols": [
+            {
+              "name": "createBinder",
+              "qualifiedName": "createBinder",
+              "kind": "function",
+              "startLine": 508,
+              "endLine": 3770
+            },
+            {
+              "name": "bindChildren",
+              "qualifiedName": "bindChildren",
+              "kind": "function",
+              "startLine": 1088,
+              "endLine": 1227
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/fourslash/unreachableCodeAfterEdit.ts",
+          "status": "A",
+          "role": "generated",
+          "additions": 44,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/fourslash/unusedLabelAfterEdit.ts",
+          "status": "A",
+          "role": "generated",
+          "additions": 23,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/cases/fourslash/unreachableCodeAfterEdit.ts",
+        "tests/cases/fourslash/unusedLabelAfterEdit.ts"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/binder.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/cases/fourslash/unreachableCodeAfterEdit.ts",
+          "tests/cases/fourslash/unusedLabelAfterEdit.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createBinder",
+            "path": "src/compiler/binder.ts",
+            "grade": 3,
+            "startLine": 508,
+            "endLine": 3770
+          },
+          {
+            "name": "bindChildren",
+            "path": "src/compiler/binder.ts",
+            "grade": 3,
+            "startLine": 1088,
+            "endLine": 1227
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62841-pr-62844",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62841,
+        "url": "https://github.com/microsoft/TypeScript/issues/62841",
+        "title": "Module Resolution: allow subpath imports that start with `#/`",
+        "body": "### 🔍 Search Terms\n\nmodule resolution package imports\n\n### ✅ Viability Checklist\n\n- [x] This wouldn't be a breaking change in existing TypeScript/JavaScript code\n- [x] This wouldn't change the runtime behavior of existing JavaScript code\n- [x] This could be implemented without emitting different JS based on the types of the expressions\n- [x] This isn't a runtime feature (e.g. library functionality, non-ECMAScript syntax with JavaScript output, new syntax sugar for JS, etc.)\n- [x] This isn't a request to add a new utility type: https://github.com/microsoft/TypeScript/wiki/No-New-Utility-Types\n- [x] This feature would agree with the rest of our Design Goals: https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals\n\n### ⭐ Suggestion\n\nSee https://github.com/nodejs/node/pull/60864\n\n### 📃 Motivating Example\n\nThis allows us to define symmetric `exports` and `imports` field in package.json:\n\n```\n{\n  \"exports\": {\n    \"./*\": \"./src/*\"\n  },\n  \"imports\": {\n    \"#/*\": \"./src/*\"\n  }\n}\n```\n\nand allows us to migrate away from compilerOptions.paths.\n\n### 💻 Use Cases\n\nSee above\n\nThe code requires changing is\n\nhttps://github.com/microsoft/TypeScript/blob/b33d37201e8f0353f69406d9872955dd4ccb9c34/src/compiler/moduleNameResolver.ts#L2649",
+        "createdAt": "2025-12-05T04:14:10Z"
+      },
+      "pullRequest": {
+        "number": 62844,
+        "url": "https://github.com/microsoft/TypeScript/pull/62844",
+        "mergedAt": "2025-12-09T19:28:34Z"
+      },
+      "query": "Module Resolution: allow subpath imports that start with `#/`\n\n### 🔍 Search Terms module resolution package imports ### ✅ Viability Checklist - [x] This wouldn't be a breaking change in existing TypeScript/JavaScript code - [x] This wouldn't change the runtime behavior of existing JavaScript code - [x] This could be implemented without emitting different JS based on the types of the expressions - [x] This isn't a runtime feature (e.g. library functionality, non-ECMAScript syntax with JavaScript output, new syntax sugar for JS, etc.) - [x] This isn't a request to add a new utility type: https://github.com/microsoft/TypeScript/wiki/No-New-Utility-Types - [x] This feature would agree with the rest of our Design Goals: https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals ### ⭐ Suggestion See https://github.com/nodejs/node/pull/60864 ### 📃 Motivating Example This allows us to define symmetric `exports` and `imports` field in package.json: ``` { \"exports\": { \"./*\": \"./src/*\" }, \"imports\": { \"#/*\": \"./src/*\" } } ``` and allows us to migrate away from compilerOptions.paths. ### 💻 Use Cases See above The code requires changing is https://github.com/microsoft/TypeScript/blob/b33d37201e8f0353f69406d9872955dd4ccb9c34/src/compiler/moduleNameResolver.ts#L2649",
+      "originalBaseCommit": "ab142be459f50e7cf1327b6ab1031074cf7d8e5e",
+      "originalPatchCommit": "3b9acae97cb2f40a1422151191ae17fc9dfa25d3",
+      "verifiedBaseCommit": "ab142be459f50e7cf1327b6ab1031074cf7d8e5e",
+      "verifiedPatchCommit": "3b9acae97cb2f40a1422151191ae17fc9dfa25d3",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Allow subpath imports that start with `#/` (#62844)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/moduleNameResolver.ts",
+          "pathAfterFix": "src/compiler/moduleNameResolver.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 6,
+          "deletions": 3,
+          "symbols": [
+            {
+              "name": "loadModuleFromImports",
+              "qualifiedName": "loadModuleFromImports",
+              "kind": "function",
+              "startLine": 2648,
+              "endLine": 2679
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.js",
+          "status": "A",
+          "role": "generated",
+          "additions": 89,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 74,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.trace.json",
+          "status": "A",
+          "role": "generated",
+          "additions": 243,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 101,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.errors.txt",
+          "status": "A",
+          "role": "generated",
+          "additions": 21,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.js",
+          "status": "A",
+          "role": "generated",
+          "additions": 31,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 14,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.trace.json",
+          "status": "A",
+          "role": "generated",
+          "additions": 150,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 19,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/conformance/node/nodeModulesPackageImportsRootWildcard.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 42,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/conformance/node/nodeModulesPackageImportsRootWildcardNode16.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 18,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/fourslash/importCompletionsPackageJsonImportsPatternRootWildcard.ts",
+          "status": "A",
+          "role": "generated",
+          "additions": 25,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.js",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.symbols",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.trace.json",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.types",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.errors.txt",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.js",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.symbols",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.trace.json",
+        "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.types",
+        "tests/cases/fourslash/importCompletionsPackageJsonImportsPatternRootWildcard.ts"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/moduleNameResolver.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.js",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.symbols",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.trace.json",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcard.types",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.errors.txt",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.js",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.symbols",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.trace.json",
+          "tests/baselines/reference/nodeModulesPackageImportsRootWildcardNode16.types",
+          "tests/cases/conformance/node/nodeModulesPackageImportsRootWildcard.ts",
+          "tests/cases/conformance/node/nodeModulesPackageImportsRootWildcardNode16.ts",
+          "tests/cases/fourslash/importCompletionsPackageJsonImportsPatternRootWildcard.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "loadModuleFromImports",
+            "path": "src/compiler/moduleNameResolver.ts",
+            "grade": 3,
+            "startLine": 2648,
+            "endLine": 2679
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62912-pr-62914",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62912,
+        "url": "https://github.com/microsoft/TypeScript/issues/62912",
+        "title": "Crash (Debug Failure) in Nightly when checking unreachable code in highly malformed source",
+        "body": "### 🔎 Search Terms\n\nDebug Failure. Expected -1 >= 0\n\nassertDiagnosticLocation\n\ncheckSourceElementUnreachable\n\ncompiler crash nightly\n\n### 🕗 Version & Regression Information\n\nObserved in: TypeScript Nightly \nDoes not occur in: 5.7.3, 5.8.3, 5.9.3\n\n### ⏯ Playground Link\n(https://www.typescriptlang.org/zh/play/?allowJs=true&target=7&outFile=true&ts=6.0.0-dev.20251219#code/KYDwDg9gTgLgBAQwM4E8B2BjOAzArpmASwjUSigRQDEoIBbAQVUwB4AVAPgApl0MBJGMAoAjADbAAhAC44TPoOEJxwdhwCUsgAq06hJKrYBtALoc4AbwCwAKDj24GEkngRc8ALxxTAblsOcaEQAdwRCeC4nNBc4ADc4CGxEZgEhUQl1S38AhzcYADowXCQACx5Q8Lj1PzsHAF9s+yhgGFwoUjyauqA)\n\n### 💻 Code\n\n```ts\nexport async function arrayFromAsync<T>(asyncIterable!: AsyncIterable<T>): Promise<T[]> {\n    const out = [];\n    for await (const v of asyncIterable) {\n        out.push(await v);\n    }\n    return out;\n}\n```\n\n\n### 🙁 Actual behavior\n```\n.\\ts-versions\\nightly\\node_modules\\.bin\\tsc.cmd --ignoreConfig  .\\test-async-array.ts\nD:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:123191\n      throw e;\n      ^\n\nError: Debug Failure. Expected -2 >= 0\n    at assertDiagnosticLocation (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:13878:9)                                                                                          \n    at createFileDiagnostic (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:17717:3)                                                                                              \n    at checkSourceElementUnreachable (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86649:74)                                                                                    \n    at checkSourceElementWorker (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86427:11)                                                                                         \n    at checkSourceElement (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86396:7)                                                                                                \n    at forEach (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:32:22)                                                                                                             \n    at checkSourceFileWorker (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86866:7)                                                                                             \n    at checkSourceFile (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86825:69)                                                                                                  \n    at checkSourceFileWithEagerDiagnostics (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86952:5)                                                                               \n    at D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86974:46\n\nNode.js v22.19.0\n```\n### 🙂 Expected behavior\n\nThe compiler should emit standard syntax errors (e.g., TS1005: ',' expected) and terminate gracefully without a \"Debug Failure\" crash, as it does in version 5.9.3.\n\n### Additional information about the issue\n\n_No response_",
+        "createdAt": "2025-12-19T09:19:42Z"
+      },
+      "pullRequest": {
+        "number": 62914,
+        "url": "https://github.com/microsoft/TypeScript/pull/62914",
+        "mergedAt": "2025-12-19T13:29:31Z"
+      },
+      "query": "Crash (Debug Failure) in Nightly when checking unreachable code in highly malformed source\n\n### 🔎 Search Terms Debug Failure. Expected -1 >= 0 assertDiagnosticLocation checkSourceElementUnreachable compiler crash nightly ### 🕗 Version & Regression Information Observed in: TypeScript Nightly Does not occur in: 5.7.3, 5.8.3, 5.9.3 ### ⏯ Playground Link (https://www.typescriptlang.org/zh/play/?allowJs=true&target=7&outFile=true&ts=6.0.0-dev.20251219#code/KYDwDg9gTgLgBAQwM4E8B2BjOAzArpmASwjUSigRQDEoIBbAQVUwB4AVAPgApl0MBJGMAoAjADbAAhAC44TPoOEJxwdhwCUsgAq06hJKrYBtALoc4AbwCwAKDj24GEkngRc8ALxxTAblsOcaEQAdwRCeC4nNBc4ADc4CGxEZgEhUQl1S38AhzcYADowXCQACx5Q8Lj1PzsHAF9s+yhgGFwoUjyauqA) ### 💻 Code ```ts export async function arrayFromAsync<T>(asyncIterable!: AsyncIterable<T>): Promise<T[]> { const out = []; for await (const v of asyncIterable) { out.push(await v); } return out; } ``` ### 🙁 Actual behavior ``` .\\ts-versions\\nightly\\node_modules\\.bin\\tsc.cmd --ignoreConfig .\\test-async-array.ts D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:123191 throw e; ^ Error: Debug Failure. Expected -2 >= 0 at assertDiagnosticLocation (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:13878:9) at createFileDiagnostic (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:17717:3) at checkSourceElementUnreachable (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86649:74) at checkSourceElementWorker (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86427:11) at checkSourceElement (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86396:7) at forEach (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:32:22) at checkSourceFileWorker (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86866:7) at checkSourceFile (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86825:69) at checkSourceFileWithEagerDiagnostics (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86952:5) at D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:86974:46 Node.js v22.19.0 ``` ### 🙂 Expected behavior The compiler should emit standard syntax errors (e.g., TS1005: ',' expected) and terminate gracefully without a \"Debug Failure\" crash, as it does in version 5.9.3. ### Additional information about the issue _No response_",
+      "originalBaseCommit": "b78f0899ab6ffe1890f1adff6f5acd82da31f5d8",
+      "originalPatchCommit": "2dfdbbabae955186f821925c629a37d8df76bab2",
+      "verifiedBaseCommit": "b78f0899ab6ffe1890f1adff6f5acd82da31f5d8",
+      "verifiedPatchCommit": "2dfdbbabae955186f821925c629a37d8df76bab2",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fixed crash when adding unreachable code diagnostic in situations with missing nodes (#62914)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/checker.ts",
+          "pathAfterFix": "src/compiler/checker.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 7,
+          "deletions": 6,
+          "symbols": [
+            {
+              "name": "createTypeChecker",
+              "qualifiedName": "createTypeChecker",
+              "kind": "function",
+              "startLine": 1481,
+              "endLine": 53751
+            },
+            {
+              "name": "checkSourceElementUnreachable",
+              "qualifiedName": "checkSourceElementUnreachable",
+              "kind": "function",
+              "startLine": 49218,
+              "endLine": 49275
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reachabilityChecksNoCrash1.errors.txt",
+          "status": "A",
+          "role": "generated",
+          "additions": 120,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reachabilityChecksNoCrash1.js",
+          "status": "A",
+          "role": "generated",
+          "additions": 22,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reachabilityChecksNoCrash1.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 29,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/reachabilityChecksNoCrash1.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 90,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/reachabilityChecksNoCrash1.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 10,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/reachabilityChecksNoCrash1.errors.txt",
+        "tests/baselines/reference/reachabilityChecksNoCrash1.js",
+        "tests/baselines/reference/reachabilityChecksNoCrash1.symbols",
+        "tests/baselines/reference/reachabilityChecksNoCrash1.types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/reachabilityChecksNoCrash1.errors.txt",
+          "tests/baselines/reference/reachabilityChecksNoCrash1.js",
+          "tests/baselines/reference/reachabilityChecksNoCrash1.symbols",
+          "tests/baselines/reference/reachabilityChecksNoCrash1.types",
+          "tests/cases/compiler/reachabilityChecksNoCrash1.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createTypeChecker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 1481,
+            "endLine": 53751
+          },
+          {
+            "name": "checkSourceElementUnreachable",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 49218,
+            "endLine": 49275
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62920-pr-62923",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62920,
+        "url": "https://github.com/microsoft/TypeScript/issues/62920",
+        "title": "Crash: TypeError: Cannot read properties of undefined (reading 'kind') in checkPropertyAccessibility when using abstract in Class Expression",
+        "body": "### 🔎 Search Terms\n\n\"Cannot read properties of undefined (reading 'kind')\"\n\n\"isMemberName crash\"\n\n\"abstract property class expression crash\"\n\n\"checkPropertyAccessibilityAtLocation crash\"\n\n### 🕗 Version & Regression Information\n\nVersions tested: 5.7.3, 5.8.3, 5.9.3, Nightly (typescript@5.10.0-dev.20251221)\n\nIs this a regression? No, this appears to be a long-standing issue in the checker's handling of illegal abstract modifiers within class expressions.\n\nDoes it occur in nightly? Yes.\n\n### ⏯ Playground Link\n\nhttps://www.typescriptlang.org/zh/play/?target=7&outFile=mylib.js&ts=5.8.3#code/DYUwLgBAYg9jEF4IGNgEMDOGIG8BQEhKMAdhmAE4CuyYMFAFAJS4FHtgAWAlhgHQAjNBQDUIgNxtCAXykQ0A8hTS0IQipOmS8QA\n\n### 💻 Code\n\n```ts\nlet Foo = class {\n    constructor() {\n        this.bar++;\n    }\n    abstract bar;\n};\n```\n\n\n### 🙁 Actual behavior\n```\n.\\ts-versions\\5.9.3\\node_modules\\.bin\\tsc.cmd --noEmit  .\\bugfind\\mute1.ts\nD:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:123168\n      throw e;\n      ^\n\nTypeError: Cannot read properties of undefined (reading 'kind')\n    at isMemberName (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:11830:15)                                                                                                       \n    at getTextOfIdentifierOrLiteral (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:15842:10)                                                                                       \n    at checkPropertyAccessibilityAtLocation (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:74766:132)                                                                              \n    at checkPropertyAccessibility (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:74735:12)                                                                                         \n    at checkPropertyAccessExpressionOrQualifiedName (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:75176:7)                                                                        \n    at checkPropertyAccessExpression (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:74932:94)                                                                                      \n    at checkExpressionWorker (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:80937:16)                                                                                              \n    at checkExpression (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:80846:32)                                                                                                    \n    at checkPostfixUnaryExpression (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:79348:25)                                                                                        \n    at checkExpressionWorker (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:80980:16)  \n```\n### 🙂 Expected behavior\n\nThe compiler should not crash\n\n### Additional information about the issue\n\n_No response_",
+        "createdAt": "2025-12-22T12:34:21Z"
+      },
+      "pullRequest": {
+        "number": 62923,
+        "url": "https://github.com/microsoft/TypeScript/pull/62923",
+        "mergedAt": "2025-12-28T21:22:42Z"
+      },
+      "query": "Crash: TypeError: Cannot read properties of undefined (reading 'kind') in checkPropertyAccessibility when using abstract in Class Expression\n\n### 🔎 Search Terms \"Cannot read properties of undefined (reading 'kind')\" \"isMemberName crash\" \"abstract property class expression crash\" \"checkPropertyAccessibilityAtLocation crash\" ### 🕗 Version & Regression Information Versions tested: 5.7.3, 5.8.3, 5.9.3, Nightly (typescript@5.10.0-dev.20251221) Is this a regression? No, this appears to be a long-standing issue in the checker's handling of illegal abstract modifiers within class expressions. Does it occur in nightly? Yes. ### ⏯ Playground Link https://www.typescriptlang.org/zh/play/?target=7&outFile=mylib.js&ts=5.8.3#code/DYUwLgBAYg9jEF4IGNgEMDOGIG8BQEhKMAdhmAE4CuyYMFAFAJS4FHtgAWAlhgHQAjNBQDUIgNxtCAXykQ0A8hTS0IQipOmS8QA ### 💻 Code ```ts let Foo = class { constructor() { this.bar++; } abstract bar; }; ``` ### 🙁 Actual behavior ``` .\\ts-versions\\5.9.3\\node_modules\\.bin\\tsc.cmd --noEmit .\\bugfind\\mute1.ts D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:123168 throw e; ^ TypeError: Cannot read properties of undefined (reading 'kind') at isMemberName (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:11830:15) at getTextOfIdentifierOrLiteral (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:15842:10) at checkPropertyAccessibilityAtLocation (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:74766:132) at checkPropertyAccessibility (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:74735:12) at checkPropertyAccessExpressionOrQualifiedName (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:75176:7) at checkPropertyAccessExpression (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:74932:94) at checkExpressionWorker (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:80937:16) at checkExpression (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:80846:32) at checkPostfixUnaryExpression (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:79348:25) at checkExpressionWorker (D:\\do\\tscFuzz\\ts-versions\\5.9.3\\node_modules\\typescript\\lib\\_tsc.js:80980:16) ``` ### 🙂 Expected behavior The compiler should not crash ### Additional information about the issue _No response_",
+      "originalBaseCommit": "1f5f9f34d325b2c7e3a53179108b0a217e2dae93",
+      "originalPatchCommit": "f3770c9b89ba7969b163c5cea7805d5df23b2086",
+      "verifiedBaseCommit": "1f5f9f34d325b2c7e3a53179108b0a217e2dae93",
+      "verifiedPatchCommit": "f3770c9b89ba7969b163c5cea7805d5df23b2086",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fix crash in abstract property checking (#62923)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/checker.ts",
+          "pathAfterFix": "src/compiler/checker.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 3,
+          "deletions": 3,
+          "symbols": [
+            {
+              "name": "createTypeChecker",
+              "qualifiedName": "createTypeChecker",
+              "kind": "function",
+              "startLine": 1482,
+              "endLine": 53741
+            },
+            {
+              "name": "checkPropertyAccessibilityAtLocation",
+              "qualifiedName": "checkPropertyAccessibilityAtLocation",
+              "kind": "function",
+              "startLine": 34411,
+              "endLine": 34524
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/errorInUnnamedClassExpression.errors.txt",
+          "status": "A",
+          "role": "generated",
+          "additions": 21,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/errorInUnnamedClassExpression.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 19,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/errorInUnnamedClassExpression.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 28,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/errorInUnnamedClassExpression.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 11,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/errorInUnnamedClassExpression.errors.txt",
+        "tests/baselines/reference/errorInUnnamedClassExpression.symbols",
+        "tests/baselines/reference/errorInUnnamedClassExpression.types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/errorInUnnamedClassExpression.errors.txt",
+          "tests/baselines/reference/errorInUnnamedClassExpression.symbols",
+          "tests/baselines/reference/errorInUnnamedClassExpression.types",
+          "tests/cases/compiler/errorInUnnamedClassExpression.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createTypeChecker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 1482,
+            "endLine": 53741
+          },
+          {
+            "name": "checkPropertyAccessibilityAtLocation",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 34411,
+            "endLine": 34524
+          }
+        ],
+        "notes": []
+      }
+    },
+    {
+      "taskId": "microsoft-TypeScript-issue-62921-pr-62928",
+      "repositoryId": "microsoft/TypeScript",
+      "issue": {
+        "number": 62921,
+        "url": "https://github.com/microsoft/TypeScript/issues/62921",
+        "title": "Crash: Debug Failure. type must be class or interface in getBaseTypes triggered by invalid optional rest parameter in Constructor type",
+        "body": "### 🔎 Search Terms\n\n\"Debug Failure. type must be class or interface\"\n\n\"Rest parameter cannot be optional crash\"\n\n\"isConstructorAccessible crash strict mode\"\n\n\"Mixin protected constructor crash\"\n\n### 🕗 Version & Regression Information\n\nVersions tested: 5.7.3, 5.8.3, 5.9.3, Nightly\n\nBehavior: All tested versions crash when --strict is enabled.\n\nCondition: The crash only occurs when --strict is used. Without --strict, the compiler correctly identifies the syntax error (TS1047) and the semantic error (TS2674).\n\n### ⏯ Playground Link\n\nhttps://www.typescriptlang.org/zh/play/?target=7&ts=6.0.0-dev.20251222#code/MYGwhgzhAECCBGEAuAnMwnQN4FgBQ0h0ADigPZICmGlAJtMGQHbIoCuGZKAFAJTb4i0AL75ReUJBgBhZsBSUq0SgA8qTWjASt0mXHnFIAnsUrRZLVByRcAPABVoAXmzCAfM+hNKAd2jcAOiCwFABzCAB+AC5oMCYjAG0AXX4nD3sAbnwAMzYmDABLZmgAWQKVAqYHACFIM1V1TXNmVmsuN25aiEoY+y7Kfn0hBSQ2FCYGcChlNUoNGH6BAiJhLIN8SWmAUQBbYmMl8U2ZNAgAC3sUAtDQyhQZxpgyiqZuXf2jQcEiYjZ4EAKwGgqGutx4X2WQkI3j8FnkikofDWQnEwiAA\n\n### 💻 Code\n\n```ts\nclass Abstract {\n    protected constructor() {\n    }\n}\nclass Concrete extends Abstract {\n}\ntype Constructor<T = {}> = new (...args?: any[]) => T;\nfunction Mixin<TBase extends Constructor>(Base: TBase) {\n    return class extends Base {\n    };\n}\nclass Empty {\n}\nclass CrashTrigger extends Mixin(Empty) {\n    public trigger() {\n        new Concrete();\n    }\n}\n```\n\n\n### 🙁 Actual behavior\n\n ```\n.\\ts-versions\\nightly\\node_modules\\.bin\\tsc.cmd  --ignoreConfig --strict  .\\bugfind\\2\\noCrashOnMixin_m.ts\nD:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:123191\n      throw e;\n      ^\n\nError: Debug Failure. type must be class or interface\n    at getBaseTypes (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:57088:17)                                                                                                     \n    at typeHasProtectedAccessibleBase (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76955:23)                                                                                   \n    at typeHasProtectedAccessibleBase (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76982:12)                                                                                   \n    at typeHasProtectedAccessibleBase (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76982:12)                                                                                   \n    at isConstructorAccessible (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76999:13)                                                                                          \n    at resolveNewExpression (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76918:12)                                                                                             \n    at resolveSignature (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:77323:16)                                                                                                 \n    at getResolvedSignature (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:77348:20)                                                                                             \n    at checkCallExpression (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:77456:23)                                                                                              \n    at checkExpressionWorker (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:80921:16)   \n\n .\\ts-versions\\nightly\\node_modules\\.bin\\tsc.cmd  --ignoreConfig   .\\bugfind\\2\\noCrashOnMixin_m.ts        \nbugfind/2/noCrashOnMixin_mutated_17.ts:7:40 - error TS1047: A rest parameter cannot be optional.\n\n7 type Constructor<T = {}> = new (...args?: any[]) => T;\n                                         ~                                                                                                                                                               \n\nbugfind/2/noCrashOnMixin_mutated_17.ts:16:9 - error TS2674: Constructor of class 'Abstract' is protected and only accessible within the class declaration.\n\n16         new Concrete();\n           ~~~~~~~~~~~~~~                                                                                                                                                                                \nFound 2 errors in the same file, starting at: bugfind/2/noCrashOnMixin_mutated_17.ts:7  \n```\n\n### 🙂 Expected behavior\n\nThe compiler should not crash. It should report the existing errors normally:\n\nerror TS1047: A rest parameter cannot be optional.\n\nerror TS2674: Constructor of class 'Abstract' is protected and only accessible within the class declaration.\n\n### Additional information about the issue\n\n_No response_",
+        "createdAt": "2025-12-22T13:44:35Z"
+      },
+      "pullRequest": {
+        "number": 62928,
+        "url": "https://github.com/microsoft/TypeScript/pull/62928",
+        "mergedAt": "2025-12-26T23:25:58Z"
+      },
+      "query": "Crash: Debug Failure. type must be class or interface in getBaseTypes triggered by invalid optional rest parameter in Constructor type\n\n### 🔎 Search Terms \"Debug Failure. type must be class or interface\" \"Rest parameter cannot be optional crash\" \"isConstructorAccessible crash strict mode\" \"Mixin protected constructor crash\" ### 🕗 Version & Regression Information Versions tested: 5.7.3, 5.8.3, 5.9.3, Nightly Behavior: All tested versions crash when --strict is enabled. Condition: The crash only occurs when --strict is used. Without --strict, the compiler correctly identifies the syntax error (TS1047) and the semantic error (TS2674). ### ⏯ Playground Link https://www.typescriptlang.org/zh/play/?target=7&ts=6.0.0-dev.20251222#code/MYGwhgzhAECCBGEAuAnMwnQN4FgBQ0h0ADigPZICmGlAJtMGQHbIoCuGZKAFAJTb4i0AL75ReUJBgBhZsBSUq0SgA8qTWjASt0mXHnFIAnsUrRZLVByRcAPABVoAXmzCAfM+hNKAd2jcAOiCwFABzCAB+AC5oMCYjAG0AXX4nD3sAbnwAMzYmDABLZmgAWQKVAqYHACFIM1V1TXNmVmsuN25aiEoY+y7Kfn0hBSQ2FCYGcChlNUoNGH6BAiJhLIN8SWmAUQBbYmMl8U2ZNAgAC3sUAtDQyhQZxpgyiqZuXf2jQcEiYjZ4EAKwGgqGutx4X2WQkI3j8FnkikofDWQnEwiAA ### 💻 Code ```ts class Abstract { protected constructor() { } } class Concrete extends Abstract { } type Constructor<T = {}> = new (...args?: any[]) => T; function Mixin<TBase extends Constructor>(Base: TBase) { return class extends Base { }; } class Empty { } class CrashTrigger extends Mixin(Empty) { public trigger() { new Concrete(); } } ``` ### 🙁 Actual behavior ``` .\\ts-versions\\nightly\\node_modules\\.bin\\tsc.cmd --ignoreConfig --strict .\\bugfind\\2\\noCrashOnMixin_m.ts D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:123191 throw e; ^ Error: Debug Failure. type must be class or interface at getBaseTypes (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:57088:17) at typeHasProtectedAccessibleBase (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76955:23) at typeHasProtectedAccessibleBase (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76982:12) at typeHasProtectedAccessibleBase (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76982:12) at isConstructorAccessible (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76999:13) at resolveNewExpression (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:76918:12) at resolveSignature (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:77323:16) at getResolvedSignature (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:77348:20) at checkCallExpression (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:77456:23) at checkExpressionWorker (D:\\do\\tscFuzz\\ts-versions\\nightly\\node_modules\\typescript\\lib\\_tsc.js:80921:16) .\\ts-versions\\nightly\\node_modules\\.bin\\tsc.cmd --ignoreConfig .\\bugfind\\2\\noCrashOnMixin_m.ts bugfind/2/noCrashOnMixin_mutated_17.ts:7:40 - error TS1047: A rest parameter cannot be optional. 7 type Constructor<T = {}> = new (...args?: any[]) => T; ~ bugfind/2/noCrashOnMixin_mutated_17.ts:16:9 - error TS2674: Constructor of class 'Abstract' is protected and only accessible within the class declaration. 16 new Concrete(); ~~~~~~~~~~~~~~ Found 2 errors in the same file, starting at: bugfind/2/noCrashOnMixin_mutated_17.ts:7 ``` ### 🙂 Expected behavior The compiler should not crash. It should report the existing errors normally: error TS1047: A rest parameter cannot be optional. error TS2674: Constructor of class 'Abstract' is protected and only accessible within the class declaration. ### Additional information about the issue _No response_",
+      "originalBaseCommit": "2dfdbbabae955186f821925c629a37d8df76bab2",
+      "originalPatchCommit": "1f5f9f34d325b2c7e3a53179108b0a217e2dae93",
+      "verifiedBaseCommit": "2dfdbbabae955186f821925c629a37d8df76bab2",
+      "verifiedPatchCommit": "1f5f9f34d325b2c7e3a53179108b0a217e2dae93",
+      "baseResolution": {
+        "strategy": "sole-parent",
+        "commitsIncluded": 1,
+        "patchSubjects": [
+          "Fix crash in mixin checking (#62928)"
+        ]
+      },
+      "issueFixLinkVerified": true,
+      "querySufficient": true,
+      "changedFiles": [
+        {
+          "pathAtBase": "src/compiler/checker.ts",
+          "pathAfterFix": "src/compiler/checker.ts",
+          "status": "M",
+          "role": "production",
+          "additions": 9,
+          "deletions": 20,
+          "symbols": [
+            {
+              "name": "createTypeChecker",
+              "qualifiedName": "createTypeChecker",
+              "kind": "function",
+              "startLine": 1482,
+              "endLine": 53752
+            },
+            {
+              "name": "getBaseTypes",
+              "qualifiedName": "getBaseTypes",
+              "kind": "function",
+              "startLine": 13214,
+              "endLine": 13242
+            },
+            {
+              "name": "isPropertyDeclaredInAncestorClass",
+              "qualifiedName": "isPropertyDeclaredInAncestorClass",
+              "kind": "function",
+              "startLine": 35055,
+              "endLine": 35070
+            },
+            {
+              "name": "getSuperClass",
+              "qualifiedName": "getSuperClass",
+              "kind": "function",
+              "startLine": 35072,
+              "endLine": 35078
+            }
+          ]
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/checkInheritedProperty.errors.txt",
+          "status": "A",
+          "role": "generated",
+          "additions": 17,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/checkInheritedProperty.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 26,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/checkInheritedProperty.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 37,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/noCrashOnMixin2.errors.txt",
+          "status": "A",
+          "role": "generated",
+          "additions": 41,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/noCrashOnMixin2.symbols",
+          "status": "A",
+          "role": "generated",
+          "additions": 53,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/baselines/reference/noCrashOnMixin2.types",
+          "status": "A",
+          "role": "generated",
+          "additions": 68,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/checkInheritedProperty.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 12,
+          "deletions": 0,
+          "symbols": []
+        },
+        {
+          "pathAtBase": null,
+          "pathAfterFix": "tests/cases/compiler/noCrashOnMixin2.ts",
+          "status": "A",
+          "role": "test",
+          "additions": 28,
+          "deletions": 0,
+          "symbols": []
+        }
+      ],
+      "renamedPaths": [],
+      "generatedFileExclusions": [
+        "tests/baselines/reference/checkInheritedProperty.errors.txt",
+        "tests/baselines/reference/checkInheritedProperty.symbols",
+        "tests/baselines/reference/checkInheritedProperty.types",
+        "tests/baselines/reference/noCrashOnMixin2.errors.txt",
+        "tests/baselines/reference/noCrashOnMixin2.symbols",
+        "tests/baselines/reference/noCrashOnMixin2.types"
+      ],
+      "proposal": {
+        "status": "pending",
+        "primaryFiles": [
+          "src/compiler/checker.ts"
+        ],
+        "supportingFiles": [],
+        "testFiles": [
+          "tests/baselines/reference/checkInheritedProperty.errors.txt",
+          "tests/baselines/reference/checkInheritedProperty.symbols",
+          "tests/baselines/reference/checkInheritedProperty.types",
+          "tests/baselines/reference/noCrashOnMixin2.errors.txt",
+          "tests/baselines/reference/noCrashOnMixin2.symbols",
+          "tests/baselines/reference/noCrashOnMixin2.types",
+          "tests/cases/compiler/checkInheritedProperty.ts",
+          "tests/cases/compiler/noCrashOnMixin2.ts"
+        ],
+        "positiveSymbols": [
+          {
+            "name": "createTypeChecker",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 1482,
+            "endLine": 53752
+          },
+          {
+            "name": "getBaseTypes",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 13214,
+            "endLine": 13242
+          },
+          {
+            "name": "isPropertyDeclaredInAncestorClass",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 35055,
+            "endLine": 35070
+          },
+          {
+            "name": "getSuperClass",
+            "path": "src/compiler/checker.ts",
+            "grade": 3,
+            "startLine": 35072,
+            "endLine": 35078
+          }
+        ],
+        "notes": []
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 18,
+    "correctedBaseCommits": 0,
+    "correctedPatchCommits": 0,
+    "insufficientQueries": 0,
+    "tasksWithoutPrimaryProposal": 0,
+    "renamedPaths": 0,
+    "generatedFileExclusions": 45,
+    "manualReviewFlags": 0
+  }
+}
