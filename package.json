@@ -32,7 +32,7 @@
     "corpus:graph-reachability": "npm run build --workspace @nomic/core && node packages/core/dist/benchmarks/graph-reachability-cli.js"
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
+    "@types/node": "^26.1.2",
     "typescript": "^5.8.2",
     "vitest": "^3.2.4"
   }
